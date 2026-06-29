@@ -17,6 +17,7 @@ describe("disciplined Trellis runtime templates", () => {
     ["packages/cli/src/templates/common/skills/debug.md", "NO FIXES WITHOUT ROOT CAUSE INVESTIGATION FIRST"],
     ["packages/cli/src/templates/common/skills/debug.md", "Post-Fix Handoff"],
     ["packages/cli/src/templates/common/skills/check.md", "Completion Claim Gate"],
+    ["packages/cli/src/templates/common/skills/check.md", "Milestone Handoff"],
     ["packages/cli/src/templates/common/skills/check.md", "Review Gate"],
     ["packages/cli/src/templates/common/skills/check.md", "Not sufficient"],
     ["packages/cli/src/templates/common/skills/check.md", "Rationalization prevention"],
@@ -35,6 +36,8 @@ describe("disciplined Trellis runtime templates", () => {
     ["packages/cli/src/templates/trellis/workflow.md", "trellis-before-dev"],
     ["packages/cli/src/templates/trellis/workflow.md", "trellis-debug"],
     ["packages/cli/src/templates/trellis/workflow.md", "After `trellis-debug` proves the local fix"],
+    ["packages/cli/src/templates/trellis/workflow.md", "Milestone Handoff Discipline"],
+    ["packages/cli/src/templates/trellis/workflow.md", "No active task after commit"],
     ["packages/cli/src/templates/trellis/workflow.md", "Completion Claim Gate"],
     ["packages/cli/src/templates/trellis/workflow.md", "Review feedback"],
     ["packages/cli/src/templates/trellis/agents/implement.md", "Implementer Status Protocol"],
@@ -48,6 +51,7 @@ describe("disciplined Trellis runtime templates", () => {
     ["packages/cli/src/templates/claude/agents/trellis-implement.md", "No implementation code before failing proof"],
     ["packages/cli/src/templates/claude/agents/trellis-check.md", "Verify proof existed before implementation"],
     ["packages/cli/src/templates/common/bundled-skills/trellis-channel/SKILL.md", "Copyable Worker Prompt Template"],
+    ["packages/cli/src/templates/common/commands/finish-work.md", "Final handoff"],
     ["packages/cli/src/templates/markdown/spec/guides/debugging-guide.md.txt", "POLLUTER_CANDIDATE"],
   ];
 

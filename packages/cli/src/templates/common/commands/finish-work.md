@@ -65,6 +65,17 @@ Use the work-commit hashes produced in Phase 3.4 (visible in Step 1's `Recent co
 
 Final git log order: `<work commits from 3.4>` → `chore(task): archive ...` (one or more) → `chore: record journal`.
 
+## Step 5: Final handoff
+
+After archive and journal steps complete, do not silently stop. State the evidence and offer the next integration choice:
+
+1. Push the current branch / create a PR.
+2. Keep the local commits only.
+3. Continue with the next task.
+4. Stop here.
+
+If there was no active Trellis task, skip archive/journal and still offer the same integration choices after the local commit and verification evidence.
+
 ## Branch Finish Discipline
 
 Before archive or journal finalization, ensure work commits and verification are handled. If the work lives on a branch, present the relevant integration choices: local merge, push/PR, keep branch as-is, or discard.

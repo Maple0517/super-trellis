@@ -20,6 +20,14 @@ Before saying work is complete, fixed, passing, ready, or done:
 
 For bug-fix regression tests added after the fix, verify red-green: temporarily revert or disable the fix, confirm the regression test fails for the expected reason, restore the fix, and confirm it passes.
 
+## Milestone Handoff
+
+After verification passes, do not silently stop at a success claim. State the evidence and offer the next workflow step.
+
+- Active Trellis task: route to `trellis-update-spec`, commit, then `{{CMD_REF:finish-work}}`.
+- No active Trellis task: offer structured integration choices: commit locally, push/PR, keep local only, continue with the next task, or stop here.
+- Ask before pushing, opening a PR, running expensive extra checks, adding polish outside the agreed scope, or closing lifecycle state.
+
 | Claim | Required evidence | Not sufficient |
 |---|---|---|
 | Tests pass | Fresh test command output with 0 relevant failures. | "Should pass", stale output, or partial test subset without scope reason. |

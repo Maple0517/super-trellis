@@ -248,6 +248,7 @@ Quality: apply the TDD Decision Matrix in `trellis-before-dev` before writing co
 Review feedback: route directly to `trellis-check`; verify feedback against code reality before accepting it.
 Tracking: for complex work in Codex, keep a short global `update_plan` current as phases advance.
 Finish gate: when the planned scope and acceptance criteria are verified, move to Phase 3. Do not suggest new work or polish before offering the finish flow.
+Milestone handoff: after local proof, full verification, commit, archive, or journal, do not silently stop. State evidence, recommend the next workflow step, and ask when the next step changes scope, costs time, pushes remotely, creates a PR, or closes lifecycle state.
 Main-session default: dispatch `trellis-implement` and `trellis-check` from the main session only.
 Sub-agent self-exemption: if you are already running as `trellis-implement`, do NOT spawn another `trellis-implement`; if you are already running as `trellis-check`, do NOT spawn another `trellis-check`. This is a main session only dispatch rule.
 Dispatch: main session dispatches implement/check sub-agents only. Sub-agent self-exemption: do NOT nest implement or check agents.
@@ -263,6 +264,7 @@ Before commit -> `trellis-check` review gate if non-trivial; handle feedback wit
 Spec update -> `trellis-update-spec` (capture new patterns/conventions).
 After all tasks done -> `trellis-finish-work` (verify tests -> present merge/PR/keep/discard options).
 Commit (Phase 3.4) -> `/trellis:finish-work` (archive task + record journal).
+No active task after commit -> offer push/PR, keep local, continue next task, or stop here.
 [/workflow-state:in_progress]
 
 <!-- Per-turn breadcrumb: shown while status='in_progress' when
@@ -277,6 +279,7 @@ Quality: apply the TDD Decision Matrix in `trellis-before-dev` before writing co
 Review feedback: route directly to `trellis-check`; verify feedback against code reality before accepting it.
 Tracking: for complex work in Codex, keep a short global `update_plan` current as phases advance.
 Finish gate: when the planned scope and acceptance criteria are verified, move to Phase 3. Do not suggest new work or polish before offering the finish flow.
+Milestone handoff: after local proof, full verification, commit, archive, or journal, do not silently stop. State evidence, recommend the next workflow step, and ask when the next step changes scope, costs time, pushes remotely, creates a PR, or closes lifecycle state.
 Do not dispatch implement/check sub-agents in inline mode.
 Context: `prd.md` -> `design.md` -> `implement.md`, plus relevant spec/research loaded by skills.
 
@@ -289,6 +292,7 @@ Same bug fixed 3+ times after attempted fixes -> `trellis-break-loop` (post-fix 
 Before commit -> `trellis-check` review gate if non-trivial. Spec update -> `trellis-update-spec`.
 After all tasks done -> `trellis-finish-work` (verify tests -> merge/PR/keep/discard).
 Commit (Phase 3.4) -> `/trellis:finish-work`.
+No active task after commit -> offer push/PR, keep local, continue next task, or stop here.
 [/workflow-state:in_progress-inline]
 
 ### Phase 3: Finish
@@ -566,6 +570,14 @@ Plan Execution Discipline:
 - If a bug, failed verification, or unexpected behavior appears, load `trellis-debug` and complete root-cause investigation before patching.
 - If a plan step is unclear, a prerequisite is missing, or verification fails repeatedly, stop and return to planning or ask for review. Do not improvise around the gate.
 - When the planned scope and acceptance criteria are verified, the next step is Phase 3 (spec update, commit, finish). Offer the finish flow before suggesting scope extensions or additional polish outside the plan.
+
+Milestone Handoff Discipline:
+
+- After any meaningful milestone, do not silently stop at a success report.
+- Milestones include local fix proof passing, planned implementation completing, broader verification passing, commit succeeding, task archive completing, and journal recording.
+- State the evidence, state the recommended next workflow step, and ask for user direction when the next step changes scope, costs time, pushes remotely, creates a PR, or closes lifecycle state.
+- If there is an active Trellis task, route toward Phase 3.3 spec update, Phase 3.4 commit, and `/trellis:finish-work`.
+- If there is no active Trellis task, offer structured integration choices: push/PR, keep local only, continue with the next task, or stop here.
 
 [Claude Code, Cursor, OpenCode, CodeBuddy, Droid, Pi]
 
