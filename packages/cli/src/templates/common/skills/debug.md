@@ -31,6 +31,19 @@ STOP and return to evidence gathering when you notice:
 8. Prove the fix with the reproduction, regression test, or command output.
 9. Capture durable prevention through `trellis-update-spec` when the lesson is reusable.
 
+## Post-Fix Handoff
+
+After the local reproduction, regression proof, or substitute proof passes, do not stop at "fixed".
+
+Offer the next workflow step:
+
+1. Run broader verification through `trellis-check`.
+2. Decide whether the lesson should go to `trellis-update-spec`.
+3. If the same bug or fix loop happened 3+ times, use `trellis-break-loop`.
+4. If checks are enough for the task scope, move to the finish/commit decision.
+
+Ask the user whether to continue with broader verification when the checks are non-trivial or expensive.
+
 ## Rationalization Prevention
 
 | Rationalization | Reality |

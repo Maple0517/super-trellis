@@ -255,6 +255,7 @@ Context: class-2 platforms (codex, copilot, gemini, qoder) require dispatch prom
 
 ## Phase 2: Debug (on bug/failure)
 Single bug/failure -> `trellis-debug` before patching (root-cause investigation, no fix without evidence).
+After `trellis-debug` proves the local fix, route to `trellis-check` or ask whether to run broader verification when checks are non-trivial or expensive.
 Same bug fixed 3+ times after attempted fixes -> `trellis-break-loop` (post-fix retrospective and prevention).
 
 ## Phase 3: Finish
@@ -281,6 +282,7 @@ Context: `prd.md` -> `design.md` -> `implement.md`, plus relevant spec/research 
 
 ## Phase 2: Debug (on bug/failure)
 Single bug/failure -> `trellis-debug` before patching (root-cause investigation).
+After `trellis-debug` proves the local fix, route to `trellis-check` or ask whether to run broader verification when checks are non-trivial or expensive.
 Same bug fixed 3+ times after attempted fixes -> `trellis-break-loop` (post-fix retrospective and prevention).
 
 ## Phase 3: Finish
