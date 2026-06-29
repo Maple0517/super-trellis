@@ -25,6 +25,7 @@ These guides help you **ask the right questions before coding**.
 | [Cross-Layer Thinking Guide](./cross-layer-thinking-guide.md) | Think through data flow across layers | Features spanning multiple layers |
 | [Debugging Guide](./debugging-guide.md) | Trace root cause, remove flakes, and add defense-in-depth validation | Bugs, failed verification, flaky tests, runtime errors |
 | [Testing Guide](./testing-guide.md) | Enforce TDD proof, avoid mock traps, and verify completion claims | Behavior changes, bug fixes, mocks, regression tests |
+| [Superpowers Integration Verification Scenarios](./superpowers-verification-scenarios.md) | Scenario checklist for validating Trellis/Superpowers integration behavior | Audit-only runtime checks |
 
 ---
 
@@ -117,5 +118,3 @@ Found a new "didn't think of that" moment? Add it to the relevant guide.
 ---
 
 **Core Principle**: 30 minutes of thinking saves 3 hours of debugging.
-
-| [Superpowers Integration Verification Scenarios](./superpowers-verification-scenarios.md) | Scenario checklist for validating Trellis/Superpowers integration behavior | Local runtime audits and regression checks |
