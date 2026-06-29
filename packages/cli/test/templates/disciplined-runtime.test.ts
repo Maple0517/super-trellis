@@ -37,6 +37,7 @@ describe("disciplined Trellis runtime templates", () => {
     ["packages/cli/src/templates/trellis/workflow.md", "Review feedback"],
     ["packages/cli/src/templates/trellis/agents/implement.md", "Implementer Status Protocol"],
     ["packages/cli/src/templates/trellis/agents/implement.md", "DONE_WITH_CONCERNS"],
+    ["packages/cli/src/templates/trellis/agents/check.md", "Two-Stage Review Protocol"],
     ["packages/cli/src/templates/trellis/agents/check.md", "Run review in two stages"],
     ["packages/cli/src/templates/codex/agents/trellis-implement.toml", "No implementation code before failing proof"],
     ["packages/cli/src/templates/codex/agents/trellis-implement.toml", "multi_agent = false"],

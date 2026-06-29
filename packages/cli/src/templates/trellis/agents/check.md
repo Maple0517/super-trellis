@@ -60,6 +60,8 @@ Do not start code quality review until spec compliance passes. See `.agents/skil
 
 ## Workflow
 
+## Two-Stage Review Protocol
+
 Run review in two stages even when using one check agent: first spec/acceptance compliance against PRD/design/implement, then code quality including lint/typecheck/tests/security/regression risk.
 
 
