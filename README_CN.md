@@ -7,8 +7,8 @@
 </p>
 
 <p align="center">
-<strong>开箱即用的 AI 编码工程化框架</strong><br/>
-<sub>AI 写代码很快，但它每次会话都从零开始理解项目，记不住你的规范，也记不住团队级别的需求。Trellis 会把规范、任务、记忆沉淀进仓库，让任意 Coding Agent 都按你的工程标准来实践。</sub>
+<strong>Super Trellis — 面向 AI 编码的强纪律 Trellis 个人 fork。</strong><br/>
+<sub>这个 fork 保留 Trellis 作为唯一项目管理骨架，并把 Superpowers 启发的规划、TDD、调试、验证、审查、Visual Companion 与 agent 调度纪律产品化进默认生成 runtime。</sub>
 </p>
 
 <p align="center">
@@ -22,19 +22,30 @@
 <p align="center">
 <a href="https://www.npmjs.com/package/@mindfoldhq/trellis"><img src="https://img.shields.io/npm/v/@mindfoldhq/trellis.svg?style=flat-square&color=2563eb" alt="npm version" /></a>
 <a href="https://www.npmjs.com/package/@mindfoldhq/trellis"><img src="https://img.shields.io/npm/dw/@mindfoldhq/trellis?style=flat-square&color=cb3837&label=downloads" alt="npm downloads" /></a>
-<a href="https://github.com/mindfold-ai/Trellis/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-AGPL--3.0-16a34a.svg?style=flat-square" alt="license" /></a>
-<a href="https://github.com/mindfold-ai/Trellis/stargazers"><img src="https://img.shields.io/github/stars/mindfold-ai/Trellis?style=flat-square&color=eab308" alt="stars" /></a>
+<a href="https://github.com/Maple0517/super-trellis/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-AGPL--3.0-16a34a.svg?style=flat-square" alt="license" /></a>
+<a href="https://github.com/Maple0517/super-trellis/stargazers"><img src="https://img.shields.io/github/stars/Maple0517/super-trellis?style=flat-square&color=eab308" alt="stars" /></a>
 <a href="https://docs.trytrellis.app/zh"><img src="https://img.shields.io/badge/docs-trytrellis.app-0f766e?style=flat-square" alt="docs" /></a>
 <a href="https://discord.com/invite/tWcCZ3aRHc"><img src="https://img.shields.io/badge/Discord-Join-5865F2?style=flat-square&logo=discord&logoColor=white" alt="Discord" /></a>
-<a href="https://github.com/mindfold-ai/Trellis/issues"><img src="https://img.shields.io/github/issues/mindfold-ai/Trellis?style=flat-square&color=e67e22" alt="open issues" /></a>
-<a href="https://github.com/mindfold-ai/Trellis/pulls"><img src="https://img.shields.io/github/issues-pr/mindfold-ai/Trellis?style=flat-square&color=9b59b6" alt="open PRs" /></a>
-<a href="https://deepwiki.com/mindfold-ai/Trellis"><img src="https://img.shields.io/badge/Ask-DeepWiki-blue?style=flat-square" alt="Ask DeepWiki" /></a>
-<a href="https://chatgpt.com/?q=Explain+the+project+mindfold-ai/Trellis+on+GitHub"><img src="https://img.shields.io/badge/Ask-ChatGPT-74aa9c?style=flat-square&logo=openai&logoColor=white" alt="Ask ChatGPT" /></a>
+<a href="https://github.com/Maple0517/super-trellis/issues"><img src="https://img.shields.io/github/issues/Maple0517/super-trellis?style=flat-square&color=e67e22" alt="open issues" /></a>
+<a href="https://github.com/Maple0517/super-trellis/pulls"><img src="https://img.shields.io/github/issues-pr/Maple0517/super-trellis?style=flat-square&color=9b59b6" alt="open PRs" /></a>
+<a href="https://deepwiki.com/mindfold-ai/Trellis"><img src="https://img.shields.io/badge/上游-Trellis-blue?style=flat-square" alt="上游 Trellis" /></a>
 </p>
 
 <p align="center">
 <img src="assets/trellis-demo-zh.gif" alt="Trellis 工作流演示" width="100%">
 </p>
+
+## 关于这个 Fork
+
+Super Trellis 是 [Trellis](https://github.com/mindfold-ai/Trellis) 的个人分发 fork。它比上游更强约束、更偏本地魔改：
+
+- 保留一套 Trellis workflow，不新增第二套生命周期；
+- 加强写代码前的 TDD gate 与修复前 root-cause debugging gate；
+- 强化完成声明、code review feedback、finish-before-polish 等纪律；
+- 默认生成 `trellis-debug`、`trellis-visual-companion`、更完整的 testing/debugging guides，以及更严格的 Codex/Claude agent templates；
+- Codex 默认 inline，同时保留 Claude/subagent-capable 路径的模板一致性。
+
+下方上游文档与 npm 链接仍指向官方 Trellis，除非这个 fork 之后单独发布包。
 
 ## 为什么用 Trellis？
 

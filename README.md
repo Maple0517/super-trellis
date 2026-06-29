@@ -7,8 +7,8 @@
 </p>
 
 <p align="center">
-<strong>An out-of-the-box engineering framework for AI coding.</strong><br/>
-<sub>AI writes code fast, but every session it starts from scratch — no memory of your project, your conventions, or your team's requirements. Trellis persists specs, tasks, and memory into your repo, so any coding agent works to your engineering standards.</sub>
+<strong>Super Trellis — a disciplined personal fork of Trellis for AI coding.</strong><br/>
+<sub>This fork keeps Trellis as the project-management backbone and productizes stronger Superpowers-inspired planning, TDD, debugging, verification, review, visual-companion, and agent-dispatch discipline into the default generated runtime.</sub>
 </p>
 
 <p align="center">
@@ -22,19 +22,30 @@
 <p align="center">
 <a href="https://www.npmjs.com/package/@mindfoldhq/trellis"><img src="https://img.shields.io/npm/v/@mindfoldhq/trellis.svg?style=flat-square&color=2563eb" alt="npm version" /></a>
 <a href="https://www.npmjs.com/package/@mindfoldhq/trellis"><img src="https://img.shields.io/npm/dw/@mindfoldhq/trellis?style=flat-square&color=cb3837&label=downloads" alt="npm downloads" /></a>
-<a href="https://github.com/mindfold-ai/Trellis/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-AGPL--3.0-16a34a.svg?style=flat-square" alt="license" /></a>
-<a href="https://github.com/mindfold-ai/Trellis/stargazers"><img src="https://img.shields.io/github/stars/mindfold-ai/Trellis?style=flat-square&color=eab308" alt="stars" /></a>
+<a href="https://github.com/Maple0517/super-trellis/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-AGPL--3.0-16a34a.svg?style=flat-square" alt="license" /></a>
+<a href="https://github.com/Maple0517/super-trellis/stargazers"><img src="https://img.shields.io/github/stars/Maple0517/super-trellis?style=flat-square&color=eab308" alt="stars" /></a>
 <a href="https://docs.trytrellis.app/"><img src="https://img.shields.io/badge/docs-trytrellis.app-0f766e?style=flat-square" alt="docs" /></a>
 <a href="https://discord.com/invite/tWcCZ3aRHc"><img src="https://img.shields.io/badge/Discord-Join-5865F2?style=flat-square&logo=discord&logoColor=white" alt="Discord" /></a>
-<a href="https://github.com/mindfold-ai/Trellis/issues"><img src="https://img.shields.io/github/issues/mindfold-ai/Trellis?style=flat-square&color=e67e22" alt="open issues" /></a>
-<a href="https://github.com/mindfold-ai/Trellis/pulls"><img src="https://img.shields.io/github/issues-pr/mindfold-ai/Trellis?style=flat-square&color=9b59b6" alt="open PRs" /></a>
-<a href="https://deepwiki.com/mindfold-ai/Trellis"><img src="https://img.shields.io/badge/Ask-DeepWiki-blue?style=flat-square" alt="Ask DeepWiki" /></a>
-<a href="https://chatgpt.com/?q=Explain+the+project+mindfold-ai/Trellis+on+GitHub"><img src="https://img.shields.io/badge/Ask-ChatGPT-74aa9c?style=flat-square&logo=openai&logoColor=white" alt="Ask ChatGPT" /></a>
+<a href="https://github.com/Maple0517/super-trellis/issues"><img src="https://img.shields.io/github/issues/Maple0517/super-trellis?style=flat-square&color=e67e22" alt="open issues" /></a>
+<a href="https://github.com/Maple0517/super-trellis/pulls"><img src="https://img.shields.io/github/issues-pr/Maple0517/super-trellis?style=flat-square&color=9b59b6" alt="open PRs" /></a>
+<a href="https://deepwiki.com/mindfold-ai/Trellis"><img src="https://img.shields.io/badge/Upstream-Trellis-blue?style=flat-square" alt="Upstream Trellis" /></a>
 </p>
 
 <p align="center">
 <img src="assets/trellis-demo.gif" alt="Trellis workflow demo" width="100%">
 </p>
+
+## About This Fork
+
+Super Trellis is a personal distribution fork of [Trellis](https://github.com/mindfold-ai/Trellis). It is intentionally more opinionated than upstream:
+
+- keeps one Trellis workflow instead of adding a second lifecycle,
+- adds stronger pre-code TDD and root-cause debugging gates,
+- hardens completion claims, code-review feedback handling, and finish-before-polish behavior,
+- generates `trellis-debug`, `trellis-visual-companion`, richer testing/debugging guides, and stricter Codex/Claude agent templates by default,
+- treats Codex inline as the default path while preserving Claude/subagent-capable template parity.
+
+Upstream docs and npm package links below still refer to official Trellis unless this fork is separately published.
 
 ## Why Trellis?
 
