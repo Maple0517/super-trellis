@@ -22,10 +22,12 @@ Use this skill during Phase 1 planning to turn the user's request into clear req
 
 Use this skill only after task-creation consent has been given and the user is ready to enter Trellis planning.
 
+Do not use this skill for substantive brainstorming before the task exists. In `no_task` state, stay at triage depth only; once the conversation needs a real option tree, planning artifacts, or repeated product decisions, create the task first.
+
 If no task exists yet, create one:
 
 ```bash
-TASK_DIR=$({{PYTHON_CMD}} ./.trellis/scripts/task.py create "<short task title>" --slug <slug>)
+TASK_DIR=$(python3 ./.trellis/scripts/task.py create "<short task title>" --slug <slug>)
 ```
 
 Use a concise title from the user's request. Use a slug without a date prefix. `task.py create` adds the `MM-DD-` directory prefix automatically.
@@ -49,6 +51,7 @@ Use a concise title from the user's request. Use a slug without a date prefix. `
 6. After each user answer, update `prd.md` before continuing.
 7. For complex tasks, create or update `design.md` and `implement.md` before implementation starts.
 8. Before final review or `task.py start`, run the PRD convergence pass below.
+9. For frontend visual, layout-heavy, or interaction-heavy work, explicitly evaluate whether Visual Companion would improve design exploration or review. If yes, recommend it before locking the design.
 
 Do not invent a project-specific product/spec hierarchy. If the repository already has product, domain, or spec docs, use them. If it does not, proceed with the evidence that exists.
 
@@ -164,5 +167,58 @@ Before declaring planning ready:
 - Complex tasks have `design.md` and `implement.md`.
 - Sub-agent-dispatch tasks have real curated entries in both `implement.jsonl` and `check.jsonl`; seed-only manifests are not ready.
 - The user has reviewed the final planning artifacts or explicitly approved proceeding.
+- No placeholder markers such as `TBD`, unresolved contradictions, or vague acceptance criteria remain.
 
 Do not start implementation until the user approves or asks for implementation.
+
+## Design Gate
+
+Before implementation planning, converge on a design. Inspect project evidence first, ask one question at a time, recommend an answer with trade-offs, then present 2-3 approaches when there is a real design choice. After the user selects or approves the design, write or update the Trellis planning artifacts.
+
+Do not begin implementation planning until the user has approved the design, regardless of perceived simplicity.
+
+When the task is frontend-visual in nature, do not silently skip Visual Companion. Explicitly decide whether it would add signal. If the answer is no, proceed without it; if the answer is yes, recommend using it before design lock.
+
+If the scope contains multiple independent subsystems, decompose it before planning implementation. Each sub-project must produce independently testable work.
+
+
+## Planning Quality Bar
+
+For complex work, write `implement.md` in this order:
+
+1. File map: exact files to create, modify, and test; include each file's responsibility.
+2. Header: Goal, Architecture, and Tech Stack.
+3. Tasks: `### Task N: Name`, `**Files:**`, then checkbox steps.
+4. Steps: one action each, sized for 2-5 minutes, with exact commands and expected output when verification is involved.
+5. Self-review: spec coverage, placeholder scan, and type/signature consistency.
+
+Do not write placeholders such as TBD, TODO, "implement later", "add appropriate error handling", "write tests for the above", or "similar to previous task".
+
+When asking user preferences, prefer 2-3 concrete choices with a recommended option and tradeoff unless the user asked an open-ended question. Ask one question per message.
+
+For frontend visual/layout/interaction work, explicitly evaluate `trellis-visual-companion`. If useful, run it before design lock or visual review; if not useful, record why text-only review is enough.
+
+### PRD / Spec Self-Review
+
+Before design lock, absorb the spec-reviewer checklist without copying the original Superpowers prompt:
+
+- Placeholder scan: no TBD/TODO/unresolved markers.
+- Contradiction scan: requirements do not conflict with each other or existing project constraints.
+- Ambiguity scan: every acceptance criterion is testable.
+- Missing acceptance-criteria scan: every important requirement has at least one acceptance criterion.
+- User-decision trace: major choices record the selected option and tradeoff.
+- Scope-boundary check: out-of-scope work is explicit.
+
+Fix issues inline before asking for implementation approval.
+
+### Implement Plan Reviewer Checklist
+
+Absorb the plan-reviewer checklist into Trellis planning:
+
+- File map exists before tasks.
+- Every requirement maps to a task.
+- Every task has exact files and verification.
+- Steps are 2-5 minute single actions.
+- No placeholders or "similar to previous task" shortcuts.
+- Type, function, file, and status names stay consistent across tasks.
+- Rollback points, stop points, and user-decision blockers are explicit.

@@ -50,6 +50,16 @@ Before implementing, read:
 
 ---
 
+## TDD Execution Gate
+
+- No implementation code before failing proof: a failing test, reproduction, or executable acceptance check.
+- Run the proof and verify it fails for the expected reason before coding.
+- If you wrote implementation before proof, delete it and start over; do not keep it as reference.
+- Write the smallest code that makes proof pass, then run the proof and relevant existing tests.
+- Full gate: `.agents/skills/trellis-before-dev/SKILL.md`; test quality: `.trellis/spec/guides/testing-guide.md`.
+
+---
+
 ## Workflow
 
 ### 1. Understand Specs
@@ -72,6 +82,7 @@ Read the task's prd.md, design.md if present, and implement.md if present:
 - Write code following specs and task artifacts
 - Follow existing code patterns
 - Only do what's required, no over-engineering
+- If a bug, failed test, or unexpected behavior appears, stop speculative patching and report that `trellis-debug` is needed
 
 ### 4. Verify
 
@@ -108,3 +119,17 @@ Run project's lint and typecheck commands to verify changes.
 - Don't add unnecessary abstractions
 - Only do what's required, no over-engineering
 - Keep code readable
+
+
+## Implementer Status Protocol
+
+Status must be exactly one of:
+
+- DONE: implementation completed and verification evidence is included.
+- DONE_WITH_CONCERNS: implementation completed, but correctness, scope, or risk concerns remain.
+- BLOCKED: implementation cannot continue without a decision or failed prerequisite.
+- NEEDS_CONTEXT: missing context prevents correct implementation.
+
+Do not spawn nested implement/check subagents. Return BLOCKED or NEEDS_CONTEXT to the main session if another worker or decision is needed.
+
+At Phase 2 start, read `implement.md`, review it critically against current code/spec reality, then execute steps in order. Continue through the plan while unblocked; stop for failed gates, unclear instructions, or user decisions.

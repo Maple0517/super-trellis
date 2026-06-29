@@ -118,12 +118,12 @@ These skills should become native Trellis behavior.
 | `using-superpowers` | `.trellis/workflow.md`, `trellis-start` | Choose the right process before acting; process skills before implementation skills; anti-rationalization against skipping workflow. |
 | `brainstorming` | `trellis-brainstorm`, Phase 1.1 | Explore repo context first, ask one question at a time, propose 2-3 approaches, present design for approval, decompose oversized scopes. |
 | `writing-plans` | Phase 1 planning artifacts, especially `implement.md` | Bite-sized implementation steps, exact files, exact commands, expected output, no placeholders, self-review of plans. |
-| `executing-plans` | Phase 2.1, `trellis-continue` | Load plan, review it critically, execute step-by-step, stop on blockers, checkpoint progress. |
+| `executing-plans` | Phase 2.1 walkthrough and in-progress breadcrumb | Load plan, review it critically, execute step-by-step, stop on blockers, checkpoint progress. `trellis-continue` stays a resume/navigation skill. |
 | `finishing-a-development-branch` | Phase 3.4, `trellis-finish-work` | Verify before merge/PR/cleanup, present integration choices, preserve evidence, then archive/journal through Trellis. |
 | `receiving-code-review` | `trellis-check`, review handling sections | Understand feedback, verify against codebase, push back technically when wrong, no performative agreement. |
 | `requesting-code-review` | `trellis-check`, Phase 2.2 | Request review after major tasks, high-risk changes, stuck states, and before merge; classify review findings by severity. |
-| `systematic-debugging` | `trellis-break-loop`, bugfix routing in workflow | Reproduce, read errors, inspect recent changes, find root cause before fixing, add regression prevention. |
-| `test-driven-development` | `trellis-before-dev`, Phase 2.1 | Red/green/refactor for behavior changes; failing test before implementation when practical; no generated-code shortcut without test ownership. |
+| `systematic-debugging` | new pre-fix `trellis-debug`, bug/failure routing in workflow; `trellis-break-loop` only clarifies post-fix retrospective responsibility | Reproduce, read errors, inspect recent changes, find root cause before fixing, add regression prevention. |
+| `test-driven-development` | `trellis-before-dev`, Phase 2.1 | Red/green/refactor for behavior changes; failing test, reproduction, or recorded substitute proof before implementation; if implementation precedes proof, discard it and restart from proof. |
 | `verification-before-completion` | `trellis-check`, Phase 3 | Identify proof command, run it fresh, read output, only then claim completion. |
 | `writing-skills` | `trellis-meta`, skill authoring guidance | Skill trigger clarity, frontmatter quality, when to create skills, reference/script/template split, skill self-verification. |
 
@@ -139,6 +139,64 @@ Class 2 should change actual Trellis skill instructions and workflow detail. It 
 | Generic subagent dispatch shell | Trellis should use `trellis-channel` or platform-native inline mode, not generic parallel dispatch as the default. |
 | Branch cleanup as a standalone finish lifecycle | Trellis Phase 3 remains the finish lifecycle; branch integration becomes one step inside it. |
 | Any rule that requires full design/plan for trivial requests | Trellis must keep simple-task fast path while retaining necessary checks. |
+
+---
+
+## 5.5 Auxiliary Asset Integration
+
+Superpowers skills include auxiliary prompts, references, scripts, and test documents beyond `SKILL.md`. These assets must be classified and handled explicitly; reading only the top-level skill files is not enough for maximum integration.
+
+### Absorb into skills or `.trellis/spec/guides`
+
+These should become Trellis-native guidance or references:
+
+| Auxiliary asset | Trellis destination | Reason |
+|---|---|---|
+| `systematic-debugging/root-cause-tracing.md` | `trellis-debug` reference or `.trellis/spec/guides/debugging.md` | Core pre-fix investigation technique. |
+| `systematic-debugging/condition-based-waiting.md` | testing/debugging guide | Directly useful for flaky tests and async verification. |
+| `systematic-debugging/defense-in-depth.md` | debugging or validation guide | Prevents single-point fixes after invalid-data bugs. |
+| `test-driven-development/testing-anti-patterns.md` | `trellis-before-dev` / `trellis-check` references | Strengthens test quality beyond the TDD gate. |
+| `writing-skills/anthropic-best-practices.md` | `trellis-meta` reference | Directly improves Trellis skill authoring. |
+| `writing-skills/persuasion-principles.md` | `trellis-meta` reference | Helps write skills that resist agent rationalization. |
+| `writing-skills/testing-skills-with-subagents.md` | `trellis-meta` reference or skill-verification guide | Useful for validating Trellis skills under pressure. |
+
+### Selectively absorb because the value is narrow
+
+These are useful only in specific scenarios:
+
+| Auxiliary asset | Selective use |
+|---|---|
+| `brainstorming/visual-companion.md` and browser companion scripts | Explicit evaluation required for frontend visual tasks; not mandatory to use, but mandatory to evaluate before design lock. Do not silently skip. |
+| `systematic-debugging/test-*.md` pressure tests | Reuse as validation scenarios for `trellis-debug`, not as runtime skill text. |
+| `writing-skills/examples/CLAUDE_MD_TESTING.md` | Reuse as examples for skill testing, not as Trellis runtime guidance. |
+| `systematic-debugging/condition-based-waiting-example.ts` and `find-polluter.sh` | Keep as optional examples/scripts if a matching Trellis guide needs concrete fixtures. |
+| `writing-skills/graphviz-conventions.dot` and `render-graphs.js` | Keep only for skill-documentation diagrams when Trellis meta docs need rendered examples. |
+
+### Reference comparison against Trellis agents and channel runtime
+
+These are prompt or agent-shape assets. They should be compared with existing Trellis channel/agent behavior and used to fill gaps, not copied blindly:
+
+| Auxiliary asset | Comparison target |
+|---|---|
+| `brainstorming/spec-document-reviewer-prompt.md` | Trellis design/spec review flow. |
+| `writing-plans/plan-document-reviewer-prompt.md` | Trellis `implement.md` review expectations. |
+| `requesting-code-review/code-reviewer.md` | `trellis-check` and Trellis channel reviewer prompts. |
+| `subagent-driven-development/implementer-prompt.md` | Trellis channel worker prompt shape. |
+| `subagent-driven-development/spec-reviewer-prompt.md` | Trellis channel spec-review worker shape. |
+| `subagent-driven-development/code-quality-reviewer-prompt.md` | Trellis channel code-quality review worker shape. |
+| `using-superpowers/references/codex-tools.md`, `copilot-tools.md`, `gemini-tools.md` | Platform-specific Trellis hook/skill instructions. |
+| all `agents/openai.yaml` files | Compare against Trellis agent definitions and platform template defaults; use only missing constraints, not raw agent wrappers. |
+
+### Do not absorb
+
+These should not become Trellis runtime behavior:
+
+| Auxiliary asset | Reason |
+|---|---|
+| `systematic-debugging/CREATION-LOG.md` | Historical skill-creation record, not runtime guidance. |
+| Raw visual companion server implementation | Useful only if Trellis deliberately adds a visual companion feature later. |
+| Superpowers platform wrapper details that conflict with Trellis hooks | Trellis owns platform hook and context injection semantics. |
+| Superpowers worktree and duplicate lifecycle wrappers inside auxiliary agent configs | Trellis task/workspace/finish lifecycle remains authoritative. |
 
 ---
 
@@ -162,11 +220,13 @@ Add a richer triage matrix to `.trellis/workflow.md`:
 
 Phase 1 should absorb Superpowers planning quality:
 
+- task-creation consent before substantive brainstorming; `no_task` state stays at triage depth only,
 - repo evidence before questions,
 - one question at a time,
 - recommended answer with trade-off,
 - 2-3 approaches before settling,
 - design approval before implementation plan,
+- explicit Visual Companion evaluation for frontend visual, layout-heavy, or interaction-heavy work,
 - `implement.md` with bite-sized tasks,
 - exact files and commands,
 - no placeholder language,
@@ -188,9 +248,12 @@ Phase 2 should absorb execution rigor:
 - load applicable specs,
 - decide whether TDD is required,
 - for bugfixes, run systematic debugging before patching,
+- expose `trellis-debug` in the in-progress breadcrumb because breadcrumbs are the only per-turn mandatory channel,
 - execute the plan step-by-step,
+- use the platform's native step-tracking tool (`update_plan` on Codex, `TodoWrite` on Claude Code) to keep progress visible,
 - stop and ask when blocked,
 - run verification at each planned checkpoint,
+- when the planned scope and acceptance criteria are verified, move to Phase 3; do not suggest new polish or follow-up work before offering the finish flow,
 - for multi-agent work, use Trellis channel orchestration and return summaries to the main session.
 
 ### 6.4 Phase 2.2: Quality check
@@ -202,7 +265,8 @@ Quality check should absorb review and verification behavior:
 - review feedback must be verified, not blindly accepted,
 - critical findings block progress,
 - important findings block merge unless explicitly deferred,
-- minor findings can be logged.
+- minor findings can be logged,
+- when checks are green for the planned scope, the next step is Phase 3 (spec update, commit, finish); additional polish or follow-up work is a new scope decision and requires user approval.
 
 ### 6.5 Phase 3: Finish
 
@@ -210,7 +274,9 @@ Phase 3 should absorb branch-finish discipline without replacing Trellis finish:
 
 - verify full intended test suite before commit/merge/PR,
 - present local merge / PR / leave branch / discard choices when relevant,
+- before staging or committing, inspect staged files separately from unstaged files; unstage unrelated paths before the work commit,
 - do not archive task before work commits are handled,
+- if `.trellis/` or platform directories are gitignored, archive and journal writes may remain local; report that state instead of forcing `git add -f`,
 - use Trellis archive and session journal as the final source of truth.
 
 ---
@@ -225,17 +291,22 @@ Add Superpowers-style routing semantics:
 - process skill before implementation skill,
 - simple-task fast path allowed,
 - complex/high-risk tasks require task workflow,
-- if user refuses task creation, shrink scope or stay in explanation mode.
+- if user refuses task creation, shrink scope or stay in explanation mode,
+- in `no_task` state, keep complex work at triage depth only; do not expand into brainstorm or implementation planning before the task exists,
+- frontend visual, layout-heavy, or interaction-heavy work must explicitly evaluate Visual Companion during planning or review,
+- on Codex, complex work should keep a short global `update_plan` current across planning, implementation, and verification.
 
 ### 7.2 `trellis-brainstorm`
 
 Strengthen with Superpowers brainstorming:
 
+- task-creation consent before substantive brainstorming; `no_task` state stays at triage depth,
 - context evidence before user questions,
 - one question per turn,
 - recommended answer and trade-off in each question,
 - 2-3 options before design,
 - design approval gate,
+- explicit Visual Companion evaluation for frontend visual tasks; do not silently skip,
 - decomposition of too-large scopes,
 - design self-review before plan writing.
 
@@ -244,10 +315,16 @@ Strengthen with Superpowers brainstorming:
 Strengthen with:
 
 - applicable spec loading,
-- TDD decision matrix,
+- TDD gate authority: Iron Law, decision matrix, verify-RED, discard-and-restart violation consequence, rationalizations, red flags,
 - impact/risk check,
 - behavior-change test expectation,
-- bugfix route into `trellis-break-loop` when root cause is unclear.
+- bugfix route into pre-fix `trellis-debug` when root cause is unclear.
+
+TDD is split by reader:
+
+- `trellis-before-dev` is the gate authority: no implementation code before failing proof.
+- `.trellis/spec/guides/testing-guide.md` is the test-quality authority: Good Tests, Good/Bad examples, When Stuck, mocking anti-patterns, regression red-green, and verification checklist.
+- Workflow breadcrumbs and implement/check agents carry compact execution rules plus references to those two authorities.
 
 ### 7.4 `trellis-check`
 
@@ -259,19 +336,29 @@ Strengthen with:
 - review-reception rules,
 - no positive completion language until evidence exists.
 
-### 7.5 `trellis-break-loop`
+### 7.5 `trellis-debug`
 
-Strengthen with systematic debugging:
+Create as the pre-fix systematic debugging skill:
 
 - reproduce first,
 - read full error output,
+- obey the Iron Law: no fixes without root-cause investigation first,
+- stop on red flags such as quick fixes, speculative patching, or "I see the problem" without evidence,
 - inspect recent changes,
 - form and test hypotheses,
 - fix root cause,
 - add regression proof,
 - capture reusable lesson into specs when warranted.
 
-### 7.6 `trellis-channel`
+### 7.6 `trellis-break-loop`
+
+Keep as post-fix retrospective:
+
+- clarify that `trellis-debug` handles pre-fix investigation,
+- classify why repeated fixes failed after the bug is fixed,
+- propose durable prevention after evidence exists.
+
+### 7.7 `trellis-channel`
 
 Adapt Class 1 Superpowers orchestration:
 
@@ -281,7 +368,7 @@ Adapt Class 1 Superpowers orchestration:
 - implementer/reviewer checkpoint pattern,
 - main-session integration responsibilities.
 
-### 7.7 `trellis-finish-work`
+### 7.8 `trellis-finish-work`
 
 Strengthen with branch completion discipline:
 
@@ -290,7 +377,7 @@ Strengthen with branch completion discipline:
 - distinguish dirty files from current task vs other work,
 - keep archive/journal as Trellis finalization.
 
-### 7.8 `trellis-meta`
+### 7.9 `trellis-meta`
 
 Absorb `writing-skills`:
 
@@ -350,6 +437,25 @@ The implementation should be verified with scenario tests or scripted dry runs c
 
 ---
 
+## 10.5 Pomotree Inline Experiment Feedback
+
+A full Codex inline feature run on the Pomotree project (Next.js + Tauri, frontend UI redesign) exposed runtime gaps that the integration must close:
+
+| Finding | Gap | Required fix |
+|---|---|---|
+| Agent brainstormed deeply before task creation | `no_task` state had no triage depth limit | Enforce triage-only before task creation in `trellis-start`, `trellis-brainstorm`, workflow breadcrumbs, and guardrails |
+| Visual Companion was never offered for a frontend UI task | Visual Companion classified as "optional"; agent silently skipped | Change to explicit evaluation required for frontend visual tasks in `trellis-brainstorm`, `trellis-start`, and breadcrumbs |
+| No Codex step-tracking popup during implementation | Agent did not call `update_plan`; user had no progress visibility | Add `update_plan` / `TodoWrite` integration to `trellis-start`, `trellis-before-dev`, breadcrumbs, and guardrails |
+| Agent suggested "visual polish" after implement.md was complete | No finish gate to transition from Phase 2 to Phase 3 | Add finish gate: when planned scope and acceptance criteria are verified, move to Phase 3 before suggesting new work |
+| Commit included pre-existing staged files | Agent did not inspect staged vs unstaged separately | Add staged-file hygiene to `trellis-finish-work` safety rules |
+| Trellis archive/journal writes remained local | `.trellis/` was gitignored; agent tried to force-add | Report local state instead of forcing `git add -f` |
+| Platform-level implement/check agents missed TDD gates | `.trellis/agents/*` was updated, but `.codex/agents/*` and `.claude/agents/*` still had old prompts | Sync compact TDD execution/evidence gates into platform agents |
+| TDD absorption was only a skeleton | Core proof gate existed, but Superpowers anti-drift pieces were thin | Add Iron Law, rationalizations, red flags, Good Tests, Good/Bad examples, When Stuck, and verification checklist |
+
+All findings are encoded as runtime rules in the workflow, skills, guides, and local platform/channel agents.
+
+---
+
 ## 11. Design Self-Review
 
 - Placeholder scan: no placeholder markers or vague future-fill language remain.
@@ -357,3 +463,5 @@ The implementation should be verified with scenario tests or scripted dry runs c
 - Conflict check: Trellis remains the only workflow; Superpowers outer task/finish lifecycle is not imported.
 - Max-integration check: plan requires workflow, skills, artifacts, review, execution, debugging, and channel routing changes; it is not a few added sentences.
 - Classification check: all 14 Superpowers skills are accounted for across the three classes.
+- Pomotree experiment check: no-task triage depth, Visual Companion evaluation, platform step-tracking, finish-before-polish gate, staged-file hygiene, and ignored-runtime reporting are all encoded as runtime rules.
+- TDD absorption check: gate authority and test-quality authority are separated; platform/channel agents get compact execution/evidence rules and references, not duplicated long tutorials.

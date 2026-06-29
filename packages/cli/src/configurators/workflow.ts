@@ -33,6 +33,9 @@ import {
   guidesIndexContent,
   guidesCrossLayerThinkingGuideContent,
   guidesCodeReuseThinkingGuideContent,
+  guidesDebuggingGuideContent,
+  guidesTestingGuideContent,
+  guidesSuperpowersVerificationScenariosContent,
 } from "../templates/markdown/index.js";
 
 import { writeFile, ensureDir } from "../utils/file-writer.js";
@@ -241,6 +244,12 @@ async function createSpecTemplates(
     {
       name: "code-reuse-thinking-guide.md",
       content: guidesCodeReuseThinkingGuideContent,
+    },
+    { name: "debugging-guide.md", content: guidesDebuggingGuideContent },
+    { name: "testing-guide.md", content: guidesTestingGuideContent },
+    {
+      name: "superpowers-verification-scenarios.md",
+      content: guidesSuperpowersVerificationScenariosContent,
     },
   ];
   for (const doc of guidesDocs) {

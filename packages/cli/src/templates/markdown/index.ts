@@ -95,3 +95,11 @@ export const guidesCrossLayerThinkingGuideContent: string = readLocalTemplate(
 export const guidesCodeReuseThinkingGuideContent: string = readLocalTemplate(
   "spec/guides/code-reuse-thinking-guide.md.txt",
 );
+export const guidesDebuggingGuideContent: string = readLocalTemplate(
+  "spec/guides/debugging-guide.md.txt",
+);
+export const guidesTestingGuideContent: string = readLocalTemplate(
+  "spec/guides/testing-guide.md.txt",
+);
+export const guidesSuperpowersVerificationScenariosContent: string =
+  readLocalTemplate("spec/guides/superpowers-verification-scenarios.md.txt");

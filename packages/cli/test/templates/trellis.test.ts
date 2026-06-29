@@ -129,25 +129,30 @@ describe("trellis template constants", () => {
     expect(workflowMdTemplate).toContain("#");
   });
 
-  it("marketplace native workflow mirror matches the bundled workflow", () => {
-    const repoRoot = fs.existsSync(path.join(process.cwd(), "marketplace"))
+  function readMarketplaceWorkflow(relativePath: string): string | undefined {
+    const repoRoot = fs.existsSync(path.join(process.cwd(), "packages"))
       ? process.cwd()
       : path.resolve(process.cwd(), "../..");
-    const marketplaceNative = fs.readFileSync(
-      path.join(repoRoot, "marketplace/workflows/native/workflow.md"),
-      "utf-8",
-    );
+    const workflowPath = path.join(repoRoot, "marketplace/workflows", relativePath);
+    if (!fs.existsSync(workflowPath)) {
+      return undefined;
+    }
+    return fs.readFileSync(workflowPath, "utf-8");
+  }
+
+  it("marketplace native workflow mirror matches the bundled workflow when the submodule is present", () => {
+    const marketplaceNative = readMarketplaceWorkflow("native/workflow.md");
+    if (marketplaceNative === undefined) {
+      return;
+    }
     expect(marketplaceNative).toBe(workflowMdTemplate);
   });
 
-  it("marketplace TDD workflow planning breadcrumbs include behavior gates", () => {
-    const repoRoot = fs.existsSync(path.join(process.cwd(), "marketplace"))
-      ? process.cwd()
-      : path.resolve(process.cwd(), "../..");
-    const tddWorkflow = fs.readFileSync(
-      path.join(repoRoot, "marketplace/workflows/tdd/workflow.md"),
-      "utf-8",
-    );
+  it("marketplace TDD workflow planning breadcrumbs include behavior gates when the submodule is present", () => {
+    const tddWorkflow = readMarketplaceWorkflow("tdd/workflow.md");
+    if (tddWorkflow === undefined) {
+      return;
+    }
     const planning = /\[workflow-state:planning\]([\s\S]*?)\[\/workflow-state:planning\]/.exec(
       tddWorkflow,
     )?.[1];

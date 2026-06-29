@@ -1,5 +1,7 @@
 # Break the Loop - Deep Bug Analysis
 
+`trellis-debug` handles pre-fix investigation when a bug, failure, or unexpected behavior first appears. This skill handles post-fix retrospective analysis after repeated debugging or repeated failed fixes. Do not use this skill as the first stop before gathering root-cause evidence.
+
 When debug is complete, use this for deep analysis to break the "fix bug -> forget -> repeat" cycle.
 
 ---
@@ -105,7 +107,6 @@ Three levels of insight:
 3. **Philosophical**: How to expand thinking patterns
 
 30 minutes of analysis saves 30 hours of future debugging.
-
 
 ## Thinking Framework: Bayesian Reasoning
 

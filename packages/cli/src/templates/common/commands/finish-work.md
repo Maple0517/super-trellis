@@ -5,7 +5,7 @@ Wrap up the current session: archive the active task (and any other completed-bu
 ## Step 1: Survey current state
 
 ```bash
-{{PYTHON_CMD}} ./.trellis/scripts/get_context.py --mode record
+python3 ./.trellis/scripts/get_context.py --mode record
 ```
 
 This prints:
@@ -35,7 +35,7 @@ For each remaining dirty path, decide whether it belongs to **the current task**
 Then route:
 
 - **Any remaining path looks like current-task work** — bail out with:
-  > "Working tree has uncommitted code changes from this task: `<list>`. Return to workflow Phase 3.4 to commit them before running `{{CMD_REF:finish-work}}`."
+  > "Working tree has uncommitted code changes from this task: `<list>`. Return to workflow Phase 3.4 to commit them before running ``finish-work` (Trellis command)`."
 
   Do NOT run `git commit` here. Do NOT prompt the user to commit. The user goes back to Phase 3.4 and the AI drives the batched commit there.
 - **All remaining paths look unrelated** (other parallel-window work) — report them once and continue to Step 3:
@@ -45,7 +45,7 @@ Then route:
 ## Step 3: Archive task(s)
 
 ```bash
-{{PYTHON_CMD}} ./.trellis/scripts/task.py archive <task-name>
+python3 ./.trellis/scripts/task.py archive <task-name>
 ```
 
 At minimum: the current active task (if any). Plus any extra tasks the user confirmed in Step 1. Each archive produces a `chore(task): archive ...` commit via the script's auto-commit.
@@ -55,7 +55,7 @@ If there is no active task and the user did not confirm any cleanup archives, sk
 ## Step 4: Record session journal
 
 ```bash
-{{PYTHON_CMD}} ./.trellis/scripts/add_session.py \
+python3 ./.trellis/scripts/add_session.py \
   --title "Session Title" \
   --commit "hash1,hash2" \
   --summary "Brief summary"
@@ -64,3 +64,16 @@ If there is no active task and the user did not confirm any cleanup archives, sk
 Use the work-commit hashes produced in Phase 3.4 (visible in Step 1's `Recent commits` list, or via `git log --oneline`) for `--commit`. Do not include the archive commit hashes from Step 3. This produces a `chore: record journal` commit.
 
 Final git log order: `<work commits from 3.4>` → `chore(task): archive ...` (one or more) → `chore: record journal`.
+
+## Branch Finish Discipline
+
+Before archive or journal finalization, ensure work commits and verification are handled. If the work lives on a branch, present the relevant integration choices: local merge, push/PR, keep branch as-is, or discard.
+
+Safety rules:
+- Before presenting integration options, verify the project's required checks pass on the current state.
+- If required tests fail, stop and report the failing evidence.
+- Discard requires explicit user confirmation.
+- Do not remove worktrees, workspace dirs, or harness-owned branches unless provenance is known.
+- Do not archive task work while current-task code changes remain uncommitted.
+
+Trellis archive and session journal remain the final lifecycle steps.
