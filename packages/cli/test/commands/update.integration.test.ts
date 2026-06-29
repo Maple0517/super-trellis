@@ -651,6 +651,56 @@ describe("update() integration", () => {
     expect(fs.readFileSync(guidesIndex, "utf-8")).toBe(customContent);
   });
 
+
+  it("#13b update backfills missing built-in guide files and index entries", async () => {
+    await setupProject();
+
+    const guideDir = path.join(tmpDir, PATHS.SPEC, "guides");
+    const debuggingGuide = path.join(guideDir, "debugging-guide.md");
+    const testingGuide = path.join(guideDir, "testing-guide.md");
+    const scenariosGuide = path.join(
+      guideDir,
+      "superpowers-verification-scenarios.md",
+    );
+    const guidesIndex = path.join(guideDir, "index.md");
+
+    fs.rmSync(debuggingGuide, { force: true });
+    fs.rmSync(testingGuide, { force: true });
+    fs.rmSync(scenariosGuide, { force: true });
+    fs.writeFileSync(
+      guidesIndex,
+      "# Thinking Guides\n\n" +
+        "| Guide | Purpose | When to Use |\n" +
+        "|-------|---------|-------------|\n" +
+        "| [Code Reuse Thinking Guide](./code-reuse-thinking-guide.md) | Identify patterns and reduce duplication | When you notice repeated patterns |\n" +
+        "| [Cross-Layer Thinking Guide](./cross-layer-thinking-guide.md) | Think through data flow across layers | Features spanning multiple layers |\n\n" +
+        "→ Read [Code Reuse Thinking Guide](./code-reuse-thinking-guide.md)\n",
+    );
+
+    // Simulate a project installed before these guides were hash-tracked.
+    const hashes = readHashesV2(hashFilePath());
+    delete hashes[`${PATHS.SPEC}/guides/debugging-guide.md`];
+    delete hashes[`${PATHS.SPEC}/guides/testing-guide.md`];
+    delete hashes[`${PATHS.SPEC}/guides/superpowers-verification-scenarios.md`];
+    writeHashesV2(hashFilePath(), hashes);
+
+    await update({ force: true });
+
+    expect(fs.readFileSync(debuggingGuide, "utf-8")).toContain(
+      "waitForCondition",
+    );
+    expect(fs.readFileSync(testingGuide, "utf-8")).toContain(
+      "Why Order Matters",
+    );
+    expect(fs.readFileSync(scenariosGuide, "utf-8")).toContain("Audit-only");
+
+    const updatedIndex = fs.readFileSync(guidesIndex, "utf-8");
+    expect(updatedIndex).toContain("Debugging Guide");
+    expect(updatedIndex).toContain("Testing Guide");
+    expect(updatedIndex).toContain("Superpowers Integration Verification Scenarios");
+    expect(updatedIndex).toContain("When to Think About Debugging Discipline");
+  });
+
   it("#14 deleted spec directory is NOT recreated by update", async () => {
     await setupProject();
 

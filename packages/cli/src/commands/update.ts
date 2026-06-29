@@ -44,7 +44,12 @@ import {
   gitignoreTemplate,
   workflowMdTemplate,
 } from "../templates/trellis/index.js";
-import { agentsMdContent } from "../templates/markdown/index.js";
+import {
+  agentsMdContent,
+  guidesDebuggingGuideContent,
+  guidesTestingGuideContent,
+  guidesSuperpowersVerificationScenariosContent,
+} from "../templates/markdown/index.js";
 
 import {
   ALL_MANAGED_DIRS,
@@ -104,8 +109,104 @@ const LEGACY_UNTRACKED_AGENTS_MD_BLOCK_HASHES = new Set<string>([
   "c1f511b1cfc1902f2147da159f09cc51f380b0c9e341cdb3ac5dea5233f3e307",
 ]);
 
+const BUILT_IN_GUIDE_BACKFILLS = [
+  {
+    relativePath: `${PATHS.SPEC}/guides/debugging-guide.md`,
+    content: guidesDebuggingGuideContent,
+  },
+  {
+    relativePath: `${PATHS.SPEC}/guides/testing-guide.md`,
+    content: guidesTestingGuideContent,
+  },
+  {
+    relativePath: `${PATHS.SPEC}/guides/superpowers-verification-scenarios.md`,
+    content: guidesSuperpowersVerificationScenariosContent,
+  },
+] as const;
+
+const GUIDE_INDEX_PATH = `${PATHS.SPEC}/guides/index.md`;
+
+function addMissingBuiltInGuideBackfills(
+  cwd: string,
+  files: Map<string, string>,
+): void {
+  if (!fs.existsSync(path.join(cwd, PATHS.SPEC, "guides"))) return;
+
+  for (const guide of BUILT_IN_GUIDE_BACKFILLS) {
+    if (!fs.existsSync(path.join(cwd, guide.relativePath))) {
+      files.set(guide.relativePath, guide.content);
+    }
+  }
+}
+
+function mergeBuiltInGuideIndexAdditions(content: string): string {
+  let next = content;
+  const scenarioRow =
+    "| [Superpowers Integration Verification Scenarios](./superpowers-verification-scenarios.md) | Scenario checklist for validating Trellis/Superpowers integration behavior | Audit-only runtime checks |";
+
+  if (!next.includes("[Debugging Guide](./debugging-guide.md)")) {
+    next = next.replace(
+      "| [Cross-Layer Thinking Guide](./cross-layer-thinking-guide.md) | Think through data flow across layers | Features spanning multiple layers |",
+      "| [Cross-Layer Thinking Guide](./cross-layer-thinking-guide.md) | Think through data flow across layers | Features spanning multiple layers |\n" +
+        "| [Debugging Guide](./debugging-guide.md) | Trace root cause, remove flakes, and add defense-in-depth validation | Bugs, failed verification, flaky tests, runtime errors |\n" +
+        "| [Testing Guide](./testing-guide.md) | Enforce TDD proof, avoid mock traps, and verify completion claims | Behavior changes, bug fixes, mocks, regression tests |\n" +
+        scenarioRow,
+    );
+  } else if (
+    !next.includes(
+      "[Superpowers Integration Verification Scenarios](./superpowers-verification-scenarios.md)",
+    )
+  ) {
+    next = next.replace(
+      "| [Testing Guide](./testing-guide.md) | Enforce TDD proof, avoid mock traps, and verify completion claims | Behavior changes, bug fixes, mocks, regression tests |",
+      "| [Testing Guide](./testing-guide.md) | Enforce TDD proof, avoid mock traps, and verify completion claims | Behavior changes, bug fixes, mocks, regression tests |\n" +
+        scenarioRow,
+    );
+  }
+
+  if (!next.includes("### When to Think About Debugging Discipline")) {
+    next = next.replace(
+      "→ Read [Code Reuse Thinking Guide](./code-reuse-thinking-guide.md)",
+      "→ Read [Code Reuse Thinking Guide](./code-reuse-thinking-guide.md)\n\n" +
+        "### When to Think About Debugging Discipline\n\n" +
+        "- [ ] A bug, regression, runtime error, or failed verification appears\n" +
+        "- [ ] A test is flaky or depends on arbitrary sleeps\n" +
+        "- [ ] The error appears deep in the call stack\n" +
+        "- [ ] Invalid data crosses multiple layers\n" +
+        "- [ ] Two speculative fixes have already failed\n\n" +
+        "→ Read [Debugging Guide](./debugging-guide.md)\n\n" +
+        "### When to Think About Testing Discipline\n\n" +
+        "- [ ] You are changing behavior\n" +
+        "- [ ] You are fixing a bug\n" +
+        "- [ ] You are adding or changing mocks\n" +
+        "- [ ] You are tempted to test after implementation\n" +
+        "- [ ] You are about to claim tests, lint, build, or a bug fix passed\n\n" +
+        "→ Read [Testing Guide](./testing-guide.md)",
+    );
+  }
+
+  return next;
+}
+
+function needsBuiltInGuideIndexAdditions(cwd: string): boolean {
+  const indexPath = path.join(cwd, GUIDE_INDEX_PATH);
+  if (!fs.existsSync(indexPath)) return false;
+  const content = fs.readFileSync(indexPath, "utf-8");
+  return mergeBuiltInGuideIndexAdditions(content) !== content;
+}
+
+function applyBuiltInGuideIndexAdditions(cwd: string): boolean {
+  const indexPath = path.join(cwd, GUIDE_INDEX_PATH);
+  if (!fs.existsSync(indexPath)) return false;
+  const content = fs.readFileSync(indexPath, "utf-8");
+  const next = mergeBuiltInGuideIndexAdditions(content);
+  if (next === content) return false;
+  fs.writeFileSync(indexPath, next);
+  return true;
+}
+
 // Paths that should never be touched (true user data)
-// spec/ is user-customized content created during init; update should never modify it
+// spec/ is user-customized content created during init; update only performs explicit additive backfills for missing built-in guides
 const PROTECTED_PATHS = [
   `${DIR_NAMES.WORKFLOW}/${DIR_NAMES.WORKSPACE}`, // workspace/
   `${DIR_NAMES.WORKFLOW}/${DIR_NAMES.TASKS}`, // tasks/
@@ -792,6 +893,11 @@ async function collectTemplateFiles(
   // platform routing markers outside [workflow-state:*] blocks are also
   // script-consumed.
   files.set(`${DIR_NAMES.WORKFLOW}/workflow.md`, workflowMdTemplate);
+
+  // Built-in guide backfill is additive for existing projects: add missing
+  // generic guides, but never overwrite .trellis/spec user content.
+  addMissingBuiltInGuideBackfills(cwd, files);
+
   // workspace/index.md stays excluded — it's runtime-appended by add_session.py
   // (journal index) and has no script-parsed structure.
   files.set(FILE_NAMES.AGENTS, buildAgentsMdTemplate(cwd));
@@ -2123,6 +2229,7 @@ export async function update(options: UpdateOptions): Promise<void> {
   // Analyze changes (pass hashes for modification detection)
   const changes = analyzeChanges(cwd, hashes, templates);
   const missingAgentsMdHash = collectMissingAgentsMdHash(changes, hashes);
+  const guideIndexNeedsAdditions = needsBuiltInGuideIndexAdditions(cwd);
 
   // Print summary
   printChangeSummary(changes);
@@ -2159,7 +2266,8 @@ export async function update(options: UpdateOptions): Promise<void> {
     changes.autoUpdateFiles.length === 0 &&
     changes.changedFiles.length === 0 &&
     !hasPendingMigrations &&
-    !hasSafeDeletes
+    !hasSafeDeletes &&
+    !guideIndexNeedsAdditions
   ) {
     if (!options.dryRun && missingAgentsMdHash.size > 0) {
       updateHashes(cwd, missingAgentsMdHash);
@@ -2412,6 +2520,11 @@ export async function update(options: UpdateOptions): Promise<void> {
     }
   }
 
+  const guideIndexUpdated = applyBuiltInGuideIndexAdditions(cwd);
+  if (guideIndexUpdated) {
+    console.log(chalk.green(`  + ${GUIDE_INDEX_PATH} guide entries`));
+  }
+
   // Append additive config.yaml sections introduced between versions.
   // Sentinel-gated, so users keep their customizations and re-running update
   // on already-migrated files is a no-op. Skipped on unknown / downgrade.
@@ -2479,6 +2592,9 @@ export async function update(options: UpdateOptions): Promise<void> {
   }
   if (configSectionsAppended > 0) {
     console.log(`  Config sections added: ${configSectionsAppended}`);
+  }
+  if (guideIndexUpdated) {
+    console.log("  Guide index: updated");
   }
   if (backupDir) {
     console.log(`  Backup: ${path.relative(cwd, backupDir)}/`);
