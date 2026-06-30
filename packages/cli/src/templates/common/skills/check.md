@@ -119,11 +119,13 @@ git status
 
 ## Step 2: Read Task Artifacts and Applicable Specs
 
-Read the current task artifacts in order:
+If a current task exists, read the task artifacts in order:
 
 - `prd.md`
 - `design.md` if present
 - `implement.md` if present
+
+If no active task exists, use the current user request, the current diff, changed paths, and the code area being edited as the temporary scope contract.
 
 ```bash
 python3 ./.trellis/scripts/get_context.py --mode packages
@@ -136,6 +138,8 @@ cat .trellis/spec/<package>/<layer>/index.md
 ```
 
 Read the specific guideline files referenced — the index is a pointer, not the goal.
+
+No-task fallback: verification still runs fully even when task artifacts do not exist. In that case, requirements checks must be grounded in the current request, current diff, and fresh command evidence.
 
 ## Step 3: Run Project Checks
 

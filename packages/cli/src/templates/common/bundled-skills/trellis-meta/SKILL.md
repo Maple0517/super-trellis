@@ -7,6 +7,8 @@ description: "Understand and customize the local Trellis architecture inside a u
 
 This skill is for local Trellis users who have already run `trellis init` in a project. After reading it, an AI should understand the Trellis architecture, operating model, and customization entry points inside that user project, then modify the generated `.trellis/` and platform directory files according to the user's request.
 
+This skill may be used with or without an active task. Small Trellis framework edits do not require task artifacts; larger architectural rewrites may still choose task mode for durable planning and lifecycle tracking.
+
 Trellis v0.6 adds three architectural surfaces on top of the pre-v0.6 workflow / persistence / platform model. First, a multi-agent collaboration runtime: `trellis channel` coordinates multiple AI worker processes through project-scoped JSONL event logs at `~/.trellis/channels/<project>/<channel>/events.jsonl`, with worker OOM guard, forum/thread channels, durable idempotency keys, and bundled `.trellis/agents/{check,implement}.md` runtime definitions. Second, cross-session memory: `trellis mem list | search | context | extract | projects` reads raw Claude Code, Codex, and Pi Agent JSONL already on disk, slices by `--phase brainstorm|implement|all`, and never uploads anything. Third, a dual-package npm release: `@mindfoldhq/trellis` (CLI) and `@mindfoldhq/trellis-core` (SDK with `/channel`, `/task`, `/mem`, `/testing` subpaths) ship in lockstep on one version. Treat these as first-class customization surfaces alongside the per-platform integration files.
 
 The default operating scope is local files in the user project:

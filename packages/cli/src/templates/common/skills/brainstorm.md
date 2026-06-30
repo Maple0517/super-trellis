@@ -22,7 +22,12 @@ Use this skill during Phase 1 planning to turn the user's request into clear req
 
 Use this skill only after task-creation consent has been given and the user is ready to enter Trellis planning.
 
-Do not use this skill for substantive brainstorming before the task exists. In `no_task` state, stay at triage depth only; once the conversation needs a real option tree, planning artifacts, or repeated product decisions, create the task first.
+This skill has two modes:
+
+- **Task mode**: task exists or the user approved task creation. Use the full planning flow and write planning artifacts.
+- **No-task mode**: no active task exists and the user declined task creation. Use bounded brainstorming only: inspect repo evidence, narrow direction, recommend scope, and ask one question at a time when needed. Do not create planning artifacts and do not expand into full implementation planning.
+
+In no-task mode, once the conversation needs a real option tree, repeated product decisions, durable planning, or implementation-level sequencing, stop and ask again to create a Trellis task.
 
 If no task exists yet, create one:
 
@@ -54,6 +59,18 @@ Use a concise title from the user's request. Use a slug without a date prefix. `
 9. For frontend visual, layout-heavy, or interaction-heavy work, explicitly evaluate whether Visual Companion would improve design exploration or review. If yes, recommend it before locking the design.
 
 Do not invent a project-specific product/spec hierarchy. If the repository already has product, domain, or spec docs, use them. If it does not, proceed with the evidence that exists.
+
+## No-task Mode
+
+When no active task exists and the user declined task creation:
+
+1. Inspect repository evidence first.
+2. Clarify scope, direction, and trade-offs one question at a time when needed.
+3. Recommend the smallest viable direction.
+4. Do not create or update `prd.md`.
+5. Do not create `design.md` or `implement.md`.
+6. Do not expand into full implementation planning for complex work.
+7. If work needs persistent planning, multi-stage execution, durable context, or lifecycle tracking, stop and ask again to create a Trellis task.
 
 ## Question Rules
 

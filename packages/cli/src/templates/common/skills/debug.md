@@ -1,6 +1,6 @@
 # Trellis Debug
 
-Use this skill before proposing or writing a fix. `trellis-break-loop` handles post-fix retrospective analysis after repeated debugging.
+Use this skill before proposing or writing a fix. It may be used with or without an active Trellis task. `trellis-break-loop` handles post-fix retrospective analysis after repeated debugging and remains task-only.
 
 ## Iron Law
 
@@ -60,3 +60,5 @@ Ask the user whether to continue with broader verification when the checks are n
 ## Stop Rule
 
 After 3 failed fixes, stop patching. Re-check reproduction, architecture, assumptions, and recent changes. Ask for review or use `trellis-break-loop` after the immediate failure is stabilized.
+
+If no active task exists and the bug grows into multi-stage work, durable context, or repeated-fix analysis, stop and ask to create a Trellis task before deeper retrospective work.

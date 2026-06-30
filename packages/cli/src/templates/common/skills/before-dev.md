@@ -2,20 +2,23 @@ Read the relevant development guidelines before starting your task.
 
 Execute these steps:
 
-1. **Read current task artifacts**:
-   - `prd.md` for requirements and acceptance criteria
-   - `design.md` if present for technical design
-   - `implement.md` if present for execution order and validation plan
+1. **Resolve task mode vs no-task mode**:
+   - If a current task exists, read task artifacts:
+     - `prd.md` for requirements and acceptance criteria
+     - `design.md` if present for technical design
+     - `implement.md` if present for execution order and validation plan
+   - If no active task exists, use the current user request, the files or package area you are about to change, and the current diff target area as the temporary scope contract.
 
 2. **Discover packages and their spec layers**:
    ```bash
    python3 ./.trellis/scripts/get_context.py --mode packages
    ```
 
-3. **Identify which specs apply** to your task based on:
+3. **Identify which specs apply** based on:
    - Which package you're modifying (e.g., `cli/`, `docs-site/`)
    - What type of work (backend, frontend, unit-test, docs, etc.)
-   - Any spec/research paths referenced by the task artifacts
+   - Any spec/research paths referenced by the task artifacts when a task exists
+   - The current request and changed area when no task exists
 
 4. **Read the spec index** for each relevant module:
    ```bash
@@ -30,7 +33,7 @@ Execute these steps:
    cat .trellis/spec/guides/index.md
    ```
 
-7. Understand the coding standards and patterns you need to follow, then proceed with your development plan.
+7. Understand the coding standards and patterns you need to follow, then proceed with your development plan. No-task mode still requires the same proof and TDD gates before implementation.
 
 8. **Register implementation steps** via the platform's step-tracking tool (`update_plan` on Codex, `TodoWrite` on Claude Code) before writing code, so the user sees progress visually.
 

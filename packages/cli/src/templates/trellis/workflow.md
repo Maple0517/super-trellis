@@ -161,9 +161,9 @@ Phase 3: Finish  → verify, update spec, commit, and wrap up
 
 ### Request Triage
 
-- Simple conversation or small task: ask only whether this turn should create a Trellis task. If the user says no, skip Trellis for this session.
+- Simple conversation or small task: ask only whether this turn should create a Trellis task. If the user says no, keep Trellis discipline available for inline work and auto-route no-task skills from prompt intent.
 - Bug, regression, failed verification, or unexpected behavior: reproduce and route to `trellis-debug` before patching; create a Trellis task when risk or scope is non-trivial.
-- Complex task: ask whether you may create a Trellis task and enter planning. Before task creation, limit yourself to lightweight triage, repo evidence gathering, and task-creation consent. Do not expand into a real option tree, multi-round product brainstorming, or implementation planning before the task exists. If the user says no, do not do broad inline implementation; explain, clarify scope, or suggest a smaller split.
+- Complex task: ask whether you may create a Trellis task and enter planning. Before task creation, bounded no-task brainstorming is allowed for repo evidence gathering, direction narrowing, and recommendation. Do not expand into full implementation planning before the task exists. If the user says no, continue only inside no-task skill mode until an upgrade trigger is hit, then ask again to create a task.
 - User approval to create a task is not approval to start implementation. Planning still happens first.
 
 ### Planning Artifacts
@@ -186,8 +186,10 @@ Create new children with `task.py create "<title>" --slug <name> --parent <paren
 
 [workflow-state:no_task]
 No active task. First classify the current turn and ask for task-creation consent before creating any Trellis task.
-Simple conversation / small task: ask only whether this turn should create a Trellis task. If the user says no, skip Trellis for this session.
-Complex task: ask the user if you can create a Trellis task and enter the planning phase. Before the task exists, stay at triage depth only: evidence gathering, one-sentence direction checks, and consent. Do not start substantive brainstorming, option trees, or implementation planning. If the user says no, explain, clarify scope, or suggest a smaller split.
+No active task does not mean skip Trellis discipline.
+Simple conversation / small task: ask only whether this turn should create a Trellis task. If the user says no, auto-route no-task discipline skills from prompt intent (`trellis-brainstorm`, `trellis-before-dev`, `trellis-debug`, `trellis-check`, `trellis-update-spec`) without creating task artifacts.
+Complex task: ask the user if you can create a Trellis task and enter the planning phase. Before the task exists, bounded no-task brainstorming may gather evidence, narrow direction, and recommend scope. Do not start full implementation planning. If the user says no, stay in no-task mode only until an upgrade trigger is hit, then ask again to create a task.
+Task-only in no-task state: `trellis-break-loop`, `trellis-finish-work`, `trellis-continue`, and `trellis-channel`.
 [/workflow-state:no_task]
 
 ### Phase 1: Plan
@@ -375,7 +377,10 @@ When a user request matches one of these intents inside an active task, route fi
 ### Guardrails
 
 - Task creation approval is not implementation approval; implementation waits for `task.py start` after artifact review.
-- Complex work in `no_task` state is triage only; substantive brainstorming starts only after task creation.
+- No-task mode is discipline-only, not a lightweight task system: no `prd.md`, `design.md`, `implement.md`, archive, journal, or sidecar planning files.
+- Complex work in `no_task` state may use bounded brainstorming for direction narrowing, but full implementation planning still requires task creation.
+- In no-task mode, auto-route discipline skills from prompt intent. Do not require the user to name Trellis skills explicitly.
+- When a no-task upgrade trigger is hit, stop and ask to create a Trellis task before continuing deeper.
 - PRD-only is valid for lightweight tasks; complex tasks need `design.md` + `implement.md`.
 - Planning must be persisted to task artifacts; checks must run before reporting completion.
 - Frontend visual or interaction-heavy work must explicitly evaluate whether Visual Companion should be used during planning or review.
