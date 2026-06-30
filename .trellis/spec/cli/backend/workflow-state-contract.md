@@ -210,6 +210,8 @@ and `implement.md`; in-progress keeps the commit step reachable before
 - `test that workflow.md [workflow-state:in_progress] mentions commit (Phase 3.4)`
 - `test that workflow.md [workflow-state:planning] mentions planning artifact gate`
 - `test that workflow.md [workflow-state:no_task] asks for task-creation consent`
+- `packages/cli/test/templates/trellis.test.ts` `[codex-inline] workflow.md in_progress-inline treats implement.md as ordered execution contract` keeps Codex inline mode from treating `implement.md` as loose context. The inline breadcrumb must preserve critical review, one active top-level implement step, no unexplained batching/reordering/skipping, and stop points for unclear instructions, failed gates, or user decisions.
+- `packages/cli/test/templates/trellis.test.ts` `[codex-inline] workflow.md blocks non-consensual lifecycle progress` protects the no-task and inline stop rules that prevent task-creation / lifecycle questions from becoming non-blocking side comments. Simple no-task work must not ask for task creation by default, and any explicit task-creation or lifecycle question must stop tool calls and writes until the user answers.
 
 ---
 

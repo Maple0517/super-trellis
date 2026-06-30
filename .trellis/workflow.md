@@ -187,8 +187,9 @@ Create new children with `task.py create "<title>" --slug <name> --parent <paren
 [workflow-state:no_task]
 No active task. First classify the current turn and ask for task-creation consent before creating any Trellis task.
 No active task does not mean skip Trellis discipline.
-Simple conversation / small task: ask only whether this turn should create a Trellis task. If the user says no, auto-route no-task discipline skills from prompt intent (`trellis-brainstorm`, `trellis-before-dev`, `trellis-debug`, `trellis-check`, `trellis-update-spec`) without creating task artifacts.
+Simple conversation / small task: do not ask for a Trellis task by default; answer, inspect, launch local services, or do bounded no-task work directly. Use no-task discipline skills from prompt intent (`trellis-brainstorm`, `trellis-before-dev`, `trellis-debug`, `trellis-check`, `trellis-update-spec`) without creating task artifacts.
 Complex task: ask the user if you can create a Trellis task and enter the planning phase. Before the task exists, bounded no-task brainstorming may gather evidence, narrow direction, and recommend scope. Do not start full implementation planning. If the user says no, stay in no-task mode only until an upgrade trigger is hit, then ask again to create a task.
+Consent stop: If you ask whether to create a Trellis task, stop and wait for the answer. Do not continue tool calls, code edits, commits, pushes, archives, PR work, or long-running debug/implementation steps while that task-creation question is unanswered.
 Hard upgrade triggers:
 1. The work needs persistent planning or durable decision records such as `prd.md`, `design.md`, or `implement.md`.
 2. The work spans multiple stages, multiple sessions, or otherwise will not naturally finish inside the current inline pass.
@@ -291,7 +292,12 @@ Tracking: for complex work in Codex, keep a short global `update_plan` current a
 Finish gate: when the planned scope and acceptance criteria are verified, move to Phase 3. Do not suggest new work or polish before offering the finish flow.
 Milestone handoff: after local proof, full verification, commit, archive, or journal, do not silently stop. State evidence, recommend the next workflow step, and ask when the next step changes scope, costs time, pushes remotely, creates a PR, or closes lifecycle state.
 Do not dispatch implement/check sub-agents in inline mode.
-Context: `prd.md` -> `design.md` -> `implement.md`, plus relevant spec/research loaded by skills.
+Plan discipline: `implement.md`, when present, is the ordered execution contract. At Phase 2 start, read `prd.md` -> `design.md` -> `implement.md`, review it critically against current code/spec reality, and surface blockers before coding.
+Step cursor: keep exactly one top-level implement step in progress; complete the proof/check for that step before moving to the next step.
+Step changes: Do not batch, reorder, or skip implement steps unless you first state the reason, such as inseparable atomic edits, dependency correction, failed verification, or user override.
+Stop points: Stop for unclear instructions, failed gates, or required user decisions instead of guessing.
+Consent stop: any lifecycle or task-creation question is blocking. Do not continue tool calls, code edits, commits, pushes, archives, or PR work until the user answers.
+Context: relevant spec/research loaded by skills.
 
 ## Phase 2: Debug (on bug/failure)
 Single bug/failure -> `trellis-debug` before patching (root-cause investigation).

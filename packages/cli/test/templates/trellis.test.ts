@@ -251,6 +251,26 @@ describe("trellis template constants", () => {
     expect(block).toContain("main session only");
   });
 
+  it("[codex-inline] workflow.md in_progress-inline treats implement.md as ordered execution contract", () => {
+    const block = workflowStateBreadcrumb("in_progress-inline");
+    expect(block).toContain("implement.md");
+    expect(block).toContain("ordered execution contract");
+    expect(block).toContain("review it critically");
+    expect(block).toContain("one top-level implement step");
+    expect(block).toContain("Do not batch, reorder, or skip");
+    expect(block).toContain("Stop for unclear instructions");
+  });
+
+  it("[codex-inline] workflow.md blocks non-consensual lifecycle progress", () => {
+    const noTask = workflowStateBreadcrumb("no_task");
+    const inline = workflowStateBreadcrumb("in_progress-inline");
+
+    expect(noTask).toContain("Simple conversation / small task: do not ask");
+    expect(noTask).toContain("If you ask whether to create a Trellis task, stop");
+    expect(inline).toContain("lifecycle or task-creation question is blocking");
+    expect(inline).toContain("Do not continue tool calls, code edits, commits, pushes, archives, or PR work");
+  });
+
   it("[issue-237] workflow.md Phase 2 dispatch steps require prompt recursion guards", () => {
     expect(workflowMdTemplate).toContain("**Dispatch prompt guard**");
     expect(workflowMdTemplate).toContain(
