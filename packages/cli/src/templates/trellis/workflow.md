@@ -261,6 +261,7 @@ Same bug fixed 3+ times after attempted fixes -> `trellis-break-loop` (post-fix 
 
 ## Phase 3: Finish
 Before commit -> `trellis-check` review gate if non-trivial; handle feedback with technical rigor, not performative agreement.
+Verification passed + intended work still uncommitted -> offer review diff, commit now, or stop local; do not stop at an implementation summary.
 Spec update -> `trellis-update-spec` (capture new patterns/conventions).
 After all tasks done -> `trellis-finish-work` (verify tests -> present merge/PR/keep/discard options).
 Commit (Phase 3.4) -> `/trellis:finish-work` (archive task + record journal).
@@ -290,6 +291,7 @@ Same bug fixed 3+ times after attempted fixes -> `trellis-break-loop` (post-fix 
 
 ## Phase 3: Finish
 Before commit -> `trellis-check` review gate if non-trivial. Spec update -> `trellis-update-spec`.
+Verification passed + intended work still uncommitted -> offer review diff, commit now, or stop local; do not stop at an implementation summary.
 After all tasks done -> `trellis-finish-work` (verify tests -> merge/PR/keep/discard).
 Commit (Phase 3.4) -> `/trellis:finish-work`.
 No active task after commit -> offer push/PR, keep local, continue next task, or stop here.
@@ -576,6 +578,7 @@ Milestone Handoff Discipline:
 - After any meaningful milestone, do not silently stop at a success report.
 - Milestones include local fix proof passing, planned implementation completing, broader verification passing, commit succeeding, task archive completing, and journal recording.
 - State the evidence, state the recommended next workflow step, and ask for user direction when the next step changes scope, costs time, pushes remotely, creates a PR, or closes lifecycle state.
+- If verification passed and intended work remains uncommitted, the next step must be explicit: review diff, commit now, or stop local. Do not stop at an implementation summary.
 - If there is an active Trellis task, route toward Phase 3.3 spec update, Phase 3.4 commit, and `/trellis:finish-work`.
 - If there is no active Trellis task, offer structured integration choices: push/PR, keep local only, continue with the next task, or stop here.
 

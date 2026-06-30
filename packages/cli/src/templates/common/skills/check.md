@@ -24,6 +24,7 @@ For bug-fix regression tests added after the fix, verify red-green: temporarily 
 
 After verification passes, do not silently stop at a success claim. State the evidence and offer the next workflow step.
 
+- If verification passed but intended work remains uncommitted, do not stop at an implementation summary. Offer the next step explicitly: review diff, commit now, or stop local.
 - Active Trellis task: route to `trellis-update-spec`, commit, then `{{CMD_REF:finish-work}}`.
 - No active Trellis task: offer structured integration choices: commit locally, push/PR, keep local only, continue with the next task, or stop here.
 - Ask before pushing, opening a PR, running expensive extra checks, adding polish outside the agreed scope, or closing lifecycle state.
