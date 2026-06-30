@@ -24,7 +24,7 @@ pnpm --filter @mindfoldhq/trellis typecheck
 ## Phase 2 — Mem extraction boundary
 
 - [x] Classify `packages/cli/src/commands/mem.ts` functions into core vs CLI.
-- [x] Use GitNexus context results as the first split: `runMem` stays CLI orchestration; `parseArgv`, `die`, `printSessions`, `shortDate`, `shortPath`, terminal row formatting stay CLI.
+- [x] Use  context results as the first split: `runMem` stays CLI orchestration; `parseArgv`, `die`, `printSessions`, `shortDate`, `shortPath`, terminal row formatting stay CLI.
 - [x] Move candidates behind `cmdList` / `cmdSearch` / `cmdContext`: `buildFilter`, `listAll`, `searchSession`, `searchSessionWithChildren`, `extractDialogue`, `findSessionById`, `relevanceScore`, and context chunking helpers.
 - [x] Create `packages/core/src/mem/` with `index.ts`, `types.ts`, `filter.ts`, `search.ts`, `dialogue.ts`, `context.ts`, `phase.ts`, `sessions.ts`, `projects.ts`, `adapters/{claude,codex,opencode}.ts`, and `internal/{jsonl,paths}.ts`.
 - [x] Move persisted Claude/Codex session JSONL parsing into `core/mem/adapters/claude.ts` and `core/mem/adapters/codex.ts`; keep channel live stdout/RPC adapters separate.
@@ -74,7 +74,7 @@ pnpm --filter @mindfoldhq/trellis typecheck
 
 - [x] Run a Trellis architecture/check review after Phase 1 before starting mem extraction.
 - [x] Run another review after Phase 2 because the package boundary is the main risk.
-- [x] Re-run GitNexus impact on the renamed forum assertion and on `runMem` after each phase.
+- [x] Re-run  impact on the renamed forum assertion and on `runMem` after each phase.
 - [x] Update `.trellis/spec/cli/backend/commands-channel.md` and core/CLI package specs before commit.
 - [ ] Do not edit historical release manifests. New manifests/changelogs use `forum`; published manifests keep historical `threads` text.
 - [x] Run grep gate: `rg -n 'type: "threads"|--type threads|channel threads|threads channel|thread channel|listThreads|readThreadsChannelEvents|ThreadsOptions' packages/core packages/cli .trellis/spec -g '!packages/cli/src/migrations/manifests/*.json'`.

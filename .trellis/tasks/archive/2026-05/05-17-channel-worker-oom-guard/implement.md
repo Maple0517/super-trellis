@@ -55,7 +55,7 @@
      targeted Vitest files for channel tests
    - `pnpm typecheck`
    - `pnpm lint`
-   - `gitnexus_detect_changes({scope:"all"})`
+   - `_detect_changes({scope:"all"})`
 
 ## Files Likely To Change
 
@@ -77,7 +77,7 @@
 
 ## Review Gates
 
-- Do not edit supervisor/runtime symbols without GitNexus impact checks.
+- Do not edit supervisor/runtime symbols without  impact checks.
 - Keep provider adapter behavior unchanged unless tests prove the idle timer
   needs an explicit turn hook.
 - Do not move CLI supervisor/provider adapter code into core.

@@ -5,6 +5,8 @@ description: Use Trellis channel for live multi-agent collaboration, spawned wor
 
 # trellis-channel
 
+Task-only: use this skill only when an active Trellis task exists. In no-task mode, ask to create a Trellis task before opening durable channel coordination.
+
 `trellis channel` is the local multi-agent collaboration runtime. Reach for it when agents need to talk through a durable event log, when a worker should be spawned as a peer process, when an in-flight worker needs interrupt / debugging, or when feedback should be recorded on a durable `--type forum` channel.
 
 Typical user signals: "和 codex/claude 讨论", "brainstorm with another agent", "spawn an implement/check worker", "let agent review", "open an issue board / changelog forum", "look at this thread", "channel is stuck / no output", "progress was truncated", "how do I write that channel command".

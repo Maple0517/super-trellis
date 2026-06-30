@@ -16,12 +16,12 @@ Files inspected:
 
 Repository index evidence:
 
-- GitNexus `runMem` context: upstream callers are `packages/cli/src/cli/index.ts` and `packages/cli/test/commands/mem-integration.test.ts`; downstream dispatch goes to `parseArgv`, `cmdList`, `cmdSearch`, `cmdProjects`, `cmdContext`, `cmdExtract`, `cmdHelp`, and `die`.
-- GitNexus `cmdSearch` context: mixes reusable search/filter logic (`buildFilter`, `listAll`, `searchSession`, `searchSessionWithChildren`, `relevanceScore`) with CLI output helpers (`shortDate`, `shortPath`).
-- GitNexus `cmdContext` context: mixes reusable context extraction (`buildFilter`, `listAll`, `extractDialogue`, `findSessionById`) with CLI formatting (`matchCount`, `shortPath`).
-- GitNexus `parseChannelType` context: low direct impact; primary flow is `registerChannelCommand -> createChannel -> parseChannelType`.
-- GitNexus `readThreadsChannelEvents` context/impact: high-impact forum/thread assertion point; direct callers are `listThreads`, `showThread`, `postThread`, `renameThread`, `addThreadContext`, `deleteThreadContext`, `listThreadContext`.
-- GitNexus `reduceThreads` context: thread state projection SOT for core read/context APIs, CLI thread show, CLI messages thread board, and channel tests.
+-  `runMem` context: upstream callers are `packages/cli/src/cli/index.ts` and `packages/cli/test/commands/mem-integration.test.ts`; downstream dispatch goes to `parseArgv`, `cmdList`, `cmdSearch`, `cmdProjects`, `cmdContext`, `cmdExtract`, `cmdHelp`, and `die`.
+-  `cmdSearch` context: mixes reusable search/filter logic (`buildFilter`, `listAll`, `searchSession`, `searchSessionWithChildren`, `relevanceScore`) with CLI output helpers (`shortDate`, `shortPath`).
+-  `cmdContext` context: mixes reusable context extraction (`buildFilter`, `listAll`, `extractDialogue`, `findSessionById`) with CLI formatting (`matchCount`, `shortPath`).
+-  `parseChannelType` context: low direct impact; primary flow is `registerChannelCommand -> createChannel -> parseChannelType`.
+-  `readThreadsChannelEvents` context/impact: high-impact forum/thread assertion point; direct callers are `listThreads`, `showThread`, `postThread`, `renameThread`, `addThreadContext`, `deleteThreadContext`, `listThreadContext`.
+-  `reduceThreads` context: thread state projection SOT for core read/context APIs, CLI thread show, CLI messages thread board, and channel tests.
 - abcoder was reindexed for `packages/core` and `packages/cli`; `core` is usable through MCP, while `cli` JSON exists but MCP display is partially distorted by nested `src/templates/opencode` package boundaries.
 
 Confirmed facts:
@@ -67,7 +67,7 @@ Remaining user/product decisions:
 3. Decision: Brainstorm quality gate.
    Evidence: The initial planning draft skipped full evidence and multi-round questioning.
    User answer: Improve the `trellis-brainstorm` skill so agents must evidence-gate and record multiple rounds.
-   Resulting requirement: The skill now requires evidence notes, a brainstorm ledger, GitNexus/abcoder use when structural relationships matter, and multiple rounds before final design.
+   Resulting requirement: The skill now requires evidence notes, a brainstorm ledger, /abcoder use when structural relationships matter, and multiple rounds before final design.
 
 4. Decision: First implementation slice scope.
    Evidence: `mem` currently mixes reusable search/context logic in CLI; channel already owns event schema, context entries, and thread reducers in core; forum rename touches the same channel/thread schema surface.

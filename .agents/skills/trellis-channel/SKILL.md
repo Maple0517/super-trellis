@@ -5,6 +5,8 @@ description: Use Trellis channel for live multi-agent collaboration, spawned wor
 
 # trellis-channel
 
+Task-only: use this skill only when an active Trellis task exists. In no-task mode, ask to create a Trellis task before opening durable channel coordination.
+
 `trellis channel` is the local multi-agent collaboration runtime. Reach for it when agents need to talk through a durable event log, when a worker should be spawned as a peer process, when an in-flight worker needs interrupt / debugging, or when feedback should be recorded on a durable `--type forum` channel.
 
 Typical user signals: "和 codex/claude 讨论", "brainstorm with another agent", "spawn an implement/check worker", "let agent review", "open an issue board / changelog forum", "look at this thread", "channel is stuck / no output", "progress was truncated", "how do I write that channel command".
@@ -65,3 +67,43 @@ trellis channel context list <board> --scope global --thread <thread>
 - One static review where a markdown file and prompt are enough.
 - Replacing normal tool calls with self-logging.
 - Long-term memory retrieval. Use durable forum channels for actionable issues, and `trellis mem` (the `trellis-session-insight` skill) for session/history search.
+
+## Superpowers-Derived Orchestration Rules
+
+Use channel orchestration only when work splits into independent domains or needs durable peer review. Do not use workers to avoid understanding the task.
+
+Before spawning or coordinating workers:
+
+1. Define each independent domain.
+2. Provide a self-contained context bundle from Trellis task artifacts, relevant specs, and exact files.
+3. Define expected output: findings, changed files, verification, and blockers.
+4. Use `--kind done` / `--kind turn_finished` for worker completion detection, not user-defined tags.
+5. Main session reviews and integrates worker output before proceeding.
+
+After workers complete, read each summary, verify that worker changes do not conflict, spot-check the actual code or artifact changes, and run the relevant full verification before claiming integration success.
+
+Do not use workers when tasks have sequential dependencies, require shared mutable state, need full-system reasoning in one context, or inline execution would be faster.
+
+For Codex inline sessions, inline execution remains the default unless the user explicitly requests workers or the workflow classifies the task as a multi-agent candidate.
+
+## Copyable Worker Prompt Template
+
+Use this when channel orchestration is chosen. Codex inline remains the default unless the user explicitly requests workers or the task truly splits into independent domains.
+
+```text
+Active task: <task path>
+Worker role: <implement|check|research|review>
+Scope: <exact files, subsystem, or question>
+Goal: <one verifiable outcome>
+Constraints: <do not edit outside scope; do not spawn nested workers; obey TDD/debug/review gates>
+Context to read first: <prd/design/implement/spec files>
+Expected output: changed files or findings, verification commands run, evidence, blockers, concerns
+Status enum: DONE | DONE_WITH_CONCERNS | BLOCKED | NEEDS_CONTEXT
+```
+
+Main session responsibilities after workers complete:
+
+1. Read each worker summary.
+2. Verify worker changes do not conflict.
+3. Spot-check actual code or artifact changes.
+4. Run full relevant verification before claiming integration success.

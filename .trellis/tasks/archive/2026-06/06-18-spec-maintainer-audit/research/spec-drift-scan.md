@@ -28,7 +28,7 @@ Single-repo project (no packages configured)
 Spec layers: cli, docs-site
 ```
 
-- GitNexus shows package context is driven by
+-  shows package context is driven by
   `packages/cli/src/templates/trellis/scripts/common/packages_context.py`.
   `get_context_packages_text()` reads `get_packages_info()`, which reads
   `common/config.py:get_packages()` and scans `.trellis/spec/<package>/<layer>`.
@@ -176,7 +176,7 @@ Archive references were verified:
 - `.trellis/tasks/archive/2026-04/04-17-subagent-hook-reliability-audit/research/platform-hook-audit.md`
 - `.trellis/tasks/archive/2026-04/04-17-workflow-enforcement-v2/prd.md`
 
-GitNexus `detect_changes(scope="all")` reported no changed symbols, no affected
+ `detect_changes(scope="all")` reported no changed symbols, no affected
 processes, and low risk, which matches the docs/config-only change set.
 
 ## Spec-Update Judgment

@@ -4,7 +4,7 @@
 
 - [x] Create Trellis task and record user scope.
 - [x] Read relevant core channel source, tests, and specs.
-- [x] Record GitNexus indexing limitation for `packages/core/src/channel/**`.
+- [x] Record  indexing limitation for `packages/core/src/channel/**`.
 - [x] Add planning artifacts before continuing implementation.
 - [x] Finish implementation in `packages/core/src/channel/**`.
 - [x] Add core channel tests for durable idempotency.
@@ -16,7 +16,7 @@
 - [x] Run two additional sequential channel-driven check reviews.
 - [x] Run build after sequential reviews.
 - [x] Run real dist-based channel write/replay test against physical `events.jsonl`.
-- [x] Run `gitnexus_detect_changes`.
+- [x] Run `_detect_changes`.
 - [x] Update specs if the final API contract changes the documented core/channel behavior.
 - [ ] Commit only this task's files.
 

@@ -23,6 +23,9 @@ These guides help you **ask the right questions before coding**.
 |-------|---------|-------------|
 | [Code Reuse Thinking Guide](./code-reuse-thinking-guide.md) | Identify patterns and reduce duplication | When you notice repeated patterns |
 | [Cross-Layer Thinking Guide](./cross-layer-thinking-guide.md) | Think through data flow across layers | Features spanning multiple layers |
+| [Debugging Guide](./debugging-guide.md) | Trace root cause, remove flakes, and add defense-in-depth validation | Bugs, failed verification, flaky tests, runtime errors |
+| [Testing Guide](./testing-guide.md) | Enforce TDD proof, avoid mock traps, and verify completion claims | Behavior changes, bug fixes, mocks, regression tests |
+| [Superpowers Integration Verification Scenarios](./superpowers-verification-scenarios.md) | Scenario checklist for validating Trellis/Superpowers integration behavior | Audit-only runtime checks |
 | [Cross-Platform Thinking Guide](./cross-platform-thinking-guide.md) | Catch OS, shell, Python, path, and persistence assumptions | When commands, hooks, templates, scripts, or persisted JSON must work across platforms |
 
 ---
@@ -51,6 +54,26 @@ These guides help you **ask the right questions before coding**.
 - [ ] Multiple branches update the same derived state from `kind` / `action`
 
 → Read [Code Reuse Thinking Guide](./code-reuse-thinking-guide.md)
+
+### When to Think About Debugging Discipline
+
+- [ ] A bug, regression, runtime error, or failed verification appears
+- [ ] A test is flaky or depends on arbitrary sleeps
+- [ ] The error appears deep in the call stack
+- [ ] Invalid data crosses multiple layers
+- [ ] Two speculative fixes have already failed
+
+→ Read [Debugging Guide](./debugging-guide.md)
+
+### When to Think About Testing Discipline
+
+- [ ] You are changing behavior
+- [ ] You are fixing a bug
+- [ ] You are adding or changing mocks
+- [ ] You are tempted to test after implementation
+- [ ] You are about to claim tests, lint, build, or a bug fix passed
+
+→ Read [Testing Guide](./testing-guide.md)
 
 ### When to Think About Cross-Platform Issues
 

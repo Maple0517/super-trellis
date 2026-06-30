@@ -350,11 +350,11 @@ Threads channel 已经进入下游集成的紧急产品路径，因此 threads c
 - 不引入 thread archive/unarchive，避免和现有 `status` 生命周期重复。
 - Channel 现有默认隐藏机制是 `ephemeral`，不新增 channel hide。
 - Channel display title 是缺失能力，可以作为 metadata projection 添加。
-- GitNexus graph shows `reduceThreads` is the central thread projection used by
+-  graph shows `reduceThreads` is the central thread projection used by
   `channelThreadsList`, `channelThreadShow`, `printThreadBoard`, and tests.
   Thread rename/context behavior belongs in that projection path, not in each
   command renderer.
-- GitNexus graph showed the old `readChannelMetadata` path delegated to
+-  graph showed the old `readChannelMetadata` path delegated to
   `metadataFromCreateEvent(events.find(isCreateEvent))`. Channel title and
   channel-level context need a metadata reducer over the event stream instead
   of special cases in `channel list`, `messages`, or `threads`.

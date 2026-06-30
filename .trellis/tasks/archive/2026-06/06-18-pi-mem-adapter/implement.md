@@ -4,7 +4,7 @@
 
 - [x] Research Pi session file layout and semantics.
 - [x] Read mem, core SDK, quality, and test specs.
-- [ ] Run GitNexus impact analysis before editing each existing symbol touched.
+- [ ] Run  impact analysis before editing each existing symbol touched.
 - [ ] Keep all core changes zero-dependency and CLI-free.
 
 ## Ordered Steps
@@ -44,7 +44,7 @@
    - Run targeted core mem tests.
    - Run targeted CLI mem tests.
    - Run package typecheck/build as needed.
-   - Run `detect_changes()` or equivalent GitNexus change detection before finish/commit.
+   - Run `detect_changes()` or equivalent  change detection before finish/commit.
 
 ## Validation Commands
 

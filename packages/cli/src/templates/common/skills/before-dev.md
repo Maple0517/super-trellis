@@ -37,6 +37,8 @@ Execute these steps:
 
 8. **Register implementation steps** via the platform's step-tracking tool (`update_plan` on Codex, `TodoWrite` on Claude Code) before writing code, so the user sees progress visually.
 
+No-task escalation: if the current request reveals a hard upgrade trigger — persistent planning, multi-stage or multi-session work, lifecycle features, structured decomposition, elevated risk/scope, or durable context injection beyond the current conversation — stop before implementation and ask to create a Trellis task.
+
 This step is **mandatory** before writing any code.
 
 ## Iron Law

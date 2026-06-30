@@ -45,7 +45,7 @@ push API，不处理 legacy `thread` / `threads` 类型兼容。
   killed 路径，没有 pre-timeout warning。
 - Core event schema 已有 runtime kinds，如 `turn_started`、`turn_finished`、
   `undeliverable`，适合新增 substrate event kind。
-- GitNexus context:
+-  context:
   - `channelWait` 的直接调用者是 `registerChannelCommand`。
   - `channelWait` 依赖 `parseChannelKind`、`parseCsv`、`parseThreadAction`、
     `normalizeThreadKey`。

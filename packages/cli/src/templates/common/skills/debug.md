@@ -61,4 +61,4 @@ Ask the user whether to continue with broader verification when the checks are n
 
 After 3 failed fixes, stop patching. Re-check reproduction, architecture, assumptions, and recent changes. Ask for review or use `trellis-break-loop` after the immediate failure is stabilized.
 
-If no active task exists and the bug grows into multi-stage work, durable context, or repeated-fix analysis, stop and ask to create a Trellis task before deeper retrospective work.
+No-task escalation: if no active task exists and a hard upgrade trigger appears — persistent planning, multi-stage or multi-session debugging, lifecycle features, structured decomposition, elevated risk/scope, durable context injection beyond the current conversation, or repeated-fix analysis — stop and ask to create a Trellis task before deeper work.

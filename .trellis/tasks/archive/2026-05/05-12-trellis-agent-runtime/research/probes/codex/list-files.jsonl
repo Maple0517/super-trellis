@@ -5,7 +5,7 @@
 {"method":"mcpServer/startupStatus/updated","params":{"name":"exa","status":"starting","error":null}}
 {"method":"mcpServer/startupStatus/updated","params":{"name":"playwright","status":"starting","error":null}}
 {"method":"mcpServer/startupStatus/updated","params":{"name":"abcoder","status":"starting","error":null}}
-{"method":"mcpServer/startupStatus/updated","params":{"name":"gitnexus","status":"starting","error":null}}
+{"method":"mcpServer/startupStatus/updated","params":{"name":"","status":"starting","error":null}}
 {"method":"mcpServer/startupStatus/updated","params":{"name":"chromedevtool","status":"starting","error":null}}
 {"method":"mcpServer/startupStatus/updated","params":{"name":"computer-use","status":"starting","error":null}}
 {"method":"mcpServer/startupStatus/updated","params":{"name":"codex_apps","status":"starting","error":null}}
@@ -14,7 +14,7 @@
 {"method":"thread/status/changed","params":{"threadId":"019e1b3c-2ea1-78b3-bcc3-c8fe281cdf57","status":{"type":"active","activeFlags":[]}}}
 {"method":"turn/started","params":{"threadId":"019e1b3c-2ea1-78b3-bcc3-c8fe281cdf57","turn":{"id":"019e1b3c-3313-7c23-bdb9-c79e2b26408c","items":[],"itemsView":"notLoaded","status":"inProgress","error":null,"startedAt":1778573390,"completedAt":null,"durationMs":null}}}
 {"method":"mcpServer/startupStatus/updated","params":{"name":"computer-use","status":"ready","error":null}}
-{"method":"mcpServer/startupStatus/updated","params":{"name":"gitnexus","status":"ready","error":null}}
+{"method":"mcpServer/startupStatus/updated","params":{"name":"","status":"ready","error":null}}
 {"method":"mcpServer/startupStatus/updated","params":{"name":"playwright","status":"ready","error":null}}
 {"method":"mcpServer/startupStatus/updated","params":{"name":"chromedevtool","status":"ready","error":null}}
 {"method":"mcpServer/startupStatus/updated","params":{"name":"abcoder","status":"ready","error":null}}

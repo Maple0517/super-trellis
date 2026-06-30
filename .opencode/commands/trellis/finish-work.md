@@ -1,5 +1,7 @@
 # Finish Work
 
+Task-only: use this command only when an active Trellis task exists and its planned work is verified. No-task mode has no archive or journal lifecycle to close.
+
 Wrap up the current session: archive the active task (and any other completed-but-unarchived tasks the user wants to clean up) and record the session journal. Code commits are NOT done here — those happen in workflow Phase 3.4 before you invoke this command.
 
 ## Step 1: Survey current state
@@ -35,7 +37,7 @@ For each remaining dirty path, decide whether it belongs to **the current task**
 Then route:
 
 - **Any remaining path looks like current-task work** — bail out with:
-  > "Working tree has uncommitted code changes from this task: `<list>`. Return to workflow Phase 3.4 to commit them before running `/trellis:finish-work`."
+  > "Working tree has uncommitted code changes from this task: `<list>`. Return to workflow Phase 3.4 to commit them before running ``finish-work` (Trellis command)`."
 
   Do NOT run `git commit` here. Do NOT prompt the user to commit. The user goes back to Phase 3.4 and the AI drives the batched commit there.
 - **All remaining paths look unrelated** (other parallel-window work) — report them once and continue to Step 3:
@@ -64,3 +66,27 @@ python3 ./.trellis/scripts/add_session.py \
 Use the work-commit hashes produced in Phase 3.4 (visible in Step 1's `Recent commits` list, or via `git log --oneline`) for `--commit`. Do not include the archive commit hashes from Step 3. This produces a `chore: record journal` commit.
 
 Final git log order: `<work commits from 3.4>` → `chore(task): archive ...` (one or more) → `chore: record journal`.
+
+## Step 5: Final handoff
+
+After archive and journal steps complete, do not silently stop. State the evidence and offer the next integration choice:
+
+1. Push the current branch / create a PR.
+2. Keep the local commits only.
+3. Continue with the next task.
+4. Stop here.
+
+If there is no active Trellis task, do not use this command. Return to \`trellis-check\` no-task handoff and offer integration choices there.
+
+## Branch Finish Discipline
+
+Before archive or journal finalization, ensure work commits and verification are handled. If the work lives on a branch, present the relevant integration choices: local merge, push/PR, keep branch as-is, or discard.
+
+Safety rules:
+- Before presenting integration options, verify the project's required checks pass on the current state.
+- If required tests fail, stop and report the failing evidence.
+- Discard requires explicit user confirmation.
+- Do not remove worktrees, workspace dirs, or harness-owned branches unless provenance is known.
+- Do not archive task work while current-task code changes remain uncommitted.
+
+Trellis archive and session journal remain the final lifecycle steps.

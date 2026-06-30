@@ -141,6 +141,8 @@ Read the specific guideline files referenced — the index is a pointer, not the
 
 No-task fallback: verification still runs fully even when task artifacts do not exist. In that case, requirements checks must be grounded in the current request, current diff, and fresh command evidence.
 
+No-task escalation: if verification reveals a hard upgrade trigger — persistent planning, multi-stage or multi-session work, lifecycle features, structured decomposition, elevated risk/scope, or durable context injection beyond the current conversation — report the evidence and ask to create a Trellis task before continuing deeper.
+
 ## Step 3: Run Project Checks
 
 Run the project's lint, type-check, and test commands. Fix any failures before proceeding.

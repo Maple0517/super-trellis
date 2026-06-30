@@ -57,7 +57,7 @@ This task does not own:
 7. [x] Validate.
    - Run targeted CLI/core channel tests.
    - Run typecheck or the repository's equivalent check command.
-   - Run GitNexus change detection if available before final review.
+   - Run  change detection if available before final review.
 
 ## Risk Points
 

@@ -187,14 +187,14 @@ exec_command                                   67020
 apply_patch  (custom_tool_call)                 7668
 write_stdin                                     5703
 shell_command                                   1473
-mcp__gitnexus__impact                           1259   ⭐ MCP
+mcp____impact                           1259   ⭐ MCP
 spawn_agent                                      881   ⚠️ 原生 collab
 wait_agent                                       641   ⚠️
 update_plan                                      535
 mcp__codex_apps__exa_get_code_context_exa        434   ⭐ MCP
-mcp__gitnexus__context                           411   ⭐ MCP
-mcp__gitnexus__detect_changes                    390   ⭐ MCP
-mcp__gitnexus__query                             367   ⭐ MCP
+mcp____context                           411   ⭐ MCP
+mcp____detect_changes                    390   ⭐ MCP
+mcp____query                             367   ⭐ MCP
 close_agent                                      322   ⚠️
 mcp__exa__web_search_exa                         171   ⭐ MCP
 mcp__ref__ref_read_url                           117   ⭐ MCP

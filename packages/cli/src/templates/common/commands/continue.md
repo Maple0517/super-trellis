@@ -1,5 +1,7 @@
 # Continue Current Task
 
+Task-only: use this command only when an active Trellis task exists. No-task mode has no durable task artifacts to resume.
+
 Resume work on the current task — pick up at the right phase/step in `.trellis/workflow.md`.
 
 ---

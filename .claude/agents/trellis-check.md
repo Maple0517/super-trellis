@@ -46,7 +46,29 @@ Before checking, read:
 
 You have write and edit tools, you can modify code directly.
 
+## TDD Evidence Review
+
+- Do not trust implementer self-reports; inspect the actual diff, artifacts, and relevant code.
+- Verify proof existed before implementation: failing test, reproduction, executable acceptance check, or recorded substitute proof.
+- Verify RED failed for the expected reason and GREEN passed after the change.
+- Check tests exercise real behavior, not mock behavior or implementation details.
+- Full gate: `.agents/skills/trellis-before-dev/SKILL.md`; test quality: `.trellis/spec/guides/testing-guide.md`.
+
 ---
+
+
+
+## Two-Stage Review Protocol
+
+Run review in two stages even when using one check agent:
+
+1. Spec compliance first: verify the diff against `prd.md`, `design.md`, `implement.md`, and acceptance criteria.
+2. Code quality second: inspect implementation quality, tests, lint/typecheck, security/regression risk, and maintainability.
+
+Do not trust implementer self-reports. Inspect the actual diff, artifacts, and command output. Do not use completion or success language until fresh evidence passes the Completion Claim Gate in `.agents/skills/trellis-check/SKILL.md`.
+
+Status must be exactly one of: DONE, DONE_WITH_CONCERNS, BLOCKED, NEEDS_CONTEXT.
+Do not spawn nested implement/check subagents; return BLOCKED or NEEDS_CONTEXT if another worker or decision is needed.
 
 ## Workflow
 

@@ -24,7 +24,7 @@
 
 ## Existing channel audit
 
-GitNexus was reindexed for this Trellis worktree on 2026-05-13 and reports
+ was reindexed for this Trellis worktree on 2026-05-13 and reports
 12,920 nodes, 17,458 edges, 197 clusters, and 300 flows. The graph audit used
 symbol context and impact checks for the current channel implementation.
 
@@ -46,7 +46,7 @@ Confirmed existing behavior:
 - Channel address is the storage directory key; changing it requires a
   future storage move operation, not an append-only event.
 
-GitNexus graph findings:
+ graph findings:
 
 - `reduceThreads` is the current central thread projection. It is called by
   `channelThreadsList`, `channelThreadShow`, `printThreadBoard`, and channel

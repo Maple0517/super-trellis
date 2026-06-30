@@ -1953,7 +1953,7 @@ Fixed two community-reported issues, released v0.3.10, and merged fixes into bet
 - `pnpm release:beta` → npm 发布成功，CI 通过
 
 ### 3. Marketplace: cc-codex-spec-bootstrap skill
-- 新增 CC + Codex 并行流水线 skill（GitNexus + ABCoder MCP）
+- 新增 CC + Codex 并行流水线 skill（ABCoder MCP）
 - 创建 docs-site skill 详情页（EN/ZH）
 - 更新 skills marketplace index + docs.json 导航
 

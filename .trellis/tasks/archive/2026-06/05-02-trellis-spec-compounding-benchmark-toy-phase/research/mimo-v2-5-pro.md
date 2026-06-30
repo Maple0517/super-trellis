@@ -80,7 +80,7 @@ OpenRouter also exposes the model as `xiaomi/mimo-v2.5-pro`: <https://openrouter
 
 MiMo-V2.5-Pro **natively supports OpenAI-style function calling** via the standard `tools: [...]` parameter. The official model card explicitly lists capabilities: "Text generation, deep thinking, streaming, function calling, structured output, web search."
 
-This is critical for our benchmark — ABCoder + GitNexus MCP servers can be wired through any standard MCP-to-OpenAI-tools adapter.
+This is critical for our benchmark — ABCoder MCP servers can be wired through any standard MCP-to-OpenAI-tools adapter.
 
 ### Minimal Python tool-calling example
 
@@ -225,7 +225,7 @@ GitHub references for community drivers:
 
 **Use the Claude Agent SDK via LiteLLM proxy** as the primary driver, with a **fallback custom OpenAI-compatible loop** for stdio MCP integration. Rationale:
 
-1. Claude Agent SDK already knows how to spawn stdio MCP servers (ABCoder, GitNexus) and feed their tool schemas into a chat-completions loop. We do not want to rewrite that.
+1. Claude Agent SDK already knows how to spawn stdio MCP servers (ABCoder, ) and feed their tool schemas into a chat-completions loop. We do not want to rewrite that.
 2. Claude Agent SDK speaks Anthropic Messages format. Two routes work:
    - **Route A (recommended)**: Point Claude Agent SDK at MiMo's **native Anthropic-compatible endpoint** `https://api.xiaomimimo.com/anthropic/v1`. Zero proxy needed, zero translation overhead. Confirmed working per Xiaomi's `iChochy.com` reference and OpenClaw integration.
    - **Route B**: Run **LiteLLM Proxy** locally as a translation layer (`Anthropic in → OpenAI/Xiaomi out`). Gives uniform observability + cost tracking but adds a hop.
@@ -254,7 +254,7 @@ GitHub references for community drivers:
 │  ┌──────────────────────────────────────────────────┐       │
 │  │ Stdio MCP servers spawned by Claude Agent SDK    │       │
 │  │   • abcoder  (AST/type signatures)               │       │
-│  │   • gitnexus (knowledge graph)                   │       │
+│  │   •  (knowledge graph)                   │       │
 │  └──────────────────────────────────────────────────┘       │
 └─────────────────────────────────────────────────────────────┘
 ```
@@ -278,7 +278,7 @@ client = AsyncOpenAI(
 
 MCP_SERVERS = [
     StdioServerParameters(command="abcoder", args=["serve"]),
-    StdioServerParameters(command="gitnexus", args=["mcp"]),
+    StdioServerParameters(command="", args=["mcp"]),
 ]
 
 async def collect_tools(sessions):

@@ -174,7 +174,7 @@
 - 表格内容（`core/`、`claude-code/`、`how-to-modify/`、`meta/`）与 marketplace/skills/trellis-meta/ 结构需验证 — 未展开。
 
 #### skills-market/cc-codex-spec-bootstrap.mdx / zh/skills-market/cc-codex-spec-bootstrap.mdx
-- Prerequisites 表（Trellis / GitNexus / ABCoder / Codex CLI）— 基本稳定。
+- Prerequisites 表（Trellis / ABCoder / Codex CLI）— 基本稳定。
 - 结构和 marketplace/skills/cc-codex-spec-bootstrap/ 需验证（至少 SKILL.md + references/mcp-setup.md 存在）— 未展开。
 - **稳定度高**。
 

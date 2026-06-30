@@ -105,14 +105,14 @@ Set it once via `opencode auth login` (interactive) OR seed the file directly pe
 
 **Known issue to watch:** github.com/anomalyco/opencode#20725 reports that custom `@ai-sdk/openai-compatible` providers can fall back to `@ai-sdk/openai` and demand `OPENAI_API_KEY` in **sub-sessions** (Task tool). For our benchmark we plan to disable the Task tool anyway, so this should not bite — but smoke-test once before the full sweep.
 
-### 3. MCP whitelist — abcoder + gitnexus only
+### 3. MCP whitelist — abcoder only
 
 OpenCode's permission model (docs: https://opencode.ai/docs/permissions, v1.1.1+):
 - Each tool key (`read`, `edit`, `bash`, `glob`, `grep`, `webfetch`, `websearch`, `task`, `skill`, `lsp`, plus MCP tools) accepts `"allow" | "ask" | "deny"`.
 - A wildcard `"*"` key sets the global default; **last matching rule wins**, so put `"*"` first and specific rules after.
 - MCP tools are referenced as `mcp__<server>__<tool>` (per the user's existing `trellis-research.md` agent: `mcp__exa__*: allow`).
 
-For the benchmark's "ONLY Read/Edit/Bash + abcoder + gitnexus" policy, define a custom agent in `<workspace>/.opencode/agents/swe-bench-runner.md`:
+For the benchmark's "ONLY Read/Edit/Bash + abcoder" policy, define a custom agent in `<workspace>/.opencode/agents/swe-bench-runner.md`:
 
 ```yaml
 ---
@@ -135,7 +135,7 @@ permission:
   todowrite: allow
   doom_loop: ask     # currently can't be forced to deny; ask is fine in headless+yolo
   mcp__abcoder__*: allow
-  mcp__gitnexus__*: allow
+  mcp____*: allow
   # Belt-and-suspenders: explicitly deny anything else MCP exposes
   mcp__exa__*: deny
   mcp__chrome-devtools__*: deny
@@ -378,7 +378,7 @@ if __name__ == "__main__":
   "run_exit": 0,
   "tokens": {"input": 184223, "output": 4112, "reasoning": 0, "cache_read": 142000, "cache_write": 9100},
   "cost_usd": 0.43,
-  "tool_calls": {"read": 12, "edit": 4, "bash": 7, "grep": 3, "mcp__abcoder__find_definition": 9, "mcp__gitnexus__impact_analysis": 2},
+  "tool_calls": {"read": 12, "edit": 4, "bash": 7, "grep": 3, "mcp__abcoder__find_definition": 9, "mcp____impact_analysis": 2},
   "tool_call_total": 37,
   "wall_clock_ms": 184321,
   "errors": [],
@@ -431,7 +431,7 @@ if __name__ == "__main__":
     "task": "deny",
     "skill": "deny",
     "mcp__abcoder__*": "allow",
-    "mcp__gitnexus__*": "allow"
+    "mcp____*": "allow"
   }
 }
 ```

@@ -1,5 +1,7 @@
 # Break the Loop - Deep Bug Analysis
 
+Task-only: use this skill only when an active Trellis task exists. In no-task mode, use `trellis-debug` for immediate evidence gathering and ask to create a Trellis task before repeated-fix retrospective analysis.
+
 `trellis-debug` handles pre-fix investigation when a bug, failure, or unexpected behavior first appears. This skill handles post-fix retrospective analysis after repeated debugging or repeated failed fixes. Do not use this skill as the first stop before gathering root-cause evidence.
 
 When debug is complete, use this for deep analysis to break the "fix bug -> forget -> repeat" cycle.

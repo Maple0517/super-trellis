@@ -1,4 +1,4 @@
-# ABCoder + GitNexus MCP Wiring for Claude Agent SDK
+# ABCoder MCP Wiring for Claude Agent SDK
 
 ## 1. ABCoder
 
@@ -30,9 +30,9 @@ list_repos → get_repo_structure → get_package_structure → get_file_structu
 "abcoder": { "command": "abcoder", "args": ["mcp", "/Users/taosu/.asts"] }
 ```
 
-## 2. GitNexus
+## 2.
 
-**Repo**: https://github.com/abhigyanpatwari/GitNexus (npm package `gitnexus`). Docs: https://abhigyanpatwari-gitnexus.mintlify.app/mcp/overview.
+**Repo**: https://github.com/abhigyanpatwari/ (npm package ``). Docs: https://abhigyanpatwari-.mintlify.app/mcp/overview.
 
 **What it does**: Builds a graph database (KuzuDB) over a repo with nodes `File / Function / Class / Interface / Method / Community / Process` and edges `{CALLS, IMPORTS, EXTENDS, IMPLEMENTS, DEFINES, MEMBER_OF, STEP_IN_PROCESS}`. BM25 + optional embeddings for hybrid search.
 
@@ -49,26 +49,26 @@ list_repos → get_repo_structure → get_package_structure → get_file_structu
 
 **Index step**: Mandatory.
 ```bash
-npx -y gitnexus@latest analyze <project-path>
-npx -y gitnexus@latest analyze <path> --force
-npx -y gitnexus@latest analyze <path> --embeddings   # adds vector pass
+npx -y @latest analyze <project-path>
+npx -y @latest analyze <path> --force
+npx -y @latest analyze <path> --embeddings   # adds vector pass
 ```
-Each `analyze` writes `.gitnexus/` inside the repo and registers in `~/.gitnexus/registry.json`.
+Each `analyze` writes `./` inside the repo and registers in `~/./registry.json`.
 
-**Transport**: `gitnexus mcp` → stdio. Also `gitnexus serve` (HTTP) and `gitnexus eval-server` (HTTP for evaluation; interesting for benchmarking but standard MCP transport is stdio).
+**Transport**: ` mcp` → stdio. Also ` serve` (HTTP) and ` eval-server` (HTTP for evaluation; interesting for benchmarking but standard MCP transport is stdio).
 
-**Local install detected**: `/Users/taosu/.nvm/versions/node/v24.10.0/bin/gitnexus`. Registry at `~/.gitnexus/registry.json` shows ~10 indexed repos. Already wired in `~/.claude.json`:
+**Local install detected**: `/Users/taosu/.nvm/versions/node/v24.10.0/bin/`. Registry at `~/./registry.json` shows ~10 indexed repos. Already wired in `~/.claude.json`:
 ```json
-"gitnexus": { "type": "stdio", "command": "npx", "args": ["-y", "gitnexus@latest", "mcp"] }
+"": { "type": "stdio", "command": "npx", "args": ["-y", "@latest", "mcp"] }
 ```
 
 ## 3. Per-task attachment cost
 
-Both servers **require a per-repo index**. Indexes persist on disk (`~/.asts/*.json`, `<repo>/.gitnexus/`).
+Both servers **require a per-repo index**. Indexes persist on disk (`~/.asts/*.json`, `<repo>/./`).
 
 **ABCoder parse**: small repo seconds; large TS monorepo 10s–60s; Java needs `--lsp` (slower).
 
-**GitNexus analyze**: small repo (16 files) seconds; mid (~600–900 files) 20–60s; large (2275 files) 1–2 min. `--embeddings` adds significant time.
+** analyze**: small repo (16 files) seconds; mid (~600–900 files) 20–60s; large (2275 files) 1–2 min. `--embeddings` adds significant time.
 
 **For the benchmark loop**: spawning fresh repo per task → 5s–60s indexing combined. Two strategies:
 1. **Pre-index once per fixture**, mount prebuilt indexes into each attempt. ✅ **Recommended for our benchmark.**
@@ -90,15 +90,15 @@ options = ClaudeAgentOptions(
             "command": "abcoder",
             "args": ["mcp", "/Users/taosu/.asts"],
         },
-        "gitnexus": {
+        "": {
             "type": "stdio",
             "command": "npx",
-            "args": ["-y", "gitnexus@1.6.0", "mcp"],   # pin version
+            "args": ["-y", "@1.6.0", "mcp"],   # pin version
         },
     },
     allowed_tools=[
         "mcp__abcoder__*",
-        "mcp__gitnexus__*",
+        "mcp____*",
     ],
 )
 ```
@@ -113,41 +113,41 @@ for await (const message of query({
     settingSources: [],
     mcpServers: {
       abcoder: { command: "abcoder", args: ["mcp", "/Users/taosu/.asts"] },
-      gitnexus: { command: "npx", args: ["-y", "gitnexus@1.6.0", "mcp"] },
+      : { command: "npx", args: ["-y", "@1.6.0", "mcp"] },
     },
-    allowedTools: ["mcp__abcoder__*", "mcp__gitnexus__*"],
+    allowedTools: ["mcp__abcoder__*", "mcp____*"],
   },
 })) { /* ... */ }
 ```
 
-Tool naming convention: `mcp__<server-name>__<tool>`, so `mcp__abcoder__get_ast_node`, `mcp__gitnexus__cypher`, etc.
+Tool naming convention: `mcp__<server-name>__<tool>`, so `mcp__abcoder__get_ast_node`, `mcp____cypher`, etc.
 
 ## 5. Existing MCP usage in this repo
 
 - `Trellis/.claude/` has `agents/`, `commands/`, `hooks/`, `settings.json` but **no `.mcp.json`**.
-- Live config at user level: `~/.claude.json` declares 12 MCP servers including abcoder, gitnexus, lark-mcp, playwright, chrome-devtools, codex-cli, notify, reddit, sequential-thinking, context7.
+- Live config at user level: `~/.claude.json` declares 12 MCP servers including abcoder, , lark-mcp, playwright, chrome-devtools, codex-cli, notify, reddit, sequential-thinking, context7.
 - The benchmark driver should NOT depend on `~/.claude.json`; pass `mcp_servers` programmatically and set `setting_sources=[]` for hermeticity.
 - **No existing examples** in Trellis source of programmatic Claude Agent SDK MCP wiring — this benchmark will be the first.
 
 ## 6. Determinism
 
 - **ABCoder**: deterministic (same source → same UniAST). Pin version, avoid `--load-external-symbol` unless deps are pinned.
-- **GitNexus**: deterministic for `cypher`/`impact`/`context`. `query` BM25 is deterministic; community detection (Louvain-style) **can drift across versions** → pin `gitnexus@1.6.0`. Disable `--embeddings` for benchmark.
+- ****: deterministic for `cypher`/`impact`/`context`. `query` BM25 is deterministic; community detection (Louvain-style) **can drift across versions** → pin `@1.6.0`. Disable `--embeddings` for benchmark.
 
 ## Key local paths
 
 - `/Users/taosu/.local/bin/abcoder`
-- `/Users/taosu/.nvm/versions/node/v24.10.0/bin/gitnexus`
+- `/Users/taosu/.nvm/versions/node/v24.10.0/bin/`
 - `/Users/taosu/.asts/` — ABCoder cache (populated)
-- `/Users/taosu/.gitnexus/registry.json` — GitNexus registry
+- `/Users/taosu/./registry.json` —  registry
 - `/Users/taosu/.claude.json` — user MCP config (already has both)
 
 ## Caveats
 
 - **ABCoder HTTP not exposed** — stdio only.
 - **TS monorepo silent fail** if `--tsconfig` missing (AST <1KB). Sanity-check size after parse.
-- **Pin both versions** for reproducibility; `gitnexus@latest` resolves at install time.
-- **Inherited MCP servers**: with default `setting_sources`, SDK loads ALL 12 servers from `~/.claude.json`. Must set `setting_sources=[]` and pass only abcoder + gitnexus.
+- **Pin both versions** for reproducibility; `@latest` resolves at install time.
+- **Inherited MCP servers**: with default `setting_sources`, SDK loads ALL 12 servers from `~/.claude.json`. Must set `setting_sources=[]` and pass only abcoder.
 - **Indexing wall-time at scale**: pre-index once at fixture creation, not per attempt.
 
 ## Implications for benchmark

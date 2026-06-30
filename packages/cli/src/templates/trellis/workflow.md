@@ -189,6 +189,13 @@ No active task. First classify the current turn and ask for task-creation consen
 No active task does not mean skip Trellis discipline.
 Simple conversation / small task: ask only whether this turn should create a Trellis task. If the user says no, auto-route no-task discipline skills from prompt intent (`trellis-brainstorm`, `trellis-before-dev`, `trellis-debug`, `trellis-check`, `trellis-update-spec`) without creating task artifacts.
 Complex task: ask the user if you can create a Trellis task and enter the planning phase. Before the task exists, bounded no-task brainstorming may gather evidence, narrow direction, and recommend scope. Do not start full implementation planning. If the user says no, stay in no-task mode only until an upgrade trigger is hit, then ask again to create a task.
+Hard upgrade triggers:
+1. The work needs persistent planning or durable decision records such as `prd.md`, `design.md`, or `implement.md`.
+2. The work spans multiple stages, multiple sessions, or otherwise will not naturally finish inside the current inline pass.
+3. The work needs task lifecycle features such as `trellis-continue`, `trellis-finish-work`, archive, or journal recording.
+4. The work needs structured decomposition or coordination such as parent/child task trees, explicit dependency management, or `trellis-channel`.
+5. Risk or scope increases to the point that explicit planning, rollback thinking, or code-level implementation sequencing is needed.
+6. Future agents or sessions will need durable context injection beyond the current conversation, such as task artifacts, JSONL manifests, curated research files, or stable handoff context.
 Task-only in no-task state: `trellis-break-loop`, `trellis-finish-work`, `trellis-continue`, and `trellis-channel`.
 [/workflow-state:no_task]
 

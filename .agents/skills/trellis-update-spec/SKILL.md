@@ -9,6 +9,10 @@ When you learn something valuable (from debugging, implementing, or discussion),
 
 **Timing**: After completing a task, fixing a bug, or discovering a new pattern
 
+## No-task approval gate
+
+This skill may be used without an active Trellis task. In no-task mode, do not edit `.trellis/spec` automatically. Recommend the spec update, ask the user for approval, and write only after explicit approval.
+
 ---
 
 ## Code-Spec First Rule (CRITICAL)

@@ -16,11 +16,11 @@ Do not ask the user to confirm facts that the repository can answer. Ask only fo
 
 ---
 
-Use this skill during Phase 1 planning to turn the user's request into clear requirements and planning artifacts.
+Use this skill to clarify requirements, scope, and trade-offs. In task mode, it turns the user's request into planning artifacts. In no-task mode, it stays bounded to evidence gathering, direction narrowing, and recommendation.
 
 ## Preconditions
 
-Use this skill only after task-creation consent has been given and the user is ready to enter Trellis planning.
+Resolve the mode before taking action:
 
 This skill has two modes:
 
@@ -29,7 +29,15 @@ This skill has two modes:
 
 In no-task mode, once the conversation needs a real option tree, repeated product decisions, durable planning, or implementation-level sequencing, stop and ask again to create a Trellis task.
 
-If no task exists yet, create one:
+Hard upgrade triggers:
+1. The work needs persistent planning or durable decision records such as `prd.md`, `design.md`, or `implement.md`.
+2. The work spans multiple stages, multiple sessions, or otherwise will not naturally finish inside the current inline pass.
+3. The work needs task lifecycle features such as `trellis-continue`, `trellis-finish-work`, archive, or journal recording.
+4. The work needs structured decomposition or coordination such as parent/child task trees, explicit dependency management, or `trellis-channel`.
+5. Risk or scope increases to the point that explicit planning, rollback thinking, or code-level implementation sequencing is needed.
+6. Future agents or sessions will need durable context injection beyond the current conversation, such as task artifacts, JSONL manifests, curated research files, or stable handoff context.
+
+In task mode, if no task exists yet, create one:
 
 ```bash
 TASK_DIR=$(python3 ./.trellis/scripts/task.py create "<short task title>" --slug <slug>)
@@ -71,6 +79,7 @@ When no active task exists and the user declined task creation:
 5. Do not create `design.md` or `implement.md`.
 6. Do not expand into full implementation planning for complex work.
 7. If work needs persistent planning, multi-stage execution, durable context, or lifecycle tracking, stop and ask again to create a Trellis task.
+8. If any hard upgrade trigger appears, stop bounded brainstorming and ask to create a Trellis task before deeper planning.
 
 ## Question Rules
 

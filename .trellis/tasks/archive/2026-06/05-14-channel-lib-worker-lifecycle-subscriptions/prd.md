@@ -28,7 +28,7 @@
 ## Acceptance Criteria
 
 - [ ] PRD 记录 issue 来源、需求、非目标和可验证验收标准。
-- [ ] research 记录已核对的 core/CLI/channel 现状、相关 spec、GitNexus/abcoder 证据和已确认缺口。
+- [ ] research 记录已核对的 core/CLI/channel 现状、相关 spec、/abcoder 证据和已确认缺口。
 - [ ] 至少一轮 architect agent review 记录到 task research，重点检查高内聚、低耦合、SOT、API 边界和兼容性。
 - [ ] 产出 draft `design.md`，包含 API surface、事件 schema、reducer 边界、CLI 迁移顺序、兼容策略和验证计划。
 - [ ] 产出 draft `implement.md`，但保持 planning 状态，等待用户明确开干。

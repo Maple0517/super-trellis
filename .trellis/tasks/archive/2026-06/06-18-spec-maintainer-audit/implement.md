@@ -2,7 +2,7 @@
 
 ## Checklist
 
-- [x] Confirm current package/source truth from manifests and GitNexus.
+- [x] Confirm current package/source truth from manifests and .
 - [x] Add active package map to `.trellis/config.yaml`.
 - [x] Add `.trellis/spec/tech/repo/index.md` with repo/package/spec map.
 - [x] Add a minimal core spec layer if package-context output would otherwise
@@ -25,7 +25,7 @@
       record absence if the repo does not provide it.
 - [x] Run targeted `rg` checks for the stale facts repaired in this task.
 - [x] Run `git diff --check -- .trellis/config.yaml .trellis/spec`.
-- [x] Run GitNexus `detect_changes` before any commit plan.
+- [x] Run  `detect_changes` before any commit plan.
 
 ## Validation Commands
 

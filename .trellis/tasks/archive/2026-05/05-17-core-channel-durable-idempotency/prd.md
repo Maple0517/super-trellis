@@ -18,7 +18,7 @@ Downstream callers that retry a logical send or forum/thread mutation after a cr
 - `appendEvent` in `packages/core/src/channel/internal/store/events.ts` owns channel locking, seq allocation, JSONL append, and `.seq` sidecar update.
 - `SendMessageOptions` and `PostThreadOptions` in `packages/core/src/channel/api/types.ts` are the intended public option surfaces for this task.
 - Current tests under `packages/core/test/channel/` cover seq sidecar behavior, metadata validation, thread lifecycle, and delivery modes, but not idempotent replay.
-- GitNexus impact/context for `appendEvent`, `sendMessage`, `postThread`, and the target files returned `Target not found`; local file search and spec review are the evidence source for this task.
+-  impact/context for `appendEvent`, `sendMessage`, `postThread`, and the target files returned `Target not found`; local file search and spec review are the evidence source for this task.
 
 ## Requirements
 
@@ -60,7 +60,7 @@ Downstream callers that retry a logical send or forum/thread mutation after a cr
 - Read core tests: `metadata.test.ts`, `threads.test.ts`, and `seq.test.ts`.
 - Read specs: `.trellis/spec/cli/backend/trellis-core-sdk.md`, `error-handling.md`, `quality-guidelines.md`, and unit-test conventions.
 - Searched for `idempot`, `appendEvent`, `sendMessage`, and `postThread`.
-- GitNexus did not have indexed symbols/files for the `packages/core/src/channel/**` targets; this limitation is recorded here.
+-  did not have indexed symbols/files for the `packages/core/src/channel/**` targets; this limitation is recorded here.
 
 ## Brainstorm Rounds
 

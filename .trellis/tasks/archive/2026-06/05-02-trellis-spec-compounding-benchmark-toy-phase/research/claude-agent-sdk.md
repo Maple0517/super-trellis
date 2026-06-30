@@ -100,14 +100,14 @@ for await (const msg of query({
     allowedTools: [
       "Read", "Edit", "Bash", "Glob", "Grep",
       "mcp__abcoder",      // wildcard-style: pre-approves any tool from server "abcoder"
-      "mcp__gitnexus",
+      "mcp__",
     ],
     // Hard-deny anything else that might sneak in via skills/agents.
     disallowedTools: ["Write", "WebFetch", "WebSearch", "Task"],
     permissionMode: "dontAsk",                 // never prompt; deny if not in allowedTools
     mcpServers: {
       abcoder:  { type: "stdio", command: "abcoder",  args: ["--mcp"] },
-      gitnexus: { type: "stdio", command: "gitnexus", args: ["mcp"] },
+      : { type: "stdio", command: "", args: ["mcp"] },
     },
     maxTurns: 40,
     maxBudgetUsd: 1.50,
@@ -131,13 +131,13 @@ async def main():
         tools=["Read", "Edit", "Bash", "Glob", "Grep"],
         allowed_tools=[
             "Read", "Edit", "Bash", "Glob", "Grep",
-            "mcp__abcoder", "mcp__gitnexus",
+            "mcp__abcoder", "mcp__",
         ],
         disallowed_tools=["Write", "WebFetch", "WebSearch", "Task"],
         permission_mode="dontAsk",
         mcp_servers={
             "abcoder":  {"type": "stdio", "command": "abcoder",  "args": ["--mcp"]},
-            "gitnexus": {"type": "stdio", "command": "gitnexus", "args": ["mcp"]},
+            "": {"type": "stdio", "command": "", "args": ["mcp"]},
         },
         max_turns=40,
         max_budget_usd=1.50,
@@ -166,7 +166,7 @@ MCP servers are attached **programmatically via the `mcpServers` option** (TS `R
 **Four transport types** (from `sdk.d.ts` lines 934–1058 and `types.py` lines 549–584):
 
 ```typescript
-// Stdio (subprocess) — the most common for local tools like ABCoder/GitNexus
+// Stdio (subprocess) — the most common for local tools like ABCoder/
 type McpStdioServerConfig = {
   type?: 'stdio';            // optional, default
   command: string;
@@ -198,12 +198,12 @@ type McpSdkServerConfigWithInstance = {
 };
 ```
 
-**Attaching ABCoder + GitNexus** (assumed they run as stdio MCP servers — verify their actual transports):
+**Attaching ABCoder** (assumed they run as stdio MCP servers — verify their actual transports):
 
 ```typescript
 mcpServers: {
   abcoder:  { type: "stdio", command: "abcoder",  args: ["--mcp"], env: { LOG_LEVEL: "warn" } },
-  gitnexus: { type: "stdio", command: "gitnexus", args: ["mcp"]   },
+  : { type: "stdio", command: "", args: ["mcp"]   },
 }
 ```
 
@@ -443,7 +443,7 @@ Both forms are accepted by `options.model`. Pinned dated IDs are recommended for
 - `disallowedTools` = `["WebFetch", "WebSearch", "Task"]` and anything else off-spec
 - `permissionMode: "dontAsk"`
 - `settingSources: []` (isolation)
-- `mcpServers`: `{ abcoder: {...stdio...}, gitnexus: {...stdio...} }`
+- `mcpServers`: `{ abcoder: {...stdio...}, : {...stdio...} }`
 - `maxTurns: 40`, `maxBudgetUsd: 1.50`, `taskBudget: { total: 100_000 }`, `abortController: AbortSignal.timeout(...)`
 - `model`: `"claude-haiku-4-5-20251001"` or `"claude-opus-4-6"` (pinned dated IDs)
 - Iterate messages → on `result` message, record `usage`, `modelUsage`, `total_cost_usd`, `num_turns`, `duration_ms`, `permission_denials`, plus a running tool-call counter
@@ -454,7 +454,7 @@ Both forms are accepted by `options.model`. Pinned dated IDs are recommended for
 
 - **MCP wildcard pre-approval syntax** (e.g. `mcp__abcoder__*`) is widely cited in community examples but I did not find a normative line in the SDK type defs. The safe fallback is to enumerate each MCP tool name explicitly in `allowedTools` after a first run prints what `getMcpStatus()` returns. The Python README example uses an exact name (`mcp__tools__greet`).
 - **`persistSession` on Python**: not present as a typed field on `ClaudeAgentOptions` v0.1.72; achievable via `extra_args` passthrough to the CLI flag. Verify against the CLI's `--help`.
-- I did not test ABCoder/GitNexus actual MCP transport — assumed stdio. Confirm by running each tool with `--help` or its `mcp` subcommand.
+- I did not test ABCoder/ actual MCP transport — assumed stdio. Confirm by running each tool with `--help` or its `mcp` subcommand.
 - The `options.tools` "base set" semantics is explicit in the JSDoc (TS line 1211) but the Python README emphasizes only `allowed_tools` / `disallowed_tools`. Both fields work in both SDKs (`tools` is in `ClaudeAgentOptions` at types.py line 1463) — if you want the model to literally not see a tool exists, set `tools` to the strict list, not just `allowedTools`.
 - `claude-opus-4-6` is still listed in current model enums (e.g. `BetaManagedAgentsModel`) but Anthropic's "what's new" page now leads with Opus 4.7 (`claude-opus-4-7`). Check whether the benchmark really wants 4.6 or should track to 4.7.
 

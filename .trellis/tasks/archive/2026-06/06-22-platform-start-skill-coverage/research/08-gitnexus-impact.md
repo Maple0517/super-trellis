@@ -1,12 +1,12 @@
-# 08 — GitNexus impact analysis（best-effort）
+# 08 —  impact analysis（best-effort）
 
 - **Query**: 对 `filterCommands` 和 `resolveTrellisStartSkill` 跑 impact 分析；标注 index 新鲜度
 - **Scope**: internal
 - **Date**: 2026-06-22
 
-## GitNexus index 新鲜度
+##  index 新鲜度
 
-CLAUDE.md 标注 GitNexus index 是 stale（last indexed `d6a6bc2`）。当前 HEAD 是 `0681c8d1`，**本地有未 index 的修改**（含本会话刚加的 zcode `resolveTrellisStartSkill` 调用）。所以以下 impact 结论**不一定反映最新代码**，需要结合维度 1 / 维度 6 的手工 grep 校准。
+CLAUDE.md 标注  index 是 stale（last indexed `d6a6bc2`）。当前 HEAD 是 `0681c8d1`，**本地有未 index 的修改**（含本会话刚加的 zcode `resolveTrellisStartSkill` 调用）。所以以下 impact 结论**不一定反映最新代码**，需要结合维度 1 / 维度 6 的手工 grep 校准。
 
 > **未实际调用 MCP `impact()` 工具**——本调研维度走 grep + read 的等价路径以避免依赖 stale index。下面是基于 grep 的等价 impact 结果。
 
@@ -63,6 +63,6 @@ grep -rn "resolveTrellisStartSkill\|resolveCodexTrellisStartSkill" \
 
 ## Implications for PRD
 
-- PRD 未要求 GitNexus impact 报告（这是 CLAUDE.md 的 project guideline 强制）。建议 PRD R4 / Notes 加一条"跑 `grep -rn 'resolveTrellisStartSkill\\|resolveCodexTrellisStartSkill' .` 全仓 + 全文件类型扫一次，确认 packages/cli/dist 之外无遗漏调用点"。
-- 没有发现 GitNexus 范围内的新风险。
-- stale index 这一点应该单独提一下：implement agent 若要严格遵循 CLAUDE.md "MUST run impact analysis"，可以先跑 `node .gitnexus/run.cjs analyze` 刷新 index 再做 impact——但鉴于改动结构简单（条件收紧 + helper 删除），手工 grep 验证已经足够，可以 PRD 显式 grant 跳过权限。
+- PRD 未要求  impact 报告（这是 CLAUDE.md 的 project guideline 强制）。建议 PRD R4 / Notes 加一条"跑 `grep -rn 'resolveTrellisStartSkill\\|resolveCodexTrellisStartSkill' .` 全仓 + 全文件类型扫一次，确认 packages/cli/dist 之外无遗漏调用点"。
+- 没有发现  范围内的新风险。
+- stale index 这一点应该单独提一下：implement agent 若要严格遵循 CLAUDE.md "MUST run impact analysis"，可以先跑 `node ./run.cjs analyze` 刷新 index 再做 impact——但鉴于改动结构简单（条件收紧 + helper 删除），手工 grep 验证已经足够，可以 PRD 显式 grant 跳过权限。

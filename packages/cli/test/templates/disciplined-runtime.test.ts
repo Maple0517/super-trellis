@@ -11,7 +11,7 @@ function read(relativePath: string): string {
 }
 
 describe("disciplined Trellis runtime templates", () => {
-  const markers: Array<[string, string]> = [
+  const markers: [string, string][] = [
     ["packages/cli/src/templates/common/skills/before-dev.md", "NO IMPLEMENTATION CODE BEFORE FAILING PROOF"],
     ["packages/cli/src/templates/common/skills/before-dev.md", "Why Order Matters"],
     ["packages/cli/src/templates/common/skills/debug.md", "NO FIXES WITHOUT ROOT CAUSE INVESTIGATION FIRST"],
@@ -68,4 +68,65 @@ describe("disciplined Trellis runtime templates", () => {
       expect(read(file)).toContain(marker);
     });
   }
+
+  it("trellis-brainstorm no-task mode does not preserve task-creation-only preconditions", () => {
+    const brainstorm = read("packages/cli/src/templates/common/skills/brainstorm.md");
+
+    expect(brainstorm).toContain("No-task mode");
+    expect(brainstorm).not.toContain(
+      "Use this skill only after task-creation consent has been given",
+    );
+    expect(brainstorm).not.toContain("If no task exists yet, create one:");
+  });
+
+  it("workflow and no-task brainstorm spell out every hard upgrade trigger", () => {
+    const workflow = read("packages/cli/src/templates/trellis/workflow.md");
+    const brainstorm = read("packages/cli/src/templates/common/skills/brainstorm.md");
+    const hardUpgradeTriggers = [
+      "persistent planning or durable decision records",
+      "spans multiple stages, multiple sessions",
+      "task lifecycle features",
+      "structured decomposition or coordination",
+      "Risk or scope increases",
+      "durable context injection beyond the current conversation",
+    ];
+
+    for (const template of [workflow, brainstorm]) {
+      expect(template).toContain("Hard upgrade triggers");
+      for (const trigger of hardUpgradeTriggers) {
+        expect(template).toContain(trigger);
+      }
+    }
+  });
+
+  it("no-task fallback skills escalate when a hard upgrade trigger appears", () => {
+    const files = [
+      "packages/cli/src/templates/common/skills/before-dev.md",
+      "packages/cli/src/templates/common/skills/check.md",
+      "packages/cli/src/templates/common/skills/debug.md",
+    ];
+
+    for (const file of files) {
+      expect(read(file)).toContain("hard upgrade trigger");
+      expect(read(file)).toContain("ask to create a Trellis task");
+    }
+  });
+
+  it("task-only Trellis skills and commands self-declare the no-task boundary", () => {
+    const files = [
+      "packages/cli/src/templates/common/skills/break-loop.md",
+      "packages/cli/src/templates/common/commands/finish-work.md",
+      "packages/cli/src/templates/common/commands/continue.md",
+      "packages/cli/src/templates/common/bundled-skills/trellis-channel/SKILL.md",
+    ];
+
+    for (const file of files) {
+      expect(read(file)).toContain("Task-only");
+      expect(read(file)).toContain("active Trellis task");
+    }
+
+    expect(read("packages/cli/src/templates/common/commands/finish-work.md")).not.toContain(
+      "If there was no active Trellis task, skip archive/journal",
+    );
+  });
 });

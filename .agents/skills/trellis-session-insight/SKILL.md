@@ -9,6 +9,8 @@ This skill teaches an AI **how to call `trellis mem`** — the project's cross-s
 
 It is intentionally a **capability skill, not a workflow**. There is no fixed output file, no required write-back step, no "always run after finish-work" rule. What to do with what `mem` returns is a judgement call made in the moment of the conversation. The skill exists so the AI knows the capability is there and can decide.
 
+This skill may be used with or without an active task. In no-task mode, do not create ad-hoc planning or note files; answer inline, ask whether to update `.trellis/spec`, or recommend creating a Trellis task if durable planning is needed.
+
 ## What `trellis mem` is
 
 A local CLI that indexes the user's past Claude Code, Codex, and Pi Agent conversation logs (the JSONL files each platform stores under `~/.claude/projects/`, `~/.codex/sessions/`, and `~/.pi/agent/sessions/`) and lets you list, search, slice by Trellis task boundaries, and dump cleaned dialogue from them. OpenCode logs are not yet indexable (provider adapter pending) — when an OpenCode session is the obvious target, surface that limitation rather than guessing.

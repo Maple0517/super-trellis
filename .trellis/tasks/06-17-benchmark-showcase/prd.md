@@ -83,7 +83,6 @@ Judging: LLM judge with published rubric + human spot-check on 20% of runs.
 | Single-run variance | n ≥ 5 per (commit, arm); report variance not point estimates. |
 | Author-judging bias | LLM judge with published rubric + human spot-check 20%. |
 | Commit-message prompt leakage | Frozen worktree at parent SHA, prompts derived from rewritten PR text. |
-| GitNexus / index reflects post-fix state | Rebuild index at parent SHA inside the frozen harness. |
 | Token-spend confound | Report tokens; don't penalize C for higher spend unless quality is equal. |
 | Self-deception ("we won") | Pre-commit to filing every loss/tie as a follow-up task before reading aggregate results. |
 

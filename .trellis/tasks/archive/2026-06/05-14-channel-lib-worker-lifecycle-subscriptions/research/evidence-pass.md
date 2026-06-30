@@ -15,7 +15,7 @@
 - `packages/cli/src/commands/channel/kill.ts`
 - `.trellis/spec/cli/backend/trellis-core-sdk.md`
 - `.trellis/spec/cli/backend/commands-channel.md`
-- GitNexus query/context for `channelSpawn`, `runInboxWatcher`, `readChannelEvents`
+-  query/context for `channelSpawn`, `runInboxWatcher`, `readChannelEvents`
 - abcoder file structure for core channel event/read/watch files
 
 ## Confirmed Facts
@@ -54,7 +54,7 @@
    - It explicitly says not to duplicate `lastSeq`, event classification, linked context parsing, or thread status rules across command files.
    - `.trellis/spec/cli/backend/commands-channel.md` currently documents `spawn`, `kill`, `wait`, `messages`, `post`, `forum`, `thread`, and current routing semantics.
 
-9. GitNexus confirms current call boundaries.
+9.  confirms current call boundaries.
    - `channelSpawn` is called by `channelRun` and `registerChannelCommand`.
    - `runInboxWatcher` is called only by `runSupervisor`.
    - `readChannelEvents` is ambiguous across core API, core store, and CLI compatibility store, which is exactly the kind of split that needs careful SOT work.

@@ -83,7 +83,7 @@ Inspected sources:
 - `.trellis/tasks/05-14-channel-lib-worker-lifecycle-subscriptions/design.md`
 - `.trellis/tasks/05-15-worker-dispatcher-observability-gaps/prd.md`
 - `.trellis/spec/cli/backend/commands-channel.md`
-- GitNexus query:
+-  query:
   `channel worker spawn supervisor timeout kill liveness process management memory OOM`
 
 Confirmed facts:

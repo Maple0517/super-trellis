@@ -66,5 +66,5 @@ Out of scope:
 GA can ship only after:
 - All 9 success criteria above
 - Dogfood passes
-- No HIGH/CRITICAL gitnexus_impact warnings on any pre-publish file changes
+- No HIGH/CRITICAL _impact warnings on any pre-publish file changes
 - All preflight checks green (`check-docs-changelog --type promote`, `release-preflight check-versions`, `release-preflight publish-plan`, `pnpm lint`, `pnpm typecheck`, `pnpm test`)

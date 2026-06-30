@@ -6,7 +6,7 @@
 {"method":"mcpServer/startupStatus/updated","params":{"name":"codex_apps","status":"starting","error":null}}
 {"method":"mcpServer/startupStatus/updated","params":{"name":"computer-use","status":"starting","error":null}}
 {"method":"mcpServer/startupStatus/updated","params":{"name":"exa","status":"starting","error":null}}
-{"method":"mcpServer/startupStatus/updated","params":{"name":"gitnexus","status":"starting","error":null}}
+{"method":"mcpServer/startupStatus/updated","params":{"name":"","status":"starting","error":null}}
 {"method":"mcpServer/startupStatus/updated","params":{"name":"playwright","status":"starting","error":null}}
 {"method":"mcpServer/startupStatus/updated","params":{"name":"ref","status":"starting","error":null}}
 {"method":"mcpServer/startupStatus/updated","params":{"name":"abcoder","status":"starting","error":null}}
@@ -14,7 +14,7 @@
 {"method":"thread/status/changed","params":{"threadId":"019e1b39-2ec1-7fe0-979e-5cfc133b0805","status":{"type":"active","activeFlags":[]}}}
 {"method":"turn/started","params":{"threadId":"019e1b39-2ec1-7fe0-979e-5cfc133b0805","turn":{"id":"019e1b39-3364-7332-8699-0155635bbf90","items":[],"itemsView":"notLoaded","status":"inProgress","error":null,"startedAt":1778573194,"completedAt":null,"durationMs":null}}}
 {"method":"mcpServer/startupStatus/updated","params":{"name":"computer-use","status":"ready","error":null}}
-{"method":"mcpServer/startupStatus/updated","params":{"name":"gitnexus","status":"ready","error":null}}
+{"method":"mcpServer/startupStatus/updated","params":{"name":"","status":"ready","error":null}}
 {"method":"mcpServer/startupStatus/updated","params":{"name":"playwright","status":"ready","error":null}}
 {"method":"mcpServer/startupStatus/updated","params":{"name":"chromedevtool","status":"ready","error":null}}
 {"method":"mcpServer/startupStatus/updated","params":{"name":"ref","status":"ready","error":null}}

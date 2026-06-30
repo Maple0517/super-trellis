@@ -1,5 +1,7 @@
 # Finish Work
 
+Task-only: use this command only when an active Trellis task exists and its planned work is verified. No-task mode has no archive or journal lifecycle to close.
+
 Wrap up the current session: archive the active task (and any other completed-but-unarchived tasks the user wants to clean up) and record the session journal. Code commits are NOT done here — those happen in workflow Phase 3.4 before you invoke this command.
 
 ## Step 1: Survey current state
@@ -74,7 +76,7 @@ After archive and journal steps complete, do not silently stop. State the eviden
 3. Continue with the next task.
 4. Stop here.
 
-If there was no active Trellis task, skip archive/journal and still offer the same integration choices after the local commit and verification evidence.
+If there is no active Trellis task, do not use this command. Return to \`trellis-check\` no-task handoff and offer integration choices there.
 
 ## Branch Finish Discipline
 

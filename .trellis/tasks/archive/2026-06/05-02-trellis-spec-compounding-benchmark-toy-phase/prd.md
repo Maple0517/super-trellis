@@ -21,7 +21,7 @@ The PRD went through several pivots. Locked positions, with reasoning:
 - **Substrate**: 20 tasks from SWE-bench Verified, drawn from 4 repos × 5 tasks (sympy, astropy, django, requests).
 - **Model under test**: MiMo v2.5 Pro at `https://api.xiaomimimo.com/v1`, model id `mimo-v2.5-pro`.
 - **Driver**: OpenCode in headless mode (`opencode run --format json --dangerously-skip-permissions`), per-attempt sandboxed via `XDG_*` env vars + `mktemp -d`.
-- **Tool whitelist**: only `Read/Edit/Write/Glob/Grep/Bash` + `mcp__abcoder__*` + `mcp__gitnexus__*`. Default-deny all other tools (no Web*, no playwright, no codex-cli, etc.). Sub-agent (`task`) and skill auto-loading **disabled** to control token bloat.
+- **Tool whitelist**: only `Read/Edit/Write/Glob/Grep/Bash` + `mcp__abcoder__*` + `mcp____*`. Default-deny all other tools (no Web*, no playwright, no codex-cli, etc.). Sub-agent (`task`) and skill auto-loading **disabled** to control token bloat.
 - **Per-attempt sandboxing**: `XDG_DATA_HOME` / `XDG_CONFIG_HOME` / `XDG_CACHE_HOME` / `XDG_STATE_HOME` all relocated under `mktemp -d`; `--dir <repo-snapshot>` controls cwd. Pre-warmed sqlite to silence first-run migration message.
 - **Spec generation (oracle, offline, once per task)**: MiMo v2.5 Pro reads the repo snapshot at the task's base commit, writes a complete Trellis-structured `.trellis/spec/` (multi-file, with `index.md`) capturing the codified conventions a new contributor would need.
 - **4 arms** (each task × each arm × 3 trials = 240 attempts):
@@ -79,7 +79,7 @@ End-to-end pipeline:
 ```
 1. Select tasks       (bench/select_tasks.py → tasks.yaml)
 2. Snapshot repos     (per task × repo, checkout at base commit, save tarball)
-3. Index for MCP      (abcoder parse + gitnexus analyze, once per repo)
+3. Index for MCP      (abcoder parse analyze, once per repo)
 4. Generate oracle    (bench/generate_spec.py via MiMo → .trellis/spec/ tarball per task)
 5. Run attempts       (bench/run_attempt.sh × 240, OpenCode headless, sandboxed)
 6. Grade attempts     (bench/score_attempt.py: SWE-bench grader + telemetry parse → result.json)
@@ -140,7 +140,7 @@ Slim agent definition (`<workspace>/.opencode/agents/swe-bench-runner.md`) with 
 - [`research/terminal-bench-2.md`](research/terminal-bench-2.md) — TB-2 evaluated and rejected; "no starting repo state" was the disqualifier
 - [`research/tb2-agent-landscape.md`](research/tb2-agent-landscape.md) — competitive landscape; **no existing TB-2 framework has a structured project-spec layer** → confirmed positioning gap
 - [`research/claude-agent-sdk.md`](research/claude-agent-sdk.md) — Claude Agent SDK option (rejected in favor of OpenCode), useful as fallback reference
-- [`research/mcp-tools-setup.md`](research/mcp-tools-setup.md) — abcoder + gitnexus stdio MCP wiring (carries over to OpenCode unchanged)
+- [`research/mcp-tools-setup.md`](research/mcp-tools-setup.md) — abcoder stdio MCP wiring (carries over to OpenCode unchanged)
 - [`research/mimo-v2-5-pro.md`](research/mimo-v2-5-pro.md) — model API, capability tier (SWE-bench Pro 57.2), 1M context, no `seed` support
 - [`research/opencode-driver.md`](research/opencode-driver.md) — full driver architecture, 6/6 capability checks green, ready-to-lift script + agent + config sketches
 

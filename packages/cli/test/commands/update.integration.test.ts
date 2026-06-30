@@ -679,10 +679,15 @@ describe("update() integration", () => {
 
     // Simulate a project installed before these guides were hash-tracked.
     const hashes = readHashesV2(hashFilePath());
-    delete hashes[`${PATHS.SPEC}/guides/debugging-guide.md`];
-    delete hashes[`${PATHS.SPEC}/guides/testing-guide.md`];
-    delete hashes[`${PATHS.SPEC}/guides/superpowers-verification-scenarios.md`];
-    writeHashesV2(hashFilePath(), hashes);
+    const missingGuideFiles = new Set([
+      `${PATHS.SPEC}/guides/debugging-guide.md`,
+      `${PATHS.SPEC}/guides/testing-guide.md`,
+      `${PATHS.SPEC}/guides/superpowers-verification-scenarios.md`,
+    ]);
+    const hashesWithoutBuiltInGuides = Object.fromEntries(
+      Object.entries(hashes).filter(([relativePath]) => !missingGuideFiles.has(relativePath)),
+    );
+    writeHashesV2(hashFilePath(), hashesWithoutBuiltInGuides);
 
     await update({ force: true });
 

@@ -227,6 +227,20 @@ expect(dirs).toEqual(AI_TOOLS[id].templateDirs); // getTemplateDirs just returns
 
 **Why**: These tests verify that JavaScript object property access works, not that our code is correct. If the implementation is a trivial lookup, don't test it — test the **consumer behavior** instead.
 
+### Template Marker Tests That Miss Stale Conflicts
+
+```typescript
+// Bad: proves the new wording exists, but stale contradictory wording can remain
+expect(template).toContain("No-task mode");
+
+// Good: proves both sides of the text contract
+expect(template).toContain("No-task mode");
+expect(template).not.toContain("Use this skill only after task-creation consent");
+expect(template).not.toContain("If no task exists yet, create one:");
+```
+
+**Why**: template changes often remove or narrow old instructions. A presence-only marker test can pass while the old instruction still contradicts the new behavior. When the requirement is to replace behavior, include at least one negative assertion for the stale phrase or a scoped assertion that proves the old phrase only remains in the valid mode.
+
 ### Redundant Type Checks (TypeScript Guarantees)
 
 ```typescript

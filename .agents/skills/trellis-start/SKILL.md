@@ -48,17 +48,23 @@ From Step 1 you know the current task and status. Check the task directory:
   python3 ./.trellis/scripts/get_context.py --mode phase --step 2.1 --platform codex
   ```
 - **No active task** → classify first. For simple conversation / small task, ask only whether this turn should create a Trellis task. For complex work, ask whether you may create a Trellis task and enter planning. If the user says no, skip Trellis for this session.
+  Before the task exists, keep complex work at triage depth only: evidence gathering, one-sentence direction checks, and task-creation consent. Do not expand into a real brainstorm, option tree, or implementation plan before creating the task.
 
 ---
 
-## Skill routing (quick reference)
+## Routing Discipline
 
-| User intent | Skill |
-|---|---|
-| New feature / unclear requirements | `trellis-brainstorm` |
-| About to write code | `trellis-before-dev` |
-| Done coding / quality check | `trellis-check` |
-| Stuck / fixed same bug multiple times | `trellis-break-loop` |
-| Learned something worth capturing | `trellis-update-spec` |
+Before acting, classify the request and choose the process path. Process routing happens before implementation.
+
+1. Explanation only -> answer with repo evidence when needed.
+2. Trivial work -> keep fast path and verify any behavior claim.
+3. Unclear requirements -> `trellis-brainstorm`.
+4. Code change -> `trellis-before-dev`.
+5. Bug, failed command, failed verification, or unexpected behavior -> `trellis-debug` before patching.
+6. Done coding or receiving review feedback -> `trellis-check`.
+7. Repeated debugging after a fix -> `trellis-break-loop`.
+8. Complex or high-risk work -> ask for Trellis task creation unless the user opted out.
+9. Frontend visual redesign, layout-heavy, or interaction-heavy work -> explicitly evaluate whether Visual Companion should be used during planning or review.
+10. In Codex, complex work -> keep a short global `update_plan` current across planning, implementation, and verification.
 
 Full rules + anti-rationalization table in `.trellis/workflow.md`.

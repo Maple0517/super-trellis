@@ -40,7 +40,7 @@ trellis channel thread trellis-issue <thread>
 - `parseChannelType("threads")` throws; `reduceChannelMetadata` does not normalize legacy `thread` / `threads` values to `forum`.
 - Legacy `type:"threads"` logs are not treated as forum channels. Thread APIs must reject them or see them as non-forum channels.
 
-GitNexus 查到的实际影响点：
+ 查到的实际影响点：
 
 - `parseChannelType` 的直接影响很小，主要由 `registerChannelCommand -> createChannel -> parseChannelType` 使用，并被 `packages/core/test/channel/metadata.test.ts` 覆盖。
 - `readThreadsChannelEvents` 是当前真正的 forum/thread 操作入口，影响 `listThreads`、`showThread`、`postThread`、`renameThread`、`addThreadContext`、`deleteThreadContext`、`listThreadContext`，并继续影响 CLI `channelContextAdd/Delete/List` 和 `registerChannelCommand`。
@@ -70,7 +70,7 @@ Core 应暴露历史检索的纯能力，不暴露 CLI 输出样式。
 
 这些高阶语义可以后续基于 core search record 组合出来，不放进第一版 public API。
 
-GitNexus 查到的 `mem` 入口关系：
+ 查到的 `mem` 入口关系：
 
 - `runMem` 的上游只有 `packages/cli/src/cli/index.ts` 和 `packages/cli/test/commands/mem-integration.test.ts`，入口迁移风险低。
 - `runMem` 下游分发到 `parseArgv`、`cmdList`、`cmdSearch`、`cmdProjects`、`cmdContext`、`cmdExtract`、`cmdHelp`、`die`。
