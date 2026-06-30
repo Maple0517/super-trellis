@@ -145,6 +145,14 @@ markers (`[Codex]` plus `[Kilo, Antigravity, Windsurf]`) must be replaced by
 the current packaged template so `--platform codex` can resolve to
 `codex-inline` or `codex-sub-agent` and still load Phase 2.1 detail.
 
+Regression invariant: the `no_task`, `in_progress`, and
+`in_progress-inline` breadcrumb blocks must preserve tool-routing guidance
+that names CodeGraph for structural source exploration and LeanCTX for fresh
+reads, compressed shell/test/log output, repo overview, semantic search, and
+session memory. Codex Desktop can expose MCP tools through deferred/nested tool
+surfaces, so breadcrumb wording must instruct agents to check available tools
+before claiming CodeGraph is unavailable.
+
 ---
 
 ## Status writer table

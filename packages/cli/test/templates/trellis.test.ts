@@ -140,6 +140,16 @@ describe("trellis template constants", () => {
     return fs.readFileSync(workflowPath, "utf-8");
   }
 
+  function readCommonSkillTemplate(name: string): string {
+    const repoRoot = fs.existsSync(path.join(process.cwd(), "packages"))
+      ? process.cwd()
+      : path.resolve(process.cwd(), "../..");
+    return fs.readFileSync(
+      path.join(repoRoot, "packages/cli/src/templates/common/skills", name),
+      "utf-8",
+    );
+  }
+
   it("marketplace native workflow mirror matches the bundled workflow when the submodule is present", () => {
     const marketplaceNative = readMarketplaceWorkflow("native/workflow.md");
     if (marketplaceNative === undefined) {
@@ -269,6 +279,22 @@ describe("trellis template constants", () => {
     expect(noTask).toContain("If you ask whether to create a Trellis task, stop");
     expect(inline).toContain("lifecycle or task-creation question is blocking");
     expect(inline).toContain("Do not continue tool calls, code edits, commits, pushes, archives, or PR work");
+  });
+
+  it("workflow and common skills preserve CodeGraph / LeanCTX tool routing", () => {
+    const noTask = workflowStateBreadcrumb("no_task");
+    const inline = workflowStateBreadcrumb("in_progress-inline");
+    const beforeDev = readCommonSkillTemplate("before-dev.md");
+    const debug = readCommonSkillTemplate("debug.md");
+    const check = readCommonSkillTemplate("check.md");
+
+    for (const block of [noTask, inline, beforeDev, debug, check]) {
+      expect(block).toContain("CodeGraph");
+      expect(block).toContain("LeanCTX");
+    }
+    expect(beforeDev).toContain("Do not claim CodeGraph unavailable");
+    expect(debug).toContain("For code-level root cause tracing");
+    expect(check).toContain("symbol-level claims");
   });
 
   it("[issue-237] workflow.md Phase 2 dispatch steps require prompt recursion guards", () => {

@@ -187,6 +187,7 @@ Create new children with `task.py create "<title>" --slug <name> --parent <paren
 [workflow-state:no_task]
 No active task. First classify the current turn and ask for task-creation consent before creating any Trellis task.
 No active task does not mean skip Trellis discipline.
+Tool routing: before source exploration, check available tools. Use CodeGraph first for symbol/module/function/class lookup, callers/callees, flow tracing, and impact radius. Use LeanCTX first for fresh file bytes, compressed shell/test/log output, repo overview, routes, semantic search, and session memory. If CodeGraph is unavailable, stale, or degraded, say so and fall back to LeanCTX fresh reads or native search.
 Simple conversation / small task: do not ask for a Trellis task by default; answer, inspect, launch local services, or do bounded no-task work directly. Use no-task discipline skills from prompt intent (`trellis-brainstorm`, `trellis-before-dev`, `trellis-debug`, `trellis-check`, `trellis-update-spec`) without creating task artifacts.
 Complex task: ask the user if you can create a Trellis task and enter the planning phase. Before the task exists, bounded no-task brainstorming may gather evidence, narrow direction, and recommend scope. Do not start full implementation planning. If the user says no, stay in no-task mode only until an upgrade trigger is hit, then ask again to create a task.
 Consent stop: If you ask whether to create a Trellis task, stop and wait for the answer. Do not continue tool calls, code edits, commits, pushes, archives, PR work, or long-running debug/implementation steps while that task-creation question is unanswered.
@@ -258,6 +259,7 @@ Quality: apply the TDD Decision Matrix in `trellis-before-dev` before writing co
 Review feedback: route directly to `trellis-check`; verify feedback against code reality before accepting it.
 Tracking: for complex work in Codex, keep a short global `update_plan` current as phases advance.
 Finish gate: when the planned scope and acceptance criteria are verified, move to Phase 3. Do not suggest new work or polish before offering the finish flow.
+Tool routing: before source exploration, check available tools. Use CodeGraph first for symbol/module/function/class lookup, callers/callees, flow tracing, and impact radius. Use LeanCTX first for fresh file bytes, compressed shell/test/log output, repo overview, routes, semantic search, and session memory. If CodeGraph is unavailable, stale, or degraded, say so and fall back to LeanCTX fresh reads or native search.
 Milestone handoff: after local proof, full verification, commit, archive, or journal, do not silently stop. State evidence, recommend the next workflow step, and ask when the next step changes scope, costs time, pushes remotely, creates a PR, or closes lifecycle state.
 Main-session default: dispatch `trellis-implement` and `trellis-check` from the main session only.
 Sub-agent self-exemption: if you are already running as `trellis-implement`, do NOT spawn another `trellis-implement`; if you are already running as `trellis-check`, do NOT spawn another `trellis-check`. This is a main session only dispatch rule.
@@ -290,6 +292,7 @@ Quality: apply the TDD Decision Matrix in `trellis-before-dev` before writing co
 Review feedback: route directly to `trellis-check`; verify feedback against code reality before accepting it.
 Tracking: for complex work in Codex, keep a short global `update_plan` current as phases advance.
 Finish gate: when the planned scope and acceptance criteria are verified, move to Phase 3. Do not suggest new work or polish before offering the finish flow.
+Tool routing: before source exploration, check available tools. Use CodeGraph first for symbol/module/function/class lookup, callers/callees, flow tracing, and impact radius. Use LeanCTX first for fresh file bytes, compressed shell/test/log output, repo overview, routes, semantic search, and session memory. If CodeGraph is unavailable, stale, or degraded, say so and fall back to LeanCTX fresh reads or native search.
 Milestone handoff: after local proof, full verification, commit, archive, or journal, do not silently stop. State evidence, recommend the next workflow step, and ask when the next step changes scope, costs time, pushes remotely, creates a PR, or closes lifecycle state.
 Do not dispatch implement/check sub-agents in inline mode.
 Plan discipline: `implement.md`, when present, is the ordered execution contract. At Phase 2 start, read `prd.md` -> `design.md` -> `implement.md`, review it critically against current code/spec reality, and surface blockers before coding.

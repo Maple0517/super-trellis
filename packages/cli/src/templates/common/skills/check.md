@@ -66,6 +66,8 @@ Rationalization prevention:
 
 Request review for high-risk, cross-layer, major feature, complex bugfix, pre-merge work, after each substantial subagent task, when stuck, before risky refactors, or after a complex bug fix. Do not force two separate reviewer agents by default; use the Trellis check path unless channel orchestration is explicitly chosen.
 
+For symbol-level claims, cross-layer claims, caller/callee relationships, flow tracing, or impact-radius review, verify with CodeGraph when available. Use LeanCTX for fresh diff/status/test output, compressed logs, file reads, repo overview, routes, semantic search, and session memory. Do not claim CodeGraph unavailable until checking available tools or calling `codegraph_status`; if CodeGraph is unavailable, stale, or degraded, say so and use LeanCTX fresh reads or native search as fallback.
+
 When receiving review feedback:
 
 1. READ the full feedback before reacting.

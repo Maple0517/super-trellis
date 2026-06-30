@@ -8,6 +8,10 @@ NO FIXES WITHOUT ROOT CAUSE INVESTIGATION FIRST.
 
 Violating the letter of this process is violating the spirit of debugging. If implementation starts before reproduction, evidence, and a written testable hypothesis, discard the speculative fix and restart from investigation.
 
+## Tool Routing
+
+For code-level root cause tracing, use CodeGraph before text search when tracing symbols, callers, callees, module flow, or impact radius. Use LeanCTX for current logs, command output, fresh file bytes, repo overview, semantic search, and compressed test/build output. Do not claim CodeGraph unavailable until checking available tools or calling `codegraph_status`; if CodeGraph is unavailable, stale, or degraded, say so and fall back to LeanCTX fresh reads or native search.
+
 ## Red Flags
 
 STOP and return to evidence gathering when you notice:
