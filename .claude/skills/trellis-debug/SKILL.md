@@ -15,7 +15,7 @@ Violating the letter of this process is violating the spirit of debugging. If im
 
 ## Tool Routing
 
-Before code-level root cause tracing, run tool preflight. In Codex, inspect nested/deferred tools from inside `exec` by checking `ALL_TOOLS` for CodeGraph and LeanCTX MCP tools. Use CodeGraph MCP before text search when tracing symbols, callers, callees, module flow, or impact radius. Use LeanCTX MCP or `/Users/maple/.local/bin/lean-ctx -c "<cmd>"` for current logs, command output, fresh file bytes, repo overview, semantic search, and compressed test/build output. If CodeGraph MCP is not exposed, say `CodeGraph tools are not exposed this turn` before falling back to LeanCTX or native text search; if CodeGraph is exposed but stale or degraded, say so and use LeanCTX fresh reads or native search for live files.
+Before code-level root cause tracing, run tool preflight and state the platform structural tool you found. Platform structural tool map: Codex: CodeGraph; Claude Code: gortex. Do not use another platform's tool name. In Codex, inspect nested/deferred tools from inside `exec` by checking `ALL_TOOLS` for CodeGraph and LeanCTX MCP tools. Use the platform structural tool before text search when tracing symbols, callers, callees, module flow, or impact radius. Use LeanCTX MCP or `/Users/maple/.local/bin/lean-ctx -c "<cmd>"` for current logs, command output, fresh file bytes, repo overview, semantic search, and compressed test/build output. If no mapped/exposed structural tool exists, say `no structural code tool is exposed this turn` before falling back to LeanCTX or native text search; if the platform structural tool is stale or degraded, say so and use LeanCTX fresh reads or native search for live files.
 
 ## Red Flags
 

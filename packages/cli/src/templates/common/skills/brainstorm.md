@@ -12,7 +12,7 @@ If a question can be answered by exploring the codebase, explore the codebase in
 
 This is mandatory. Before asking the user a question, first check whether the answer is already available in code, tests, configs, docs, existing specs, or task history.
 
-Before codebase exploration, run tool preflight. In Codex, inspect nested/deferred tools from inside `exec` by checking `ALL_TOOLS` for CodeGraph and LeanCTX MCP tools. Use CodeGraph MCP first for structure, symbols, callers/callees, flow tracing, and impact radius. If CodeGraph MCP is not exposed, say `CodeGraph tools are not exposed this turn` before falling back to LeanCTX or native text search. Use LeanCTX MCP or `/Users/maple/.local/bin/lean-ctx -c "<cmd>"` for fresh reads, compressed shell/test/log output, regex search, session memory, and URL/document reads.
+Before codebase exploration, run tool preflight and state the platform structural tool you found. Platform structural tool map: Codex: CodeGraph; Claude Code: gortex. Do not use another platform's tool name. In Codex, inspect nested/deferred tools from inside `exec` by checking `ALL_TOOLS` for CodeGraph and LeanCTX MCP tools. Use the platform structural tool first for structure, symbols, callers/callees, flow tracing, and impact radius. If no mapped/exposed structural tool exists, say `no structural code tool is exposed this turn` before falling back to LeanCTX or native text search. Use LeanCTX MCP or `/Users/maple/.local/bin/lean-ctx -c "<cmd>"` for fresh reads, compressed shell/test/log output, regex search, session memory, and URL/document reads.
 
 Do not ask the user to confirm facts that the repository can answer. Ask only for product intent, preference, scope, risk tolerance, or decisions that remain ambiguous after inspection.
 

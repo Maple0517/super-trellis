@@ -281,7 +281,7 @@ describe("trellis template constants", () => {
     expect(inline).toContain("Do not continue tool calls, code edits, commits, pushes, archives, or PR work");
   });
 
-  it("workflow and common skills preserve CodeGraph / LeanCTX tool routing", () => {
+  it("workflow and common skills preserve platform structural-tool routing", () => {
     const noTask = workflowStateBreadcrumb("no_task");
     const inline = workflowStateBreadcrumb("in_progress-inline");
     const inProgress = workflowStateBreadcrumb("in_progress");
@@ -291,10 +291,14 @@ describe("trellis template constants", () => {
     const check = readCommonSkillTemplate("check.md");
 
     for (const block of [noTask, inProgress, inline, brainstorm, beforeDev, debug, check]) {
-      expect(block).toContain("CodeGraph");
+      expect(block).toContain("platform structural tool");
+      expect(block).toContain("Codex: CodeGraph");
+      expect(block).toContain("Claude Code: gortex");
+      expect(block).not.toContain("Other platforms");
       expect(block).toContain("LeanCTX");
       expect(block).toContain("ALL_TOOLS");
-      expect(block).toContain("CodeGraph tools are not exposed this turn");
+      expect(block).toContain("Do not use another platform's tool name");
+      expect(block).toContain("no structural code tool is exposed this turn");
     }
     expect(brainstorm).toContain("Before codebase exploration, run tool preflight");
     expect(beforeDev).toContain("Apply tool preflight before source exploration");
