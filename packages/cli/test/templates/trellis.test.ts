@@ -284,16 +284,21 @@ describe("trellis template constants", () => {
   it("workflow and common skills preserve CodeGraph / LeanCTX tool routing", () => {
     const noTask = workflowStateBreadcrumb("no_task");
     const inline = workflowStateBreadcrumb("in_progress-inline");
+    const inProgress = workflowStateBreadcrumb("in_progress");
+    const brainstorm = readCommonSkillTemplate("brainstorm.md");
     const beforeDev = readCommonSkillTemplate("before-dev.md");
     const debug = readCommonSkillTemplate("debug.md");
     const check = readCommonSkillTemplate("check.md");
 
-    for (const block of [noTask, inline, beforeDev, debug, check]) {
+    for (const block of [noTask, inProgress, inline, brainstorm, beforeDev, debug, check]) {
       expect(block).toContain("CodeGraph");
       expect(block).toContain("LeanCTX");
+      expect(block).toContain("ALL_TOOLS");
+      expect(block).toContain("CodeGraph tools are not exposed this turn");
     }
-    expect(beforeDev).toContain("Do not claim CodeGraph unavailable");
-    expect(debug).toContain("For code-level root cause tracing");
+    expect(brainstorm).toContain("Before codebase exploration, run tool preflight");
+    expect(beforeDev).toContain("Apply tool preflight before source exploration");
+    expect(debug).toContain("Before code-level root cause tracing");
     expect(check).toContain("symbol-level claims");
   });
 
@@ -347,6 +352,23 @@ describe("trellis template constants", () => {
       expect(block).toContain("parent task plus independently verifiable child tasks");
       expect(block).toContain("not implied by tree position");
     }
+  });
+
+  it("planning uses Trellis-native plan quality and requires design options", () => {
+    const planning = workflowStateBreadcrumb("planning");
+    const planningInline = workflowStateBreadcrumb("planning-inline");
+    const brainstorm = readCommonSkillTemplate("brainstorm.md");
+
+    expect(workflowMdTemplate).not.toContain("writing-plans");
+    for (const block of [planning, planningInline]) {
+      expect(block).toContain("Trellis Plan Quality Gate");
+      expect(block).toContain("present 2-3 approaches for real design choices");
+      expect(block).toContain("Simple assent such as");
+      expect(block).toContain("do not treat simple assent as approval");
+    }
+    expect(brainstorm).toContain("Each approach must include trade-offs");
+    expect(brainstorm).toContain("one approach must be marked as the recommendation");
+    expect(brainstorm).toContain("do not treat simple assent as approval to write `design.md` or `implement.md`");
   });
 
   it("gitignoreTemplate contains ignore patterns", () => {

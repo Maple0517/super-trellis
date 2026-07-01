@@ -187,7 +187,7 @@ Create new children with `task.py create "<title>" --slug <name> --parent <paren
 [workflow-state:no_task]
 No active task. First classify the current turn and ask for task-creation consent before creating any Trellis task.
 No active task does not mean skip Trellis discipline.
-Tool routing: before source exploration, check available tools. Use CodeGraph first for symbol/module/function/class lookup, callers/callees, flow tracing, and impact radius. Use LeanCTX first for fresh file bytes, compressed shell/test/log output, repo overview, routes, semantic search, and session memory. If CodeGraph is unavailable, stale, or degraded, say so and fall back to LeanCTX fresh reads or native search.
+Tool routing: before source exploration, run tool preflight. In Codex, inspect nested/deferred tools from inside `exec` by checking `ALL_TOOLS` for CodeGraph and LeanCTX MCP tools. Use CodeGraph MCP first for symbol/module/function/class lookup, callers/callees, flow tracing, and impact radius. Use LeanCTX MCP or `/Users/maple/.local/bin/lean-ctx -c "<cmd>"` for fresh file bytes, compressed shell/test/log output, repo overview, routes, semantic search, and session memory. If CodeGraph MCP is not exposed, say `CodeGraph tools are not exposed this turn` before falling back to LeanCTX or native text search; if CodeGraph is exposed but stale or degraded, say so and use LeanCTX fresh reads or native search for live files.
 Simple conversation / small task: do not ask for a Trellis task by default; answer, inspect, launch local services, or do bounded no-task work directly. Use no-task discipline skills from prompt intent (`trellis-brainstorm`, `trellis-before-dev`, `trellis-debug`, `trellis-check`, `trellis-update-spec`) without creating task artifacts.
 Complex task: ask the user if you can create a Trellis task and enter the planning phase. Before the task exists, bounded no-task brainstorming may gather evidence, narrow direction, and recommend scope. Do not start full implementation planning. If the user says no, stay in no-task mode only until an upgrade trigger is hit, then ask again to create a task.
 Consent stop: If you ask whether to create a Trellis task, stop and wait for the answer. Do not continue tool calls, code edits, commits, pushes, archives, PR work, or long-running debug/implementation steps while that task-creation question is unanswered.
@@ -213,8 +213,8 @@ Task-only in no-task state: `trellis-break-loop`, `trellis-finish-work`, `trelli
 
 [workflow-state:planning]
 Load `trellis-brainstorm`; stay in planning.
-Lightweight: `prd.md` can be enough. Complex: finish `prd.md`, `design.md`, and `implement.md`; for high-risk or multi-file tasks, load `writing-plans` to enhance `implement.md` to code-level detail; ask for review before `task.py start`.
-Design Gate: inspect evidence before asking, ask one question at a time, present 2-3 approaches for real design choices, and get user approval before implementation planning.
+Lightweight: `prd.md` can be enough. Complex: finish `prd.md`, `design.md`, and `implement.md`; for high-risk or multi-file tasks, apply the Trellis Plan Quality Gate to enhance `implement.md` to code-level detail; ask for review before `task.py start`.
+Design Gate: inspect evidence before asking, ask one question at a time, present 2-3 approaches for real design choices, include trade-offs and a recommended option, and get user approval before implementation planning. Simple assent such as "ok", "可以", or "行" only approves the currently stated question; if 2-3 approaches have not been presented for a real design choice, do not treat simple assent as approval to write `design.md` or `implement.md`.
 Frontend visual/interaction work: explicitly evaluate whether Visual Companion would improve design exploration or review. Use it when layout, visual hierarchy, information density, or interaction shape is hard to judge from text alone.
 Plan Quality Gate: complex `implement.md` must include exact files, bite-sized steps, concrete commands, expected outputs, verification checkpoints, and no placeholder instructions.
 Tracking Gate: for complex work in Codex, keep a short global `update_plan` in sync across planning, implementation, and verification so task progress remains visible.
@@ -230,8 +230,8 @@ Sub-agent mode: curate `implement.jsonl` and `check.jsonl` as spec/research mani
 
 [workflow-state:planning-inline]
 Load `trellis-brainstorm`; stay in planning.
-Lightweight: `prd.md` can be enough. Complex: finish `prd.md`, `design.md`, and `implement.md`; for high-risk or multi-file tasks, load `writing-plans` to enhance `implement.md` to code-level detail; ask for review before `task.py start`.
-Design Gate: inspect evidence before asking, ask one question at a time, present 2-3 approaches for real design choices, and get user approval before implementation planning.
+Lightweight: `prd.md` can be enough. Complex: finish `prd.md`, `design.md`, and `implement.md`; for high-risk or multi-file tasks, apply the Trellis Plan Quality Gate to enhance `implement.md` to code-level detail; ask for review before `task.py start`.
+Design Gate: inspect evidence before asking, ask one question at a time, present 2-3 approaches for real design choices, include trade-offs and a recommended option, and get user approval before implementation planning. Simple assent such as "ok", "可以", or "行" only approves the currently stated question; if 2-3 approaches have not been presented for a real design choice, do not treat simple assent as approval to write `design.md` or `implement.md`.
 Frontend visual/interaction work: explicitly evaluate whether Visual Companion would improve design exploration or review. Use it when layout, visual hierarchy, information density, or interaction shape is hard to judge from text alone.
 Plan Quality Gate: complex `implement.md` must include exact files, bite-sized steps, concrete commands, expected outputs, verification checkpoints, and no placeholder instructions.
 Tracking Gate: for complex work in Codex, keep a short global `update_plan` in sync across planning, implementation, and verification so task progress remains visible.
@@ -259,7 +259,7 @@ Quality: apply the TDD Decision Matrix in `trellis-before-dev` before writing co
 Review feedback: route directly to `trellis-check`; verify feedback against code reality before accepting it.
 Tracking: for complex work in Codex, keep a short global `update_plan` current as phases advance.
 Finish gate: when the planned scope and acceptance criteria are verified, move to Phase 3. Do not suggest new work or polish before offering the finish flow.
-Tool routing: before source exploration, check available tools. Use CodeGraph first for symbol/module/function/class lookup, callers/callees, flow tracing, and impact radius. Use LeanCTX first for fresh file bytes, compressed shell/test/log output, repo overview, routes, semantic search, and session memory. If CodeGraph is unavailable, stale, or degraded, say so and fall back to LeanCTX fresh reads or native search.
+Tool routing: before source exploration, run tool preflight. In Codex, inspect nested/deferred tools from inside `exec` by checking `ALL_TOOLS` for CodeGraph and LeanCTX MCP tools. Use CodeGraph MCP first for symbol/module/function/class lookup, callers/callees, flow tracing, and impact radius. Use LeanCTX MCP or `/Users/maple/.local/bin/lean-ctx -c "<cmd>"` for fresh file bytes, compressed shell/test/log output, repo overview, routes, semantic search, and session memory. If CodeGraph MCP is not exposed, say `CodeGraph tools are not exposed this turn` before falling back to LeanCTX or native text search; if CodeGraph is exposed but stale or degraded, say so and use LeanCTX fresh reads or native search for live files.
 Milestone handoff: after local proof, full verification, commit, archive, or journal, do not silently stop. State evidence, recommend the next workflow step, and ask when the next step changes scope, costs time, pushes remotely, creates a PR, or closes lifecycle state.
 Main-session default: dispatch `trellis-implement` and `trellis-check` from the main session only.
 Sub-agent self-exemption: if you are already running as `trellis-implement`, do NOT spawn another `trellis-implement`; if you are already running as `trellis-check`, do NOT spawn another `trellis-check`. This is a main session only dispatch rule.
@@ -292,7 +292,7 @@ Quality: apply the TDD Decision Matrix in `trellis-before-dev` before writing co
 Review feedback: route directly to `trellis-check`; verify feedback against code reality before accepting it.
 Tracking: for complex work in Codex, keep a short global `update_plan` current as phases advance.
 Finish gate: when the planned scope and acceptance criteria are verified, move to Phase 3. Do not suggest new work or polish before offering the finish flow.
-Tool routing: before source exploration, check available tools. Use CodeGraph first for symbol/module/function/class lookup, callers/callees, flow tracing, and impact radius. Use LeanCTX first for fresh file bytes, compressed shell/test/log output, repo overview, routes, semantic search, and session memory. If CodeGraph is unavailable, stale, or degraded, say so and fall back to LeanCTX fresh reads or native search.
+Tool routing: before source exploration, run tool preflight. In Codex, inspect nested/deferred tools from inside `exec` by checking `ALL_TOOLS` for CodeGraph and LeanCTX MCP tools. Use CodeGraph MCP first for symbol/module/function/class lookup, callers/callees, flow tracing, and impact radius. Use LeanCTX MCP or `/Users/maple/.local/bin/lean-ctx -c "<cmd>"` for fresh file bytes, compressed shell/test/log output, repo overview, routes, semantic search, and session memory. If CodeGraph MCP is not exposed, say `CodeGraph tools are not exposed this turn` before falling back to LeanCTX or native text search; if CodeGraph is exposed but stale or degraded, say so and use LeanCTX fresh reads or native search for live files.
 Milestone handoff: after local proof, full verification, commit, archive, or journal, do not silently stop. State evidence, recommend the next workflow step, and ask when the next step changes scope, costs time, pushes remotely, creates a PR, or closes lifecycle state.
 Do not dispatch implement/check sub-agents in inline mode.
 Plan discipline: `implement.md`, when present, is the ordered execution contract. At Phase 2 start, read `prd.md` -> `design.md` -> `implement.md`, review it critically against current code/spec reality, and surface blockers before coding.
@@ -354,7 +354,7 @@ When a user request matches one of these intents inside an active task, route fi
 | Intent | Route to | Notes |
 |--------|----------|-------|
 | Planning or unclear requirements | `trellis-brainstorm` | HARD-GATE: no code until design approved |
-| Complex task plan needs code-level detail | `writing-plans` | After brainstorm, before `task.py start`; lightweight tasks skip |
+| Complex task plan needs code-level detail | Trellis Plan Quality Gate | Enhance `implement.md` inside `trellis-brainstorm` before `task.py start`; lightweight tasks skip |
 | Frontend visual redesign, layout overhaul, or interaction-heavy UI work | evaluate Visual Companion | Use when text-only design exploration is likely to be weak |
 | Before writing any code | `trellis-before-dev` | Apply TDD Decision Matrix and load specs |
 | Implementing features | dispatch `trellis-implement` | Sub-agent reads specs + artifacts via hook |
@@ -376,7 +376,7 @@ When a user request matches one of these intents inside an active task, route fi
 | Intent | Route to | Notes |
 |--------|----------|-------|
 | Planning or unclear requirements | `trellis-brainstorm` | Same as above |
-| Complex task plan needs code-level detail | `writing-plans` | Same as above |
+| Complex task plan needs code-level detail | Trellis Plan Quality Gate | Same as above |
 | Frontend visual redesign, layout overhaul, or interaction-heavy UI work | evaluate Visual Companion | Use when text-only design exploration is likely to be weak |
 | Before writing any code | `trellis-before-dev` | Apply TDD Decision Matrix and load specs |
 | After editing | `trellis-check` | Inline check |

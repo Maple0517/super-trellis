@@ -10,7 +10,7 @@ Violating the letter of this process is violating the spirit of debugging. If im
 
 ## Tool Routing
 
-For code-level root cause tracing, use CodeGraph before text search when tracing symbols, callers, callees, module flow, or impact radius. Use LeanCTX for current logs, command output, fresh file bytes, repo overview, semantic search, and compressed test/build output. Do not claim CodeGraph unavailable until checking available tools or calling `codegraph_status`; if CodeGraph is unavailable, stale, or degraded, say so and fall back to LeanCTX fresh reads or native search.
+Before code-level root cause tracing, run tool preflight. In Codex, inspect nested/deferred tools from inside `exec` by checking `ALL_TOOLS` for CodeGraph and LeanCTX MCP tools. Use CodeGraph MCP before text search when tracing symbols, callers, callees, module flow, or impact radius. Use LeanCTX MCP or `/Users/maple/.local/bin/lean-ctx -c "<cmd>"` for current logs, command output, fresh file bytes, repo overview, semantic search, and compressed test/build output. If CodeGraph MCP is not exposed, say `CodeGraph tools are not exposed this turn` before falling back to LeanCTX or native text search; if CodeGraph is exposed but stale or degraded, say so and use LeanCTX fresh reads or native search for live files.
 
 ## Red Flags
 

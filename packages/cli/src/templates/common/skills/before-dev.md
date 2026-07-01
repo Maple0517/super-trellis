@@ -9,10 +9,11 @@ Execute these steps:
      - `implement.md` if present for execution order and validation plan
    - If no active task exists, use the current user request, the files or package area you are about to change, and the current diff target area as the temporary scope contract.
 
-2. **Apply tool routing before source exploration**:
-   - Use CodeGraph first for symbols, module structure, function/class understanding, callers/callees, flow tracing, and impact radius.
-   - Use LeanCTX first for fresh file reads, compressed shell/test/log output, repo overview, routes, semantic search, and session memory.
-   - Do not claim CodeGraph unavailable until checking available tools or calling `codegraph_status`. If CodeGraph is unavailable, stale, or degraded, say so and fall back to LeanCTX fresh reads or native search.
+2. **Apply tool preflight before source exploration**:
+   - In Codex, inspect nested/deferred tools from inside `exec` by checking `ALL_TOOLS` for CodeGraph and LeanCTX MCP tools before using shell search for structure.
+   - Use CodeGraph MCP first for symbols, module structure, function/class understanding, callers/callees, flow tracing, and impact radius.
+   - Use LeanCTX MCP or `/Users/maple/.local/bin/lean-ctx -c "<cmd>"` for fresh file reads, compressed shell/test/log output, repo overview, routes, semantic search, and session memory.
+   - If CodeGraph MCP is not exposed, say `CodeGraph tools are not exposed this turn` before falling back to LeanCTX or native text search. If CodeGraph is exposed but stale or degraded, say so and use LeanCTX fresh reads or native search for live files.
 
 3. **Discover packages and their spec layers**:
    ```bash

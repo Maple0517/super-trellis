@@ -12,6 +12,8 @@ If a question can be answered by exploring the codebase, explore the codebase in
 
 This is mandatory. Before asking the user a question, first check whether the answer is already available in code, tests, configs, docs, existing specs, or task history.
 
+Before codebase exploration, run tool preflight. In Codex, inspect nested/deferred tools from inside `exec` by checking `ALL_TOOLS` for CodeGraph and LeanCTX MCP tools. Use CodeGraph MCP first for structure, symbols, callers/callees, flow tracing, and impact radius. If CodeGraph MCP is not exposed, say `CodeGraph tools are not exposed this turn` before falling back to LeanCTX or native text search. Use LeanCTX MCP or `/Users/maple/.local/bin/lean-ctx -c "<cmd>"` for fresh reads, compressed shell/test/log output, regex search, session memory, and URL/document reads.
+
 Do not ask the user to confirm facts that the repository can answer. Ask only for product intent, preference, scope, risk tolerance, or decisions that remain ambiguous after inspection.
 
 ---
@@ -199,7 +201,9 @@ Do not start implementation until the user approves or asks for implementation.
 
 ## Design Gate
 
-Before implementation planning, converge on a design. Inspect project evidence first, ask one question at a time, recommend an answer with trade-offs, then present 2-3 approaches when there is a real design choice. After the user selects or approves the design, write or update the Trellis planning artifacts.
+Before implementation planning, converge on a design. Inspect project evidence first, ask one question at a time, then present 2-3 approaches when there is a real design choice. Each approach must include trade-offs, and one approach must be marked as the recommendation. After the user selects or approves the design, write or update the Trellis planning artifacts.
+
+Simple assent such as "ok", "可以", or "行" only approves the currently stated question. If a real design choice exists and 2-3 approaches have not been presented, do not treat simple assent as approval to write `design.md` or `implement.md`; present the options first.
 
 Do not begin implementation planning until the user has approved the design, regardless of perceived simplicity.
 

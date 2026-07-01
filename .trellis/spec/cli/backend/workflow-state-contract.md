@@ -150,8 +150,20 @@ Regression invariant: the `no_task`, `in_progress`, and
 that names CodeGraph for structural source exploration and LeanCTX for fresh
 reads, compressed shell/test/log output, repo overview, semantic search, and
 session memory. Codex Desktop can expose MCP tools through deferred/nested tool
-surfaces, so breadcrumb wording must instruct agents to check available tools
-before claiming CodeGraph is unavailable.
+surfaces, so breadcrumb wording must instruct agents to inspect `ALL_TOOLS`
+from inside `exec` before source exploration. If CodeGraph MCP is not exposed,
+the breadcrumb must require the exact visible fallback note
+`CodeGraph tools are not exposed this turn` before using LeanCTX or native text
+search.
+
+---
+
+Regression invariant: the `planning` and `planning-inline` breadcrumb blocks
+must use Trellis-native planning quality wording, not external Superpowers
+skill names such as `writing-plans`. They must require 2-3 approaches for real
+design choices, include trade-offs plus a recommended option, and prevent
+simple assent (`ok`, `可以`, `行`) from advancing to `design.md` or
+`implement.md` when those options have not yet been presented.
 
 ---
 

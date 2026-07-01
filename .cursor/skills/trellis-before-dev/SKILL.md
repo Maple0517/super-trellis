@@ -14,33 +14,39 @@ Execute these steps:
      - `implement.md` if present for execution order and validation plan
    - If no active task exists, use the current user request, the files or package area you are about to change, and the current diff target area as the temporary scope contract.
 
-2. **Discover packages and their spec layers**:
+2. **Apply tool preflight before source exploration**:
+   - In Codex, inspect nested/deferred tools from inside `exec` by checking `ALL_TOOLS` for CodeGraph and LeanCTX MCP tools before using shell search for structure.
+   - Use CodeGraph MCP first for symbols, module structure, function/class understanding, callers/callees, flow tracing, and impact radius.
+   - Use LeanCTX MCP or `/Users/maple/.local/bin/lean-ctx -c "<cmd>"` for fresh file reads, compressed shell/test/log output, repo overview, routes, semantic search, and session memory.
+   - If CodeGraph MCP is not exposed, say `CodeGraph tools are not exposed this turn` before falling back to LeanCTX or native text search. If CodeGraph is exposed but stale or degraded, say so and use LeanCTX fresh reads or native search for live files.
+
+3. **Discover packages and their spec layers**:
    ```bash
    python3 ./.trellis/scripts/get_context.py --mode packages
    ```
 
-3. **Identify which specs apply** based on:
+4. **Identify which specs apply** based on:
    - Which package you're modifying (e.g., `cli/`, `docs-site/`)
    - What type of work (backend, frontend, unit-test, docs, etc.)
    - Any spec/research paths referenced by the task artifacts when a task exists
    - The current request and changed area when no task exists
 
-4. **Read the spec index** for each relevant module:
+5. **Read the spec index** for each relevant module:
    ```bash
    cat .trellis/spec/<package>/<layer>/index.md
    ```
    Follow the **"Pre-Development Checklist"** section in the index.
 
-5. **Read the specific guideline files** listed in the Pre-Development Checklist that are relevant to your task. The index is NOT the goal — it points you to the actual guideline files (e.g., `error-handling.md`, `conventions.md`, `mock-strategies.md`). Read those files to understand the coding standards and patterns.
+6. **Read the specific guideline files** listed in the Pre-Development Checklist that are relevant to your task. The index is NOT the goal — it points you to the actual guideline files (e.g., `error-handling.md`, `conventions.md`, `mock-strategies.md`). Read those files to understand the coding standards and patterns.
 
-6. **Always read shared guides**:
+7. **Always read shared guides**:
    ```bash
    cat .trellis/spec/guides/index.md
    ```
 
-7. Understand the coding standards and patterns you need to follow, then proceed with your development plan. No-task mode still requires the same proof and TDD gates before implementation.
+8. Understand the coding standards and patterns you need to follow, then proceed with your development plan. No-task mode still requires the same proof and TDD gates before implementation.
 
-8. **Register implementation steps** via the platform's step-tracking tool (`update_plan` on Codex, `TodoWrite` on Claude Code) before writing code, so the user sees progress visually.
+9. **Register implementation steps** via the platform's step-tracking tool (`update_plan` on Codex, `TodoWrite` on Claude Code) before writing code, so the user sees progress visually.
 
 No-task escalation: if the current request reveals a hard upgrade trigger — persistent planning, multi-stage or multi-session work, lifecycle features, structured decomposition, elevated risk/scope, or durable context injection beyond the current conversation — stop before implementation and ask to create a Trellis task.
 
