@@ -130,17 +130,10 @@ python3 ./.trellis/scripts/get_context.py --mode phase --step <X.Y>  # detailed 
   TAG ↔ PHASE scoping:
     [workflow state:no_task]      → no active task; before Phase 1
     [workflow state:planning]     → all of Phase 1 (status='planning')
-    [workflow state:planning-inline] → Codex inline variant of Phase 1
     [workflow state:in_progress]  → Phase 2 + Phase 3.2-3.4
                                     (status stays 'in_progress' from
                                     task.py start until task.py archive)
     [workflow state:in_progress-inline] → Codex inline variant of Phase 2/3
-    [workflow state:completed]    → currently DEAD: cmd_archive flips
-                                    status and moves the dir in the same
-                                    call, so the resolver loses the
-                                    pointer (block kept for a future
-                                    explicit in_progress→completed
-                                    transition)
 
   Editing checklist:
     - When you change a [workflow state:STATUS] block, also check the
@@ -188,8 +181,8 @@ Create new children with `task.py create "<title>" --slug <name> --parent <paren
 No active task. First classify the current turn and ask for task-creation consent before creating any Trellis task.
 No active task does not mean skip Trellis discipline.
 Tool routing: before source exploration, run tool preflight and state the platform structural tool you found. Platform structural tool map: Codex: CodeGraph; Claude Code: gortex. Do not use another platform's tool name. In Codex, inspect nested/deferred tools from inside `exec` by checking `ALL_TOOLS` for CodeGraph and LeanCTX MCP tools. Use the platform structural tool first for symbol/module/function/class lookup, callers/callees, flow tracing, and impact radius. Use LeanCTX MCP or `/Users/maple/.local/bin/lean-ctx -c "<cmd>"` for fresh file bytes, compressed shell/test/log output, repo overview, routes, semantic search, and session memory. If no mapped/exposed structural tool exists, say `no structural code tool is exposed this turn` before falling back to LeanCTX or native text search; if the platform structural tool is stale or degraded, say so and use LeanCTX fresh reads or native search for live files.
-Simple conversation / small task: do not ask for a Trellis task by default; answer, inspect, launch local services, or do bounded no-task work directly. Use no-task discipline skills from prompt intent (`trellis-brainstorm`, `trellis-before-dev`, `trellis-debug`, `trellis-check`, `trellis-update-spec`) without creating task artifacts.
-Complex task: ask the user if you can create a Trellis task and enter the planning phase. Before the task exists, bounded no-task brainstorming may gather evidence, narrow direction, and recommend scope. Do not start full implementation planning. If the user says no, stay in no-task mode only until an upgrade trigger is hit, then ask again to create a task.
+No-task mode is explicit opt-in only. Do not classify small tasks as direct no-task work. Pure conversation, status answers, and read-only inspection can be answered directly, but any development workflow, debugging workflow, implementation, local service change, commit, push, archive, PR, or durable planning requires task-creation consent by default.
+If the user did not explicitly say to work without a Trellis task, ask for task-creation consent and stop. If the user explicitly says not to create/use a Trellis task or explicitly requests no-task/direct work, use bounded no-task discipline skills from prompt intent (`trellis-brainstorm`, `trellis-before-dev`, `trellis-debug`, `trellis-check`, `trellis-update-spec`) without creating task artifacts only until an upgrade trigger is hit.
 Consent stop: If you ask whether to create a Trellis task, stop and wait for the answer. Do not continue tool calls, code edits, commits, pushes, archives, PR work, or long-running debug/implementation steps while that task-creation question is unanswered.
 Hard upgrade triggers:
 1. The work needs persistent planning or durable decision records such as `prd.md`, `design.md`, or `implement.md`.
@@ -215,29 +208,13 @@ Task-only in no-task state: `trellis-break-loop`, `trellis-finish-work`, `trelli
 Load `trellis-brainstorm`; stay in planning.
 Lightweight: `prd.md` can be enough. Complex: finish `prd.md`, `design.md`, and `implement.md`; for high-risk or multi-file tasks, apply the Trellis Plan Quality Gate to enhance `implement.md` to code-level detail; ask for review before `task.py start`.
 Design Gate: inspect evidence before asking, ask one question at a time, present 2-3 approaches for real design choices, include trade-offs and a recommended option, and get user approval before implementation planning. Simple assent such as "ok", "可以", or "行" only approves the currently stated question; if 2-3 approaches have not been presented for a real design choice, do not treat simple assent as approval to write `design.md` or `implement.md`.
+Real design space Gate: whenever the task has meaningful choices about behavior, UX, schema/data shape, API/storage contracts, data flow, architecture, migration/compatibility, permissions, provider/prompt strategy, caching/sync, error handling, or testing boundaries, list the concrete open design questions and present 2-3 concrete approaches with trade-offs and a recommended option before writing `design.md`. User approval of one local question is not approval of the whole design. Do not write `design.md` until the concrete design shape has been discussed and approved. Do not write `implement.md` until `design.md` is approved or the user explicitly asks to skip design artifacts.
 Frontend visual/interaction work: explicitly evaluate whether Visual Companion would improve design exploration or review. Use it when layout, visual hierarchy, information density, or interaction shape is hard to judge from text alone.
 Plan Quality Gate: complex `implement.md` must include exact files, bite-sized steps, concrete commands, expected outputs, verification checkpoints, and no placeholder instructions.
 Tracking Gate: for complex work in Codex, keep a short global `update_plan` in sync across planning, implementation, and verification so task progress remains visible.
 Multi-deliverable scope: consider a parent task plus independently verifiable child tasks; dependencies must be written in child artifacts, not implied by tree position.
-Sub-agent mode: curate `implement.jsonl` and `check.jsonl` as spec/research manifests before start.
+Execution mode: Sub-agent execution: curate `implement.jsonl` and `check.jsonl` as spec/research manifests before start. Inline execution: skip jsonl curation; Phase 2 reads artifacts/specs via `trellis-before-dev`.
 [/workflow-state:planning]
-
-<!-- Per-turn breadcrumb: shown throughout Phase 1 when codex.dispatch_mode=inline.
-     Codex-only opt-in alternate to [workflow state:planning]. The main agent
-     edits code directly in Phase 2, so jsonl curation is skipped —
-     the inline workflow loads `trellis-before-dev` instead of injecting JSONL
-     into a sub-agent. -->
-
-[workflow-state:planning-inline]
-Load `trellis-brainstorm`; stay in planning.
-Lightweight: `prd.md` can be enough. Complex: finish `prd.md`, `design.md`, and `implement.md`; for high-risk or multi-file tasks, apply the Trellis Plan Quality Gate to enhance `implement.md` to code-level detail; ask for review before `task.py start`.
-Design Gate: inspect evidence before asking, ask one question at a time, present 2-3 approaches for real design choices, include trade-offs and a recommended option, and get user approval before implementation planning. Simple assent such as "ok", "可以", or "行" only approves the currently stated question; if 2-3 approaches have not been presented for a real design choice, do not treat simple assent as approval to write `design.md` or `implement.md`.
-Frontend visual/interaction work: explicitly evaluate whether Visual Companion would improve design exploration or review. Use it when layout, visual hierarchy, information density, or interaction shape is hard to judge from text alone.
-Plan Quality Gate: complex `implement.md` must include exact files, bite-sized steps, concrete commands, expected outputs, verification checkpoints, and no placeholder instructions.
-Tracking Gate: for complex work in Codex, keep a short global `update_plan` in sync across planning, implementation, and verification so task progress remains visible.
-Multi-deliverable scope: consider a parent task plus independently verifiable child tasks; dependencies must be written in child artifacts, not implied by tree position.
-Inline mode: skip jsonl curation; Phase 2 reads artifacts/specs via `trellis-before-dev`.
-[/workflow-state:planning-inline]
 
 ### Phase 2: Execute
 - 2.1 Implement `[required · repeatable]`
@@ -262,6 +239,8 @@ Finish gate: when the planned scope and acceptance criteria are verified, move t
 Tool routing: before source exploration, run tool preflight and state the platform structural tool you found. Platform structural tool map: Codex: CodeGraph; Claude Code: gortex. Do not use another platform's tool name. In Codex, inspect nested/deferred tools from inside `exec` by checking `ALL_TOOLS` for CodeGraph and LeanCTX MCP tools. Use the platform structural tool first for symbol/module/function/class lookup, callers/callees, flow tracing, and impact radius. Use LeanCTX MCP or `/Users/maple/.local/bin/lean-ctx -c "<cmd>"` for fresh file bytes, compressed shell/test/log output, repo overview, routes, semantic search, and session memory. If no mapped/exposed structural tool exists, say `no structural code tool is exposed this turn` before falling back to LeanCTX or native text search; if the platform structural tool is stale or degraded, say so and use LeanCTX fresh reads or native search for live files.
 Milestone handoff: after local proof, full verification, commit, archive, or journal, do not silently stop. State evidence, recommend the next workflow step, and ask when the next step changes scope, costs time, pushes remotely, creates a PR, or closes lifecycle state.
 Main-session default: dispatch `trellis-implement` and `trellis-check` from the main session only.
+Sub-agent mode loop: After every `trellis-implement` run, the main session MUST dispatch `trellis-check` before claiming completion, asking for commit or finish, starting another implementation chunk, or leaving Phase 2. Maximum: three implement/check cycles for the same unresolved issue. After the third `trellis-check`, if bugs or concerns still require another implementation pass, stop, summarize evidence, and ask the user whether to continue, re-plan, or escalate to `trellis-break-loop`. Never skip `trellis-check` because the user did not explicitly ask for it this turn. Do not report implementation complete directly after `trellis-implement`. Do not ask for commit or finish until `trellis-check` has run on the latest diff.
+Claude Code project-agent preflight: before dispatching `trellis-research`, `trellis-implement`, or `trellis-check`, confirm Claude exposes the matching project agent from `.claude/agents/`; use subagent_type exactly matching the Trellis agent name, and never use `general-purpose` as a fallback.
 Sub-agent self-exemption: if you are already running as `trellis-implement`, do NOT spawn another `trellis-implement`; if you are already running as `trellis-check`, do NOT spawn another `trellis-check`. This is a main session only dispatch rule.
 Dispatch: main session dispatches implement/check sub-agents only. Sub-agent self-exemption: do NOT nest implement or check agents.
 Context: class-2 platforms (codex, copilot, gemini, qoder) require dispatch prompt to start with `Active task: <path from task.py current>`. Read: jsonl entries -> `prd.md` -> `design.md` -> `implement.md`.
@@ -323,17 +302,7 @@ No active task after commit -> offer push/PR, keep local, continue next task, or
 
 > Note: step 3.1 was folded into 2.2 (last-iteration full-scope check) and 3.4 (commit preamble). Numbering kept stable to avoid breaking external references.
 
-<!-- Per-turn breadcrumb: shown while status='completed'.
-     Currently DEAD in normal flow: cmd_archive writes status='completed' in
-     the same call that moves the task dir to archive/, so the active-task
-     resolver loses the pointer and the hook never fires on archived tasks.
-     Block preserved for a future status-transition redesign (e.g. an
-     explicit in_progress→completed command). Edit through the same spec
-     channel as the live blocks. -->
-
-[workflow-state:completed]
-Code committed. Run `/trellis:finish-work`; if dirty, return to Phase 3.4 first.
-[/workflow-state:completed]
+<!-- No completed workflow-state block is shipped: archive moves the task out of the active tree in the same command, so completed breadcrumbs are unreachable in normal flow. -->
 
 ### Rules
 
@@ -465,7 +434,20 @@ Return to this step whenever requirements change and revise the relevant artifac
 
 Research can happen at any time during requirement exploration. It isn't limited to local code — you can use any available tool (MCP servers, skills, web search, etc.) to look up external information, including third-party library docs, industry practices, API references, etc.
 
-[Claude Code, Cursor, OpenCode, codex-sub-agent, Kiro, Gemini, Qoder, CodeBuddy, Copilot, Droid, Pi, ZCode, Reasonix, Trae]
+[Claude Code]
+
+Claude Project Agent Preflight: before spawning a Trellis research agent, confirm Claude Code exposes project agents from `.claude/agents/`. The required type is `trellis-research`. If the required type is unavailable, stop and tell the user to restart Claude Code from the repo root or refresh project agents. Never use `general-purpose` as a fallback.
+
+Spawn the research sub-agent:
+
+- **Task tool requirement**: use subagent_type exactly `trellis-research`
+- **Agent type**: `trellis-research`
+- **Task description**: Research <specific question>
+- **Key requirement**: Research output MUST be persisted to `{TASK_DIR}/research/`
+
+[/Claude Code]
+
+[Cursor, OpenCode, codex-sub-agent, Kiro, Gemini, Qoder, CodeBuddy, Copilot, Droid, Pi, ZCode, Reasonix, Trae]
 
 Spawn the research sub-agent:
 
@@ -473,7 +455,7 @@ Spawn the research sub-agent:
 - **Task description**: Research <specific question>
 - **Key requirement**: Research output MUST be persisted to `{TASK_DIR}/research/`
 
-[/Claude Code, Cursor, OpenCode, codex-sub-agent, Kiro, Gemini, Qoder, CodeBuddy, Copilot, Droid, Pi, ZCode, Reasonix, Trae]
+[/Cursor, OpenCode, codex-sub-agent, Kiro, Gemini, Qoder, CodeBuddy, Copilot, Droid, Pi, ZCode, Reasonix, Trae]
 
 [codex-inline, Kilo, Antigravity, Devin]
 
@@ -603,7 +585,27 @@ Milestone Handoff Discipline:
 - If there is an active Trellis task, route toward Phase 3.3 spec update, Phase 3.4 commit, and `/trellis:finish-work`.
 - If there is no active Trellis task, offer structured integration choices: push/PR, keep local only, continue with the next task, or stop here.
 
-[Claude Code, Cursor, OpenCode, CodeBuddy, Droid, Pi]
+Sub-agent mode loop: After every `trellis-implement` run, the main session MUST dispatch `trellis-check` before claiming completion, asking for commit or finish, starting another implementation chunk, or leaving Phase 2. Maximum: three implement/check cycles for the same unresolved issue. After the third `trellis-check`, if bugs or concerns still require another implementation pass, stop, summarize evidence, and ask the user whether to continue, re-plan, or escalate to `trellis-break-loop`. Never skip `trellis-check` because the user did not explicitly ask for it this turn. Do not report implementation complete directly after `trellis-implement`. Do not ask for commit or finish until `trellis-check` has run on the latest diff.
+Checker responsibility boundary: checker only self-fixes mechanical issues such as lint, formatting, imports, obvious types, trivial dead branches, typos, or deterministic command failures that do not change product behavior. For behavior, design, test strategy, requirement mismatches, or implementation logic findings, return findings to the main session so it can dispatch `trellis-implement` for the next implementation pass.
+
+[Claude Code]
+
+Claude Project Agent Preflight: before spawning the implement agent, confirm Claude Code exposes project agents from `.claude/agents/`. The required type is `trellis-implement`. If the required type is unavailable, stop and tell the user to restart Claude Code from the repo root or refresh project agents. Never use `general-purpose` as a fallback.
+
+Spawn the implement sub-agent:
+
+- **Task tool requirement**: use subagent_type exactly `trellis-implement`
+- **Agent type**: `trellis-implement`
+- **Task description**: Implement the reviewed task artifacts, consulting materials under `{TASK_DIR}/research/`; finish by running project lint and type-check
+- **Dispatch prompt guard**: Tell the spawned agent it is already the `trellis-implement` sub-agent and must implement directly, not spawn another `trellis-implement` / `trellis-check`.
+
+The platform hook auto-handles:
+- Reads `implement.jsonl` and injects referenced spec/research files into the agent prompt
+- Injects `prd.md`, `design.md` if present, and `implement.md` if present
+
+[/Claude Code]
+
+[Cursor, OpenCode, CodeBuddy, Droid, Pi]
 
 Spawn the implement sub-agent:
 
@@ -615,7 +617,7 @@ The platform hook/plugin auto-handles:
 - Reads `implement.jsonl` and injects referenced spec/research files into the agent prompt
 - Injects `prd.md`, `design.md` if present, and `implement.md` if present
 
-[/Claude Code, Cursor, OpenCode, CodeBuddy, Droid, Pi]
+[/Cursor, OpenCode, CodeBuddy, Droid, Pi]
 
 [codex-sub-agent, Gemini, Qoder, Copilot, ZCode, Reasonix, Trae]
 
@@ -657,21 +659,42 @@ The platform prelude auto-handles the context load requirement:
 
 #### 2.2 Quality check `[required · repeatable]`
 
-[Claude Code, Cursor, OpenCode, codex-sub-agent, Kiro, Gemini, Qoder, CodeBuddy, Copilot, Droid, Pi, ZCode, Reasonix, Trae]
+Sub-agent mode loop: After every `trellis-implement` run, the main session MUST dispatch `trellis-check` before claiming completion, asking for commit or finish, starting another implementation chunk, or leaving Phase 2. Maximum: three implement/check cycles for the same unresolved issue. After the third `trellis-check`, if bugs or concerns still require another implementation pass, stop, summarize evidence, and ask the user whether to continue, re-plan, or escalate to `trellis-break-loop`. Never skip `trellis-check` because the user did not explicitly ask for it this turn. Do not report implementation complete directly after `trellis-implement`. Do not ask for commit or finish until `trellis-check` has run on the latest diff.
+
+[Claude Code]
+
+Claude Project Agent Preflight: before spawning the check agent, confirm Claude Code exposes project agents from `.claude/agents/`. The required type is `trellis-check`. If the required type is unavailable, stop and tell the user to restart Claude Code from the repo root or refresh project agents. Never use `general-purpose` as a fallback.
 
 Spawn the check sub-agent:
 
+- **Task tool requirement**: use subagent_type exactly `trellis-check`
 - **Agent type**: `trellis-check`
-- **Task description**: Review all code changes against specs and task artifacts; fix any findings directly; ensure lint and type-check pass
+- **Task description**: Review all code changes against specs and task artifacts; self-fix mechanical issues only; return implementation findings to the main session; ensure lint and type-check pass
 - **Dispatch prompt guard**: Tell the spawned agent it is already the `trellis-check` sub-agent and must review/fix directly, not spawn another `trellis-check` / `trellis-implement`.
 
 The check agent's job:
 - Review code changes against specs
 - Review code changes against `prd.md`, `design.md` if present, and `implement.md` if present
-- Auto-fix issues it finds
+- Self-fix mechanical issues only; return implementation findings to the main session
 - Run lint and typecheck to verify
 
-[/Claude Code, Cursor, OpenCode, codex-sub-agent, Kiro, Gemini, Qoder, CodeBuddy, Copilot, Droid, Pi, ZCode, Reasonix, Trae]
+[/Claude Code]
+
+[Cursor, OpenCode, codex-sub-agent, Kiro, Gemini, Qoder, CodeBuddy, Copilot, Droid, Pi, ZCode, Reasonix, Trae]
+
+Spawn the check sub-agent:
+
+- **Agent type**: `trellis-check`
+- **Task description**: Review all code changes against specs and task artifacts; self-fix mechanical issues only; return implementation findings to the main session; ensure lint and type-check pass
+- **Dispatch prompt guard**: Tell the spawned agent it is already the `trellis-check` sub-agent and must review/fix directly, not spawn another `trellis-check` / `trellis-implement`.
+
+The check agent's job:
+- Review code changes against specs
+- Review code changes against `prd.md`, `design.md` if present, and `implement.md` if present
+- Self-fix mechanical issues only; return implementation findings to the main session
+- Run lint and typecheck to verify
+
+[/Cursor, OpenCode, codex-sub-agent, Kiro, Gemini, Qoder, CodeBuddy, Copilot, Droid, Pi, ZCode, Reasonix, Trae]
 
 [codex-inline, Kilo, Antigravity, Devin]
 
@@ -793,10 +816,8 @@ All tag blocks live in the `## Phase Index` section above, immediately after eac
 |---|---|
 | No active task (before Phase 1) | `[workflow state:no_task]` (after the Phase Index ASCII art) |
 | All of Phase 1 (task created → ready for implementation) | `[workflow state:planning]` (after Phase 1 summary) |
-| Codex inline Phase 1 | `[workflow state:planning-inline]` |
 | Phase 2 + Phase 3.2–3.4 (implementation + check + wrap-up) | `[workflow state:in_progress]` (after Phase 2 summary) |
 | Codex inline Phase 2 + Phase 3.2–3.4 | `[workflow state:in_progress-inline]` |
-| After Phase 3.5 (archived) | `[workflow state:completed]` (after Phase 3 summary; **currently DEAD**) |
 
 ### Changing the per-turn prompt text
 

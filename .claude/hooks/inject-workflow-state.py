@@ -262,8 +262,10 @@ def resolve_breadcrumb_key(
     Codex defaults to ``inline`` because sub-agents run with ``fork_turns="none"``
     isolation and can't inherit the parent session's task context. Users can
     opt into ``codex.dispatch_mode: sub-agent`` in ``.trellis/config.yaml``
-    to use the parallel ``<status>-inline`` tag → ``<status>`` flip. Invalid
-    or missing values fall back to inline.
+    to use the parallel ``in_progress-inline`` tag → ``in_progress`` flip.
+    Planning always uses the plain ``planning`` block because inline and
+    sub-agent planning share the same behavior. Invalid or missing values fall
+    back to inline.
 
     Non-codex platforms return the plain status unchanged.
     """
@@ -275,7 +277,9 @@ def resolve_breadcrumb_key(
                 cfg_mode = codex_cfg.get("dispatch_mode")
                 if cfg_mode in ("inline", "sub-agent"):
                     mode = cfg_mode
-        return f"{status}-inline" if mode == "inline" else status
+        if mode == "inline" and status == "in_progress":
+            return "in_progress-inline"
+        return status
     return status
 
 

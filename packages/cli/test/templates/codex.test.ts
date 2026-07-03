@@ -128,4 +128,13 @@ describe("codex session-start.py compact SessionStart context", () => {
     expect(content).not.toContain("guides (inlined");
     expect(content).not.toContain("Project spec indexes are listed by path below");
   });
+
+  it("reflects no-task consent and legacy completed-state discipline", () => {
+    const content = fs.readFileSync(hookPath, "utf-8");
+    expect(content).toContain("No-task direct work is explicit opt-in only");
+    expect(content).toContain("consent question is blocking");
+    expect(content).toContain("Status: LEGACY COMPLETED");
+    expect(content).toContain("legacy completed task state");
+    expect(content).not.toContain("Status: COMPLETED\\n");
+  });
 });

@@ -2,6 +2,8 @@
 
 Use this skill before proposing or writing a fix. It may be used with or without an active Trellis task. `trellis-break-loop` handles post-fix retrospective analysis after repeated debugging and remains task-only.
 
+No-task mode is explicit opt-in only. Do not classify small tasks as direct no-task work. If no active task exists and the user did not explicitly opt into no-task debugging, stop before reproduction, implementation, local service changes, commits, pushes, archives, PR work, or long-running debug steps; ask for Trellis task-creation consent and wait.
+
 ## Iron Law
 
 NO FIXES WITHOUT ROOT CAUSE INVESTIGATION FIRST.

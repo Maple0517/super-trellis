@@ -225,8 +225,9 @@ def _get_task_status(trellis_dir: Path, hook_input: dict) -> str:
     if not active.task_path:
         return (
             "Status: NO ACTIVE TASK\n"
-            "Next: Classify the current turn and ask for task-creation consent "
-            "before creating any Trellis task."
+            "Next: Classify the current turn before creating any Trellis task. "
+            "No-task direct work is explicit opt-in only. "
+            "If the user did not explicitly opt into no-task work, ask whether to create a Trellis task and wait; the consent question is blocking."
         )
 
     task_ref = active.task_path
@@ -250,9 +251,9 @@ def _get_task_status(trellis_dir: Path, hook_input: dict) -> str:
 
     if task_status == "completed":
         return (
-            f"Status: COMPLETED\nTask: {task_title}\n"
-            f"Next: Archive with `python3 ./.trellis/scripts/task.py archive {task_dir.name}` "
-            "or start a new task."
+            f"Status: LEGACY COMPLETED\nTask: {task_title}\n"
+            "Next: Treat this as a legacy completed task state, not a normal breadcrumb phase. "
+            "Run `/trellis:finish-work`; if the working tree is dirty, return to Phase 3.4 first."
         )
 
     has_prd = (task_dir / "prd.md").is_file()
@@ -268,12 +269,12 @@ def _get_task_status(trellis_dir: Path, hook_input: dict) -> str:
     if not has_prd:
         return (
             f"Status: PLANNING\nTask: {task_title}\nPresent: {present_line}\n"
-            "Next: Load trellis-brainstorm and write prd.md. Stay in planning."
+            "Next: Load trellis-brainstorm, ask one question at a time, present 2-3 approaches for real design choices, and write prd.md. Stay in planning."
         )
 
     if task_status == "planning":
         if has_design and has_implement:
-            next_action = "Review planning artifacts with the user before `task.py start`."
+            next_action = "Ask for design/start review before `task.py start`."
         else:
             next_action = (
                 "Lightweight task can ask for start review with PRD-only; "

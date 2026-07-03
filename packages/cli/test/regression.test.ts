@@ -3537,8 +3537,10 @@ print(len(entries))
     expect(body).toMatch(/Lightweight: `prd\.md` can be enough/);
     expect(body).toMatch(/Complex: finish `prd\.md`, `design\.md`, and `implement\.md`/);
     expect(body).toContain(
-      "curate `implement.jsonl` and `check.jsonl` as spec/research manifests before start",
+      "Sub-agent execution: curate `implement.jsonl` and `check.jsonl` as spec/research manifests before start",
     );
+    expect(body).toContain("Inline execution: skip jsonl curation");
+    expect(wf).not.toContain("[workflow-state:planning-inline]");
   });
 
   it("[#292] workflow and brainstorm templates treat seed-only jsonl as not planning-ready", () => {
@@ -3621,11 +3623,9 @@ print(len(entries))
     );
   });
 
-  it("[workflow-state-r3-completed] template workflow.md [workflow-state:completed] block is present and well-formed", () => {
+  it("[workflow-state-r3-completed] template workflow.md does not ship unreachable [workflow-state:completed] block", () => {
     const wf = templateWorkflowMd();
-    expect(wf).toMatch(
-      /\[workflow-state:completed\]\s*\n[\s\S]+?\n\s*\[\/workflow-state:completed\]/,
-    );
+    expect(wf).not.toContain("[workflow-state:completed]");
   });
 
   it("[strip-breadcrumb] _strip_breadcrumb_tag_blocks only strips matched STATUS pairs (backreference parity with parser)", () => {
@@ -4103,6 +4103,41 @@ print(len(entries))
     expect(ctx).toContain("MAIN SESSION edits code");
     expect(ctx).toContain("trellis-before-dev");
     expect(ctx).not.toContain("DISPATCH the trellis-implement");
+  });
+
+  it("[planning-inline-removed] codex inline planning breadcrumb uses the plain planning block", () => {
+    setupTaskRepo();
+    writeSessionContext("session_workflow-a", ".trellis/tasks/issue-106");
+    writeProjectFile(
+      path.join(".trellis", "tasks", "issue-106", "task.json"),
+      JSON.stringify(
+        {
+          title: "Issue 106 task",
+          status: "planning",
+          package: null,
+        },
+        null,
+        2,
+      ),
+    );
+    const codexHookPath = writeCodexInjectHook();
+    writeProjectFile(
+      path.join(".trellis", "workflow.md"),
+      "[workflow-state:planning]\n" +
+        "PLANNING block is shared across dispatch modes.\n" +
+        "[/workflow-state:planning]\n" +
+        "[workflow-state:in_progress-inline]\n" +
+        "INLINE execution block.\n" +
+        "[/workflow-state:in_progress-inline]\n",
+    );
+    writeConfigYaml("codex:\n  dispatch_mode: inline\n");
+
+    const parsed = JSON.parse(
+      runPython(codexHookPath, JSON.stringify({ cwd: tmpDir, session_id: "workflow-a" })),
+    ) as { hookSpecificOutput: { additionalContext: string } };
+    const ctx = parsed.hookSpecificOutput.additionalContext;
+    expect(ctx).toContain("PLANNING block is shared across dispatch modes");
+    expect(ctx).not.toContain("Refer to workflow.md for current step");
   });
 
   it("[issue-codex-dispatch-mode] non-codex platform ignores codex.dispatch_mode=inline", () => {

@@ -166,15 +166,11 @@ describe("trellis template constants", () => {
     const planning = /\[workflow-state:planning\]([\s\S]*?)\[\/workflow-state:planning\]/.exec(
       tddWorkflow,
     )?.[1];
-    const planningInline = /\[workflow-state:planning-inline\]([\s\S]*?)\[\/workflow-state:planning-inline\]/.exec(
-      tddWorkflow,
-    )?.[1];
 
-    for (const block of [planning, planningInline]) {
-      expect(block).toContain("observable behavior slices");
-      expect(block).toContain("public interface under test");
-      expect(block).toContain("mock boundaries");
-    }
+    expect(tddWorkflow).not.toContain("[workflow-state:planning-inline]");
+    expect(planning).toContain("observable behavior slices");
+    expect(planning).toContain("public interface under test");
+    expect(planning).toContain("mock boundaries");
   });
 
   it("[issue-225] workflow.md in_progress breadcrumb has class-2 sub-agent dispatch protocol", () => {
@@ -192,7 +188,7 @@ describe("trellis template constants", () => {
     const implement = stepSection("2.1");
     const hookAutoBlock = platformBlock(
       implement,
-      "[Claude Code, Cursor, OpenCode, CodeBuddy, Droid, Pi]",
+      "[Cursor, OpenCode, CodeBuddy, Droid, Pi]",
     );
     const pullBasedMarker =
       "[codex-sub-agent, Gemini, Qoder, Copilot, ZCode, Reasonix, Trae]";
@@ -247,18 +243,113 @@ describe("trellis template constants", () => {
     );
   });
 
+  it("[claude-agent-preflight] Claude dispatch must use Trellis project agent types", () => {
+    const research = stepSection("1.2");
+    const implement = stepSection("2.1");
+    const check = stepSection("2.2");
+
+    for (const section of [research, implement, check]) {
+      const claudeBlock = platformBlock(section, "[Claude Code]");
+      expect(claudeBlock).toContain("Claude Project Agent Preflight");
+      expect(claudeBlock).toContain(".claude/agents/");
+      expect(claudeBlock).toContain("Never use `general-purpose`");
+    }
+
+    expect(platformBlock(research, "[Claude Code]")).toContain(
+      "subagent_type exactly `trellis-research`",
+    );
+    expect(platformBlock(implement, "[Claude Code]")).toContain(
+      "subagent_type exactly `trellis-implement`",
+    );
+    expect(platformBlock(check, "[Claude Code]")).toContain(
+      "subagent_type exactly `trellis-check`",
+    );
+  });
+
   it("[issue-237] workflow.md in_progress breadcrumb self-exempts implement/check sub-agents", () => {
     // The in_progress breadcrumb may be injected into sub-agent turns on some
     // hosts, so its main-session dispatch guidance must not recursively apply
     // to a sub-agent that is already doing the requested work.
     const block = inProgressBreadcrumb();
     expect(block).toContain("Main-session default");
+    expect(block).toContain("Claude Code project-agent preflight");
+    expect(block).toContain(".claude/agents/");
+    expect(block).toContain("never use `general-purpose` as a fallback");
     expect(block).toContain("Sub-agent self-exemption");
     expect(block).toContain("already running as `trellis-implement`");
     expect(block).toContain("do NOT spawn another `trellis-implement`");
     expect(block).toContain("already running as `trellis-check`");
     expect(block).toContain("do NOT spawn another `trellis-check`");
     expect(block).toContain("main session only");
+  });
+
+  it("sub-agent dispatch mode requires implement then check before completion", () => {
+    const inProgress = workflowStateBreadcrumb("in_progress");
+    const implement = stepSection("2.1");
+    const check = stepSection("2.2");
+
+    for (const block of [inProgress, implement, check]) {
+      expect(block).toContain("Sub-agent mode loop");
+      expect(block).toContain("After every `trellis-implement` run");
+      expect(block).toContain("MUST dispatch `trellis-check`");
+      expect(block).toContain("Maximum: three implement/check cycles");
+      expect(block).toContain("After the third `trellis-check`");
+      expect(block).toContain("Never skip `trellis-check` because the user did not explicitly ask for it");
+    }
+    expect(inProgress).toContain("Do not report implementation complete directly after `trellis-implement`");
+    expect(inProgress).toContain("Do not ask for commit or finish until `trellis-check` has run on the latest diff");
+  });
+
+  it("Claude and Codex check agents self-fix only mechanical issues and return implementation findings", () => {
+    const repoRoot = fs.existsSync(path.join(process.cwd(), "packages"))
+      ? process.cwd()
+      : path.resolve(process.cwd(), "../..");
+    const templateRoot = path.join(repoRoot, "packages/cli/src/templates");
+    const checkAgentFiles = [
+      "claude/agents/trellis-check.md",
+      "codex/agents/trellis-check.toml",
+    ];
+
+    for (const relativePath of checkAgentFiles) {
+      const content = fs.readFileSync(
+        path.join(templateRoot, relativePath),
+        "utf-8",
+      );
+      expect(content, relativePath).toContain("Reviewer/Fixer Boundary");
+      expect(content, relativePath).toContain("Mechanical issues only");
+      expect(content, relativePath).toContain("Do not self-fix behavior, design, test strategy, requirement mismatches, or implementation logic");
+      expect(content, relativePath).toContain("return those findings to the main session so it can dispatch `trellis-implement`");
+      expect(content, relativePath).not.toContain("Fix issues yourself, don't just report them");
+      expect(content, relativePath).not.toContain("Fix issues yourself, not just report them");
+    }
+
+    expect(workflowMdTemplate).toContain("checker only self-fixes mechanical issues");
+    expect(workflowMdTemplate).toContain("return findings to the main session so it can dispatch `trellis-implement`");
+  });
+
+  it("prompt-bearing templates do not retain stale broad-fixer or hardcoded tool guidance", () => {
+    const repoRoot = fs.existsSync(path.join(process.cwd(), "packages"))
+      ? process.cwd()
+      : path.resolve(process.cwd(), "../..");
+    const templateRoot = path.join(repoRoot, "packages/cli/src/templates");
+    const promptSourceFiles = [
+      "shared-hooks/inject-subagent-context.py",
+      "shared-hooks/session-start.py",
+      "codex/hooks/session-start.py",
+    ];
+
+    for (const relativePath of promptSourceFiles) {
+      const content = fs.readFileSync(
+        path.join(templateRoot, relativePath),
+        "utf-8",
+      );
+      expect(content, relativePath).not.toContain("Fix issues yourself, don't just report");
+      expect(content, relativePath).not.toContain("Fix issues directly, don't just report");
+      expect(content, relativePath).not.toContain("Fix issues yourself, not just report them");
+      expect(content, relativePath).not.toContain("find and explain information");
+      expect(content, relativePath).not.toContain("mcp__exa__web_search_exa");
+      expect(content, relativePath).not.toContain("Status: COMPLETED\\n");
+    }
   });
 
   it("[codex-inline] workflow.md in_progress-inline treats implement.md as ordered execution contract", () => {
@@ -275,10 +366,27 @@ describe("trellis template constants", () => {
     const noTask = workflowStateBreadcrumb("no_task");
     const inline = workflowStateBreadcrumb("in_progress-inline");
 
-    expect(noTask).toContain("Simple conversation / small task: do not ask");
+    expect(noTask).toContain("No-task mode is explicit opt-in only");
+    expect(noTask).toContain("Do not classify small tasks as direct no-task work");
+    expect(noTask).toContain("If the user did not explicitly say to work without a Trellis task, ask for task-creation consent");
     expect(noTask).toContain("If you ask whether to create a Trellis task, stop");
     expect(inline).toContain("lifecycle or task-creation question is blocking");
     expect(inline).toContain("Do not continue tool calls, code edits, commits, pushes, archives, or PR work");
+  });
+
+  it("common skills keep no-task implementation opt-in only", () => {
+    const brainstorm = readCommonSkillTemplate("brainstorm.md");
+    const beforeDev = readCommonSkillTemplate("before-dev.md");
+    const debug = readCommonSkillTemplate("debug.md");
+    const check = readCommonSkillTemplate("check.md");
+
+    for (const skill of [brainstorm, beforeDev, debug, check]) {
+      expect(skill).toContain("No-task mode is explicit opt-in only");
+      expect(skill).toContain("Do not classify small tasks as direct no-task work");
+    }
+    expect(beforeDev).toContain("If no active task exists and the user did not explicitly opt into no-task work, stop");
+    expect(debug).toContain("If no active task exists and the user did not explicitly opt into no-task debugging, stop");
+    expect(check).toContain("If no active task exists and the user did not explicitly opt into no-task review, stop");
   });
 
   it("workflow and common skills preserve platform structural-tool routing", () => {
@@ -350,29 +458,33 @@ describe("trellis template constants", () => {
 
   it("workflow.md planning breadcrumbs mention parent child split guidance", () => {
     const planning = workflowStateBreadcrumb("planning");
-    const planningInline = workflowStateBreadcrumb("planning-inline");
-    for (const block of [planning, planningInline]) {
-      expect(block).toContain("Multi-deliverable scope");
-      expect(block).toContain("parent task plus independently verifiable child tasks");
-      expect(block).toContain("not implied by tree position");
-    }
+    expect(workflowMdTemplate).not.toContain("[workflow-state:planning-inline]");
+    expect(planning).toContain("Multi-deliverable scope");
+    expect(planning).toContain("parent task plus independently verifiable child tasks");
+    expect(planning).toContain("not implied by tree position");
   });
 
   it("planning uses Trellis-native plan quality and requires design options", () => {
     const planning = workflowStateBreadcrumb("planning");
-    const planningInline = workflowStateBreadcrumb("planning-inline");
     const brainstorm = readCommonSkillTemplate("brainstorm.md");
 
     expect(workflowMdTemplate).not.toContain("writing-plans");
-    for (const block of [planning, planningInline]) {
-      expect(block).toContain("Trellis Plan Quality Gate");
-      expect(block).toContain("present 2-3 approaches for real design choices");
-      expect(block).toContain("Simple assent such as");
-      expect(block).toContain("do not treat simple assent as approval");
-    }
+    expect(workflowMdTemplate).not.toContain("[workflow-state:completed]");
+    expect(workflowMdTemplate).not.toContain("[workflow-state:planning-inline]");
+    expect(planning).toContain("Trellis Plan Quality Gate");
+    expect(planning).toContain("present 2-3 approaches for real design choices");
+    expect(planning).toContain("Simple assent such as");
+    expect(planning).toContain("do not treat simple assent as approval");
+    expect(planning).toContain("Real design space Gate");
+    expect(planning).toContain("Do not write `design.md` until");
+    expect(planning).toContain("Do not write `implement.md` until");
+    expect(planning).toContain("Sub-agent execution");
+    expect(planning).toContain("Inline execution");
     expect(brainstorm).toContain("Each approach must include trade-offs");
     expect(brainstorm).toContain("one approach must be marked as the recommendation");
     expect(brainstorm).toContain("do not treat simple assent as approval to write `design.md` or `implement.md`");
+    expect(brainstorm).toContain("Real Design Space Gate");
+    expect(brainstorm).toContain("Do not write `design.md` until");
   });
 
   it("gitignoreTemplate contains ignore patterns", () => {

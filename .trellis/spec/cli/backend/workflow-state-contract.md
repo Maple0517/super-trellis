@@ -75,9 +75,10 @@ Both regexes MUST use the `\1` backreference variant — `[workflow-state:([A-Za
 4. Otherwise it reads `task.json.status` from the resolved task directory.
 5. It opens `.trellis/workflow.md` and parses every `[workflow-state:STATUS]`
    block.
-6. Codex may map `planning` / `in_progress` to `planning-inline` /
-   `in_progress-inline` based on `codex.dispatch_mode`; all other platforms
-   use the plain status.
+6. Codex maps `in_progress` to `in_progress-inline` when
+   `codex.dispatch_mode=inline`; planning uses the plain `planning` block in
+   both Codex dispatch modes because planning behavior is shared. All other
+   platforms use the plain status.
 7. It looks up the current status in the parsed map. If found → emits the
    block body in `<workflow-state>...</workflow-state>`. If not found →
    emits the generic line `Refer to workflow.md for current step.`
@@ -158,7 +159,7 @@ search.
 
 ---
 
-Regression invariant: the `planning` and `planning-inline` breadcrumb blocks
+Regression invariant: the `planning` breadcrumb block
 must use Trellis-native planning quality wording, not external Superpowers
 skill names such as `writing-plans`. They must require 2-3 approaches for real
 design choices, include trade-offs plus a recommended option, and prevent
@@ -215,9 +216,9 @@ Which breadcrumbs actually fire in normal flow:
 | Status | Reachability | Notes |
 |--------|--------------|-------|
 | `no_task` | ✅ reachable | Pseudo-status; emitted when `resolve_active_task()` returns no pointer. |
-| `planning` | ✅ reachable | After `cmd_create` (which now auto-sets the session pointer when available) and before `cmd_start`. `planning-inline` is the Codex inline-mode breadcrumb body for the same task status. |
+| `planning` | ✅ reachable | After `cmd_create` (which now auto-sets the session pointer when available) and before `cmd_start`. Codex inline and sub-agent modes both use this shared planning body. |
 | `in_progress` | ✅ reachable | After `cmd_start`, until `cmd_archive`. `in_progress-inline` is the Codex inline-mode breadcrumb body for the same task status. |
-| `completed` | ❌ DEAD in normal flow | `cmd_archive` writes `status="completed"` and immediately moves the task dir to `archive/`. The session-pointer cleanup in `clear_task_from_sessions` runs before the move, so the resolver loses the pointer in the same call. The block body in workflow.md is preserved for a future status-transition redesign (e.g. an explicit `in_progress → completed` command) but no current code path produces it. |
+| `completed` | ❌ no shipped block | `cmd_archive` writes `status="completed"` and immediately moves the task dir to `archive/`. The session-pointer cleanup in `clear_task_from_sessions` runs before the move, so the resolver loses the pointer in the same call. Trellis does not ship a `[workflow-state:completed]` block until a reachable completion-confirmation transition exists. |
 | `stale_<source_type>` | ✅ reachable (rare) | Synthesized when the session pointer references a deleted task directory. Emits the generic body via `build_breadcrumb` because no `stale_*` tag is shipped. |
 
 **Test invariant** (`test/regression.test.ts`): workflow-state blocks must

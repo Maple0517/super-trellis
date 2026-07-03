@@ -7,7 +7,9 @@ Execute these steps:
      - `prd.md` for requirements and acceptance criteria
      - `design.md` if present for technical design
      - `implement.md` if present for execution order and validation plan
-   - If no active task exists, use the current user request, the files or package area you are about to change, and the current diff target area as the temporary scope contract.
+   - No-task mode is explicit opt-in only. Do not classify small tasks as direct no-task work.
+   - If no active task exists and the user did not explicitly opt into no-task work, stop before development workflow, debugging workflow, implementation, local service changes, commits, pushes, archives, PR work, or durable planning; ask for Trellis task-creation consent and wait.
+   - If no active task exists and the user explicitly opted into no-task work, use the current user request, the files or package area you are about to change, and the current diff target area as the temporary scope contract.
 
 2. **Apply tool preflight before source exploration**:
    - State the platform structural tool you found before using it. Platform structural tool map: Codex: CodeGraph; Claude Code: gortex.

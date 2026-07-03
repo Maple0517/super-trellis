@@ -146,4 +146,50 @@ describe("shared-hooks capability table", () => {
     expect(content).not.toContain("Status: READY");
     expect(content).not.toContain("<workflow>");
   });
+
+  it("shared session-start.py reflects no-task consent and legacy completed-state discipline", () => {
+    const sessionStart = getSharedHookScripts().find(
+      (h) => h.name === "session-start.py",
+    );
+    expect(sessionStart, "session-start.py is missing from shared-hooks/").toBeDefined();
+    const content = sessionStart ? sessionStart.content : "";
+    expect(content).toContain("No-task direct work is explicit opt-in only");
+    expect(content).toContain("consent question is blocking");
+    expect(content).toContain("Status: LEGACY COMPLETED");
+    expect(content).toContain("legacy completed task state");
+    expect(content).not.toContain("Status: COMPLETED\\n");
+  });
+
+  it("shared sub-agent hook prompts mirror disciplined implement/check/research contracts", () => {
+    const subagentHook = getSharedHookScripts().find(
+      (h) => h.name === "inject-subagent-context.py",
+    );
+    expect(
+      subagentHook,
+      "inject-subagent-context.py is missing from shared-hooks/",
+    ).toBeDefined();
+    const content = subagentHook ? subagentHook.content : "";
+
+    expect(content).toContain("No implementation code before failing proof");
+    expect(content).toContain("If you wrote implementation before proof, delete it and start over");
+    expect(content).toContain("route back to the main session for `trellis-debug`");
+    expect(content).toContain("Status must be exactly one of: DONE, DONE_WITH_CONCERNS, BLOCKED, NEEDS_CONTEXT");
+
+    expect(content).toContain("Reviewer/Fixer Boundary");
+    expect(content).toContain("Mechanical issues only");
+    expect(content).toContain("Do not self-fix behavior, design, test strategy, requirement mismatches, or implementation logic");
+    expect(content).toContain("return those findings to the main session so it can dispatch `trellis-implement`");
+    expect(content).toContain("Completion Claim Gate");
+    expect(content).toContain("Review Gate");
+
+    expect(content).toContain("Every research output MUST end up as a file under");
+    expect(content).toContain("{{TASK_DIR}}/research/");
+    expect(content).toContain("If no active task is set, ask the user where to write output");
+    expect(content).toContain("Use the platform-exposed structural tool");
+
+    expect(content).not.toContain("Fix issues yourself, don't just report");
+    expect(content).not.toContain("Fix issues directly, don't just report");
+    expect(content).not.toContain("find and explain information");
+    expect(content).not.toContain("mcp__exa__web_search_exa");
+  });
 });

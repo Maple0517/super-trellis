@@ -29,10 +29,12 @@ Use this skill to clarify requirements, scope, and trade-offs. In task mode, it 
 
 Resolve the mode before taking action:
 
+No-task mode is explicit opt-in only. Do not classify small tasks as direct no-task work.
+
 This skill has two modes:
 
 - **Task mode**: task exists or the user approved task creation. Use the full planning flow and write planning artifacts.
-- **No-task mode**: no active task exists and the user declined task creation. Use bounded brainstorming only: inspect repo evidence, narrow direction, recommend scope, and ask one question at a time when needed. Do not create planning artifacts and do not expand into full implementation planning.
+- **No-task mode**: no active task exists and the user explicitly declined task creation or explicitly asked to work without a Trellis task. Use bounded brainstorming only: inspect repo evidence, narrow direction, recommend scope, and ask one question at a time when needed. Do not create planning artifacts and do not expand into full implementation planning.
 
 In no-task mode, once the conversation needs a real option tree, repeated product decisions, durable planning, or implementation-level sequencing, stop and ask again to create a Trellis task.
 
@@ -211,6 +213,20 @@ Before implementation planning, converge on a design. Inspect project evidence f
 Simple assent such as "ok", "可以", or "行" only approves the currently stated question. If a real design choice exists and 2-3 approaches have not been presented, do not treat simple assent as approval to write `design.md` or `implement.md`; present the options first.
 
 Do not begin implementation planning until the user has approved the design, regardless of perceived simplicity.
+
+### Real Design Space Gate
+
+A real design space exists whenever the task has meaningful choices about behavior, UX, schema/data shape, API/storage contracts, data flow, architecture, migration/compatibility, permissions, provider/prompt strategy, caching/sync, error handling, or testing boundaries.
+
+When a real design space exists:
+1. List the concrete open design questions.
+2. Present 2-3 concrete approaches for each load-bearing choice.
+3. Include trade-offs for each approach.
+4. Mark one approach as the recommendation.
+5. Ask the user to choose, modify, or approve.
+6. Record only approved choices in `prd.md`.
+
+User approval of one local question is not approval of the whole design. Do not write `design.md` until the concrete design shape has been discussed and approved. Do not write `implement.md` until `design.md` is approved or the user explicitly asks to skip design artifacts.
 
 When the task is frontend-visual in nature, do not silently skip Visual Companion. Explicitly decide whether it would add signal. If the answer is no, proceed without it; if the answer is yes, recommend using it before design lock.
 

@@ -30,7 +30,7 @@ For bug-fix regression tests added after the fix, verify red-green: temporarily 
 After verification passes, do not silently stop at a success claim. State the evidence and offer the next workflow step.
 
 - If verification passed but intended work remains uncommitted, do not stop at an implementation summary. Offer the next step explicitly: review diff, commit now, or stop local.
-- Active Trellis task: route to `trellis-update-spec`, commit, then ``finish-work` (Trellis command)`.
+- Active Trellis task: route to `trellis-update-spec`, commit, then `/trellis:finish-work`.
 - No active Trellis task: offer structured integration choices: commit locally, push/PR, keep local only, continue with the next task, or stop here.
 - Ask before pushing, opening a PR, running expensive extra checks, adding polish outside the agreed scope, or closing lifecycle state.
 
@@ -70,6 +70,8 @@ Rationalization prevention:
 ## Review Gate
 
 Request review for high-risk, cross-layer, major feature, complex bugfix, pre-merge work, after each substantial subagent task, when stuck, before risky refactors, or after a complex bug fix. Do not force two separate reviewer agents by default; use the Trellis check path unless channel orchestration is explicitly chosen.
+
+No-task mode is explicit opt-in only. Do not classify small tasks as direct no-task work. If no active task exists and the user did not explicitly opt into no-task review, stop before review workflow, implementation, local service changes, commits, pushes, archives, PR work, or long-running checks; ask for Trellis task-creation consent and wait.
 
 For symbol-level claims, cross-layer claims, caller/callee relationships, flow tracing, or impact-radius review, run tool preflight first and state the platform structural tool you found. Platform structural tool map: Codex: CodeGraph; Claude Code: gortex. Do not use another platform's tool name. In Codex, inspect nested/deferred tools from inside `exec` by checking `ALL_TOOLS` for CodeGraph and LeanCTX MCP tools. Verify structural claims with the platform structural tool when exposed. Use LeanCTX MCP or `/Users/maple/.local/bin/lean-ctx -c "<cmd>"` for fresh diff/status/test output, compressed logs, file reads, repo overview, routes, semantic search, and session memory. If no mapped/exposed structural tool exists, say `no structural code tool is exposed this turn` before falling back to LeanCTX or native text search; if the platform structural tool is stale or degraded, say so and use LeanCTX fresh reads or native search for live files.
 

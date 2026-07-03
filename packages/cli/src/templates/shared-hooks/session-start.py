@@ -332,8 +332,9 @@ def _get_task_status(trellis_dir: Path, input_data: dict) -> str:
         return (
             "Status: NO ACTIVE TASK\n"
             "Next-Action: Classify the current turn before creating any Trellis task. "
-            "Simple conversation / small task asks only whether this turn should create a Trellis task. "
-            "Complex task asks whether task creation and planning are allowed."
+            "No-task direct work is explicit opt-in only. "
+            "If the user did not explicitly opt into no-task work, ask whether to create a Trellis task and wait; the consent question is blocking. "
+            "Complex work asks whether task creation and planning are allowed before substantive brainstorming."
         )
 
     task_ref = active.task_path
@@ -363,9 +364,10 @@ def _get_task_status(trellis_dir: Path, input_data: dict) -> str:
 
     if task_status == "completed":
         return (
-            f"Status: COMPLETED\nTask: {task_title}\n"
+            f"Status: LEGACY COMPLETED\nTask: {task_title}\n"
             f"Present: {present_line}\n"
-            "Next-Action: Run `/trellis:finish-work`. If the working tree is dirty, return to Phase 3.4 first."
+            "Next-Action: Treat this as a legacy completed task state, not a normal breadcrumb phase. "
+            "Run `/trellis:finish-work`; if the working tree is dirty, return to Phase 3.4 first."
         )
 
     has_prd = (task_dir / "prd.md").is_file()
@@ -382,7 +384,7 @@ def _get_task_status(trellis_dir: Path, input_data: dict) -> str:
         return (
             f"Status: PLANNING\nTask: {task_title}\n"
             f"Present: {present_line}\n"
-            "Next-Action: Load `trellis-brainstorm` and write `prd.md`. Stay in planning."
+            "Next-Action: Load `trellis-brainstorm`, ask one question at a time, present 2-3 approaches for real design choices, and write `prd.md`. Stay in planning."
         )
 
     if task_status == "planning":
@@ -400,7 +402,7 @@ def _get_task_status(trellis_dir: Path, input_data: dict) -> str:
                 f"complex task must add {', '.join(missing_complex)} before start"
             )
         else:
-            next_bits.append("Planning artifacts are present; ask for review before `task.py start`")
+            next_bits.append("Planning artifacts are present; ask for design/start review before `task.py start`")
         if not jsonl_ready:
             next_bits.append("curate `implement.jsonl` and `check.jsonl` before sub-agent mode start")
         return (
